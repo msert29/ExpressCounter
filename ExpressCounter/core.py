@@ -2,12 +2,12 @@
 
 # Form implementation generated from reading ui file 'core.ui'
 #
-# Created: Wed Dec  2 03:42:25 2015
+# Created: Sat Dec  5 10:48:48 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui, Qt
+from PyQt4 import QtCore, QtGui
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -26,11 +26,21 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(1413, 932)
-        MainWindow.setStyleSheet(_fromUtf8("background:white;"))
+        MainWindow.resize(1893, 932)
+        MainWindow.setStyleSheet(_fromUtf8("background:white;\n"
+"\n"
+"QHBoxLayout::hover {\n"
+"    background-color:blue;\n"
+"}\n"
+"\n"
+"QFrame, QLabel, QToolTip {\n"
+"    border: 2px solid green;\n"
+"    border-radius: 4px;\n"
+"    padding: 2px;\n"
+"    background-color: rgb(28, 233, 255);\n"
+"}"))
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-        
         self.horizontalLayoutWidget = QtGui.QWidget(self.centralwidget)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(90, 280, 391, 331))
         self.horizontalLayoutWidget.setObjectName(_fromUtf8("horizontalLayoutWidget"))
@@ -46,12 +56,18 @@ class Ui_MainWindow(object):
         self.horizontalLayoutWidget_3 = QtGui.QWidget(self.centralwidget)
         self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(950, 280, 391, 331))
         self.horizontalLayoutWidget_3.setObjectName(_fromUtf8("horizontalLayoutWidget_3"))
-        self.m = QtGui.QHBoxLayout(self.horizontalLayoutWidget_3)
-        self.m.setMargin(0)
-        self.m.setObjectName(_fromUtf8("m"))
+        self.manager_layout = QtGui.QHBoxLayout(self.horizontalLayoutWidget_3)
+        self.manager_layout.setMargin(0)
+        self.manager_layout.setObjectName(_fromUtf8("manager_layout"))
+        self.horizontalLayoutWidget_4 = QtGui.QWidget(self.centralwidget)
+        self.horizontalLayoutWidget_4.setGeometry(QtCore.QRect(1380, 280, 391, 331))
+        self.horizontalLayoutWidget_4.setObjectName(_fromUtf8("horizontalLayoutWidget_4"))
+        self.newcustomer_layout = QtGui.QHBoxLayout(self.horizontalLayoutWidget_4)
+        self.newcustomer_layout.setMargin(0)
+        self.newcustomer_layout.setObjectName(_fromUtf8("newcustomer_layout"))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1413, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1893, 25))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
@@ -60,8 +76,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
-        
+

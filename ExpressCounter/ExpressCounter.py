@@ -1,57 +1,30 @@
     #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-"""
-ZetCode PyQt4 tutorial 
+"""------------------------------------------------------------------------------
+FILE        : View_Main_Menu 
+DATE        : 20-12-2015
+AUTHOR      : Murat Sert
+DESCRIPTION : This class is responsible for displaying GUI components. It calls a 
+              list of other GUI Classes which construct the core elements.
+              
+------------------------------------------------------------------------------"""
+                                                                                
 
-This program creates a skeleton of
-a classic GUI application with a menubar,
-toolbar, statusbar and a central widget. 
-
-author: Jan Bodnar
-website: zetcode.com 
-last edited: September 2011
-"""
-
+"""------------------------------------------------------------------------------
+                     Development Diary
+    ------------------------------------------------------------------------------
+    Date             Notes
+    05/01/2016       Implemented the GUI Components
+    07/01/2016       Issues with importing modules
+              
+-------------------------------------------------------------------------------"""
 import sys
 from PyQt4 import QtGui
 from core import Ui_MainWindow
 from PyQt4.Qt import QLabel, QPixmap, QObject, QEvent, QDialog, QSpinBox, QPushButton, QComboBox, QCheckBox, QHBoxLayout, QGridLayout
 from PyQt4.QtCore import pyqtSlot, pyqtSignal
 from cart import Ui_Dialog
-
-
-class PenPropertiesDlg(QDialog):
-    def __init__(self, parent=None):
-        super(PenPropertiesDlg, self).__init__(parent)
-        
-        widthLabel = QLabel("&Width:")
-        self.widthSpinBox = QSpinBox()
-        widthLabel.setBuddy(self.widthSpinBox)
-        #self.widthSpinBox.setAlignment(Qt.AlignRight)
-        self.widthSpinBox.setRange(0, 24)
-        self.bevelledCheckBox = QCheckBox("&Bevelled edges")
-        styleLabel = QLabel("&Style:")
-        self.styleComboBox = QComboBox()
-        
-        styleLabel.setBuddy(self.styleComboBox)
-        self.styleComboBox.addItems(["Solid", "Dashed", "Dotted",
-                             "DashDotted", "DashDotDotted"])
-        okButton = QPushButton("&OK")
-        cancelButton = QPushButton("Cancel")
-
-        buttonLayout = QHBoxLayout()
-        buttonLayout.addStretch()
-        buttonLayout.addWidget(okButton)
-        buttonLayout.addWidget(cancelButton)
-        layout = QGridLayout()
-        layout.addWidget(widthLabel, 0, 0)
-        layout.addWidget(self.widthSpinBox, 0, 1)
-        layout.addWidget(self.bevelledCheckBox, 0, 2)
-        layout.addWidget(styleLabel, 1, 0)
-        layout.addWidget(self.styleComboBox, 1, 1, 1, 2)
-        layout.addLayout(buttonLayout, 2, 0, 1, 3)
-        self.setLayout(layout)
 
 
 def clickable(widget):
@@ -71,37 +44,47 @@ def clickable(widget):
     widget.installEventFilter(filter)
     return filter.clicked
 
+
+
+
+
         
-        
-class Example(QtGui.QMainWindow):
+class Express_Counter(QtGui.QMainWindow):
     
     ""
     
     def __init__(self):
-        super(Example, self).__init__()
+        super(Express_Counter, self).__init__()
         self.background = Ui_MainWindow()
         self.background.setupUi(self)
         self.initUI()
 
+    
+    def initUI(self):     
+                  
+        neworder_icon = QtGui.QPixmap('images/icn-phone2.png')
+        manager_icon = QPixmap('images/admin-icon.png')
+        search_icon = QPixmap('images/search-icon.png')
+        newcustomer_icon = QPixmap('images/newcustomer-icon.png')
         
-    def initUI(self):               
-        pixmap_image = QtGui.QPixmap('images/order.png')
-        manager_icon = QPixmap('images/root.png')
-        search_icon = QPixmap('images/search.png')
+        neworder_lbl = QLabel("Place an order")
         manager_lbl = QLabel("Manager Log in")
-        manager_lbl.setPixmap(manager_icon)
         search_lbl = QLabel("Search")
-        search_lbl.setPixmap(search_icon)
-        lbl = QLabel("Place an order")
-        lbl.setPixmap(pixmap_image)
+        newcustomer_lbl = QLabel("New Customer Entry")
         
-        self.background.new_order_layout.addWidget(lbl)
-        self.background.m.addWidget(manager_lbl)
+        manager_lbl.setPixmap(manager_icon)
+        search_lbl.setPixmap(search_icon)
+        neworder_lbl.setPixmap(neworder_icon)
+        newcustomer_lbl.setPixmap(newcustomer_icon)
+        
+        self.background.new_order_layout.addWidget(neworder_lbl)
+        self.background.manager_layout.addWidget(manager_lbl)
         self.background.search_order_layout.addWidget(search_lbl)
+        self.background.newcustomer_layout.addWidget(newcustomer_lbl)
         self.dial = Ui_Dialog()
         
         self.show()
-        clickable(lbl).connect(self.on_pushButton_clicked)
+        clickable(neworder_lbl).connect(self.on_pushButton_clicked)
   
         
     @pyqtSlot()
@@ -112,7 +95,7 @@ class Example(QtGui.QMainWindow):
         
 def main():
     app = QtGui.QApplication(sys.argv)
-    ex = Example()
+    ex = Express_Counter()
     sys.exit(app.exec_())
 
 
