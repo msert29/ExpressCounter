@@ -25,7 +25,7 @@ from core import Ui_MainWindow
 from PyQt4.Qt import QLabel, QPixmap, QObject, QEvent, QDialog, QSpinBox, \
         QPushButton, QComboBox, QCheckBox, QHBoxLayout, QGridLayout
 from PyQt4.QtCore import pyqtSlot, pyqtSignal
-from cart import Ui_Dialog
+import View_Cart_Dialog
 
 
 
@@ -53,8 +53,6 @@ def clickable(widget):
     filter = Filter(widget)
     widget.installEventFilter(filter)
     return filter.clicked
-
-
         
 class View_Main_Menu(QtGui.QMainWindow):
     
@@ -88,7 +86,7 @@ class View_Main_Menu(QtGui.QMainWindow):
         self.background.manager_layout.addWidget(manager_lbl)
         self.background.search_order_layout.addWidget(search_lbl)
         self.background.newcustomer_layout.addWidget(newcustomer_lbl)
-        self.dial = Ui_Dialog()
+        self.cart_dialog = View_Cart_Dialog.Ui_Dialog()
         
         self.show()
         clickable(neworder_lbl).connect(self.on_neworder_clicked)
@@ -96,7 +94,7 @@ class View_Main_Menu(QtGui.QMainWindow):
         
     @pyqtSlot()
     def on_neworder_clicked(self):
-        self.dial.exec_()
+        self.cart_dialog.exec_()
         
           
         
