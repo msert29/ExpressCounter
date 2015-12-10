@@ -1,108 +1,105 @@
-    #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-"""------------------------------------------------------------------------------
-FILE        : View_Main_Menu 
-DATE        : 20-12-2015
-AUTHOR      : Murat Sert
-DESCRIPTION : This class is responsible for displaying GUI components. It calls a 
-              list of other GUI Classes which construct the core elements.
-              
-------------------------------------------------------------------------------"""
-                                                                                
+# Form implementation generated from reading ui file 'core.ui'
+#
+# Created: Sat Dec  5 10:48:48 2015
+#      by: PyQt4 UI code generator 4.10.4
+#
+# WARNING! All changes made in this file will be lost!
 
-"""------------------------------------------------------------------------------
-                     Development Diary
-    ------------------------------------------------------------------------------
-    Date             Notes
-    05/01/2016       Implemented the GUI Components
-    07/01/2016       Issues with importing modules
-              
--------------------------------------------------------------------------------"""
-import sys
-from PyQt4 import QtGui
-from core import Ui_MainWindow
-from PyQt4.Qt import QLabel, QPixmap, QObject, QEvent, QDialog, QSpinBox, \
-        QPushButton, QComboBox, QCheckBox, QHBoxLayout, QGridLayout
-from PyQt4.QtCore import pyqtSlot, pyqtSignal
-import View_Cart_Dialog
+from PyQt4 import QtCore, QtGui
+from PyQt4.Qt import QLabel, QPixmap
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
 
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName(_fromUtf8("MainWindow"))
+        MainWindow.resize(1920, 1080)
+        MainWindow.setStyleSheet(_fromUtf8("background:white;\n"
+"\n"
+"QHBoxLayout::hover {\n"
+"    background-color:blue;\n"
+"}\n"
+"\n"
+"QFrame, QLabel, QToolTip {\n"
+"    border: 2px solid green;\n"
+"    border-radius: 4px;\n"
+"    padding: 2px;\n"
+"    background-color: rgb(28, 233, 255);\n"
+"}"))
+        self.centralwidget = QtGui.QWidget(MainWindow)
+        self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
+        self.horizontalLayoutWidget = QtGui.QWidget(self.centralwidget)
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(90, 280, 391, 331))
+        self.horizontalLayoutWidget.setObjectName(_fromUtf8("horizontalLayoutWidget"))
+        self.new_order_layout = QtGui.QHBoxLayout(self.horizontalLayoutWidget)
+        self.new_order_layout.setMargin(0)
+        self.new_order_layout.setObjectName(_fromUtf8("new_order_layout"))
+        self.horizontalLayoutWidget_2 = QtGui.QWidget(self.centralwidget)
+        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(520, 280, 391, 331))
+        self.horizontalLayoutWidget_2.setObjectName(_fromUtf8("horizontalLayoutWidget_2"))
+        self.search_order_layout = QtGui.QHBoxLayout(self.horizontalLayoutWidget_2)
+        self.search_order_layout.setMargin(0)
+        self.search_order_layout.setObjectName(_fromUtf8("search_order_layout"))
+        self.horizontalLayoutWidget_3 = QtGui.QWidget(self.centralwidget)
+        self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(950, 280, 391, 331))
+        self.horizontalLayoutWidget_3.setObjectName(_fromUtf8("horizontalLayoutWidget_3"))
+        self.manager_layout = QtGui.QHBoxLayout(self.horizontalLayoutWidget_3)
+        self.manager_layout.setMargin(0)
+        self.manager_layout.setObjectName(_fromUtf8("manager_layout"))
+        self.horizontalLayoutWidget_4 = QtGui.QWidget(self.centralwidget)
+        self.horizontalLayoutWidget_4.setGeometry(QtCore.QRect(1380, 280, 391, 331))
+        self.horizontalLayoutWidget_4.setObjectName(_fromUtf8("horizontalLayoutWidget_4"))
+        self.newcustomer_layout = QtGui.QHBoxLayout(self.horizontalLayoutWidget_4)
+        self.newcustomer_layout.setMargin(0)
+        self.newcustomer_layout.setObjectName(_fromUtf8("newcustomer_layout"))
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtGui.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1893, 25))
+        self.menubar.setObjectName(_fromUtf8("menubar"))
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtGui.QStatusBar(MainWindow)
+        self.statusbar.setObjectName(_fromUtf8("statusbar"))
+        MainWindow.setStatusBar(self.statusbar)
 
-"""------------------------------------------------------------------------------
-Function           : clickable
-Description        : This function extends events on the label widget.
-                     By default there are no clicked events in labels therefore
-                     this method is written to return capture and report click
-                     events which is then assigned to each slot
-Parameters         : Murat Sert
-Returns            : true on clicked event, else returns false
-------------------------------------------------------------------------------"""
-def clickable(widget):
-    class Filter(QObject):
-        clicked = pyqtSignal()
-        def eventFilter(self, obj, event):
-            if obj == widget:
-                if event.type() == QEvent.MouseButtonRelease:
-                    if obj.rect().contains(event.pos()):
-                        self.clicked.emit()
-                        return True
-            
-            return False
-    
-    filter = Filter(widget)
-    widget.installEventFilter(filter)
-    return filter.clicked
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.draw_icons()
         
-class View_Main_Menu(QtGui.QMainWindow):
-    
-    ""
-    
-    def __init__(self):
-        super(View_Main_Menu, self).__init__()
-        self.background = Ui_MainWindow()
-        self.background.setupUi(self)
-        self.initUI()
+    def retranslateUi(self, MainWindow):
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
 
-    
-    def initUI(self):     
-                  
+        
+    def draw_icons(self):     
         neworder_icon = QtGui.QPixmap('images/icn-phone2.png')
         manager_icon = QPixmap('images/admin-icon.png')
         search_icon = QPixmap('images/search-icon.png')
         newcustomer_icon = QPixmap('images/newcustomer-icon.png')
         
-        neworder_lbl = QLabel("Place an order")
-        manager_lbl = QLabel("Manager Log in")
-        search_lbl = QLabel("Search")
-        newcustomer_lbl = QLabel("New Customer Entry")
+        self.neworder_lbl = QLabel("Place an order")
+        self.manager_lbl = QLabel("Manager Log in")
+        self.search_lbl = QLabel("Search")
+        self.newcustomer_lbl = QLabel("New Customer Entry")
         
-        manager_lbl.setPixmap(manager_icon)
-        search_lbl.setPixmap(search_icon)
-        neworder_lbl.setPixmap(neworder_icon)
-        newcustomer_lbl.setPixmap(newcustomer_icon)
+        self.manager_lbl.setPixmap(manager_icon)
+        self.search_lbl.setPixmap(search_icon)
+        self.neworder_lbl.setPixmap(neworder_icon)
+        self.newcustomer_lbl.setPixmap(newcustomer_icon)
         
-        self.background.new_order_layout.addWidget(neworder_lbl)
-        self.background.manager_layout.addWidget(manager_lbl)
-        self.background.search_order_layout.addWidget(search_lbl)
-        self.background.newcustomer_layout.addWidget(newcustomer_lbl)
-        self.cart_dialog = View_Cart_Dialog.Ui_Dialog()
-        
-        self.show()
-        clickable(neworder_lbl).connect(self.on_neworder_clicked)
-  
-        
-    @pyqtSlot()
-    def on_neworder_clicked(self):
-        self.cart_dialog.exec_()
-        
-          
-        
-def main():
-    app = QtGui.QApplication(sys.argv)
-    vmm = View_Main_Menu()
-    sys.exit(app.exec_())
+        self.new_order_layout.addWidget(self.neworder_lbl)
+        self.manager_layout.addWidget(self.manager_lbl)
+        self.search_order_layout.addWidget(self.search_lbl)
+        self.newcustomer_layout.addWidget(self.newcustomer_lbl)
 
-
-if __name__ == '__main__':
-    main()    

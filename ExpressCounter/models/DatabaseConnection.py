@@ -35,9 +35,7 @@ class Model_Database(QSqlDatabase):
         super(Model_Database, self).__init__()
         self.establish_connection()
         self.query = QSqlQuery() # Will hold CRUD operations to the database
-        #self.get_kebabs()
-       
-        self.Get_Items()
+        
     #-----------------------------------------------------------------------------------------------------------------------------------------------------------------
     #
     # Function : Establish a connection with the local database server.

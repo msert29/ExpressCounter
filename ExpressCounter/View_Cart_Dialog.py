@@ -8,7 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-from PyQt4.Qt import QDialog
+from PyQt4.Qt import QDialog, QMainWindow
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -30,7 +30,7 @@ class Ui_Dialog(QDialog):
         self.setupUi(self)
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
-        Dialog.resize(1626, 967)
+        Dialog.resize(1920, 1080)
         Dialog.setStyleSheet(_fromUtf8("QPushButton {\n"
 " background: gray;\n"
 " color:white;\n"
