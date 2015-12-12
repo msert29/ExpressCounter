@@ -32,14 +32,14 @@ from PyQt4.Qt import QLabel, QPixmap, QObject, QEvent, QDialog, QSpinBox, \
 from PyQt4.QtCore import pyqtSlot, pyqtSignal
 import View_Main_Menu
 import Controller_Cart_Dialog 
-import DatabaseConnection 
-        
+#from Model_Database import DatabaseConnection
+import Model_Database
 class Controller_Main_Menu(QtGui.QMainWindow):
     
     def __init__(self):
         super(Controller_Main_Menu, self).__init__()
         # Establish a connection during startup
-        self.establish_database = DatabaseConnection.Model_Database()
+        self.establish_database = Model_Database.DatabaseConnection.Model_Database()
         self.establish_database.establish_connection()
          # Initialize the view element and draw it
         self.main_view = View_Main_Menu.Ui_MainWindow()

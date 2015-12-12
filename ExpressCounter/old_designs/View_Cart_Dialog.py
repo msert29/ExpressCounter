@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'new_cart.ui'
 #
-# Created: Sat Dec 12 04:41:50 2015
+# Created: Sat Dec 12 07:47:35 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -82,18 +82,6 @@ class Ui_Dialog(object):
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.kebab_tab = QtGui.QWidget()
         self.kebab_tab.setObjectName(_fromUtf8("kebab_tab"))
-        self.verticalLayoutWidget_3 = QtGui.QWidget(self.kebab_tab)
-        self.verticalLayoutWidget_3.setGeometry(QtCore.QRect(10, 780, 481, 80))
-        self.verticalLayoutWidget_3.setObjectName(_fromUtf8("verticalLayoutWidget_3"))
-        self.custom_salad_layout = QtGui.QVBoxLayout(self.verticalLayoutWidget_3)
-        self.custom_salad_layout.setMargin(0)
-        self.custom_salad_layout.setObjectName(_fromUtf8("custom_salad_layout"))
-        self.verticalLayoutWidget_4 = QtGui.QWidget(self.kebab_tab)
-        self.verticalLayoutWidget_4.setGeometry(QtCore.QRect(500, 780, 501, 80))
-        self.verticalLayoutWidget_4.setObjectName(_fromUtf8("verticalLayoutWidget_4"))
-        self.custom_sauce_layout = QtGui.QVBoxLayout(self.verticalLayoutWidget_4)
-        self.custom_sauce_layout.setMargin(0)
-        self.custom_sauce_layout.setObjectName(_fromUtf8("custom_sauce_layout"))
         self.frame_3 = QtGui.QFrame(self.kebab_tab)
         self.frame_3.setGeometry(QtCore.QRect(10, 10, 989, 759))
         self.frame_3.setStyleSheet(_fromUtf8("QFrame {\n"
@@ -105,6 +93,8 @@ class Ui_Dialog(object):
 "border-radius: 0px;\n"
 "border-top-left-radius: 9px;\n"
 "border-top-right-radius: 9px;\n"
+"min-width:460px;\n"
+"min-height:170px;\n"
 "max-width:460px;\n"
 "max-height:170px;\n"
 "}\n"
@@ -136,11 +126,44 @@ class Ui_Dialog(object):
         self.frame_3.setFrameShadow(QtGui.QFrame.Raised)
         self.frame_3.setObjectName(_fromUtf8("frame_3"))
         self.gridLayoutWidget_2 = QtGui.QWidget(self.frame_3)
-        self.gridLayoutWidget_2.setGeometry(QtCore.QRect(-10, 0, 971, 751))
+        self.gridLayoutWidget_2.setGeometry(QtCore.QRect(10, 0, 971, 731))
         self.gridLayoutWidget_2.setObjectName(_fromUtf8("gridLayoutWidget_2"))
         self.kebabs_layout = QtGui.QGridLayout(self.gridLayoutWidget_2)
         self.kebabs_layout.setMargin(0)
         self.kebabs_layout.setObjectName(_fromUtf8("kebabs_layout"))
+        self.custom_Frame = QtGui.QFrame(self.kebab_tab)
+        self.custom_Frame.setGeometry(QtCore.QRect(20, 750, 981, 55))
+        self.custom_Frame.setStyleSheet(_fromUtf8("background:orange;\n"
+"QCheckBox{\n"
+"color:black;\n"
+"}\n"
+""))
+        self.custom_Frame.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.custom_Frame.setFrameShadow(QtGui.QFrame.Raised)
+        self.custom_Frame.setObjectName(_fromUtf8("custom_Frame"))
+        self.horizontalLayoutWidget = QtGui.QWidget(self.custom_Frame)
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(-1, 0, 981, 51))
+        self.horizontalLayoutWidget.setObjectName(_fromUtf8("horizontalLayoutWidget"))
+        self.custom_salads_layout = QtGui.QHBoxLayout(self.horizontalLayoutWidget)
+        self.custom_salads_layout.setMargin(0)
+        self.custom_salads_layout.setObjectName(_fromUtf8("custom_salads_layout"))
+        self.custom_Frame_2 = QtGui.QFrame(self.kebab_tab)
+        self.custom_Frame_2.setGeometry(QtCore.QRect(20, 810, 981, 55))
+        self.custom_Frame_2.setStyleSheet(_fromUtf8("background:rgb(92, 255, 165);\n"
+"QCheckBox{\n"
+"background:orange;\n"
+"color:black;\n"
+"}\n"
+""))
+        self.custom_Frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.custom_Frame_2.setFrameShadow(QtGui.QFrame.Raised)
+        self.custom_Frame_2.setObjectName(_fromUtf8("custom_Frame_2"))
+        self.horizontalLayoutWidget_2 = QtGui.QWidget(self.custom_Frame_2)
+        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(0, 0, 981, 51))
+        self.horizontalLayoutWidget_2.setObjectName(_fromUtf8("horizontalLayoutWidget_2"))
+        self.custom_sauces_layout = QtGui.QHBoxLayout(self.horizontalLayoutWidget_2)
+        self.custom_sauces_layout.setMargin(0)
+        self.custom_sauces_layout.setObjectName(_fromUtf8("custom_sauces_layout"))
         self.tabWidget.addTab(self.kebab_tab, _fromUtf8(""))
         self.pizza_tab = QtGui.QWidget()
         self.pizza_tab.setObjectName(_fromUtf8("pizza_tab"))
@@ -150,33 +173,61 @@ class Ui_Dialog(object):
         self.pizzas_layout = QtGui.QVBoxLayout(self.verticalLayoutWidget_5)
         self.pizzas_layout.setMargin(0)
         self.pizzas_layout.setObjectName(_fromUtf8("pizzas_layout"))
-        self.verticalLayoutWidget_6 = QtGui.QWidget(self.pizza_tab)
-        self.verticalLayoutWidget_6.setGeometry(QtCore.QRect(10, 780, 981, 80))
-        self.verticalLayoutWidget_6.setObjectName(_fromUtf8("verticalLayoutWidget_6"))
-        self.custom_topping_layout = QtGui.QVBoxLayout(self.verticalLayoutWidget_6)
-        self.custom_topping_layout.setMargin(0)
-        self.custom_topping_layout.setObjectName(_fromUtf8("custom_topping_layout"))
+        self.frame_4 = QtGui.QFrame(self.pizza_tab)
+        self.frame_4.setGeometry(QtCore.QRect(10, 780, 981, 80))
+        self.frame_4.setStyleSheet(_fromUtf8("background:rgb(255, 147, 85);\n"
+"color:black;"))
+        self.frame_4.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.frame_4.setFrameShadow(QtGui.QFrame.Raised)
+        self.frame_4.setObjectName(_fromUtf8("frame_4"))
+        self.horizontalLayoutWidget_3 = QtGui.QWidget(self.frame_4)
+        self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(0, 0, 981, 80))
+        self.horizontalLayoutWidget_3.setObjectName(_fromUtf8("horizontalLayoutWidget_3"))
+        self.horizontalLayout = QtGui.QHBoxLayout(self.horizontalLayoutWidget_3)
+        self.horizontalLayout.setMargin(0)
+        self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.tabWidget.addTab(self.pizza_tab, _fromUtf8(""))
         self.burger_tab = QtGui.QWidget()
         self.burger_tab.setObjectName(_fromUtf8("burger_tab"))
-        self.verticalLayoutWidget_7 = QtGui.QWidget(self.burger_tab)
-        self.verticalLayoutWidget_7.setGeometry(QtCore.QRect(500, 780, 501, 80))
-        self.verticalLayoutWidget_7.setObjectName(_fromUtf8("verticalLayoutWidget_7"))
-        self.burger_sauce_layout_2 = QtGui.QVBoxLayout(self.verticalLayoutWidget_7)
-        self.burger_sauce_layout_2.setMargin(0)
-        self.burger_sauce_layout_2.setObjectName(_fromUtf8("burger_sauce_layout_2"))
         self.gridLayoutWidget_3 = QtGui.QWidget(self.burger_tab)
-        self.gridLayoutWidget_3.setGeometry(QtCore.QRect(10, 10, 991, 761))
+        self.gridLayoutWidget_3.setGeometry(QtCore.QRect(10, 10, 991, 731))
         self.gridLayoutWidget_3.setObjectName(_fromUtf8("gridLayoutWidget_3"))
         self.burgers_layout_2 = QtGui.QGridLayout(self.gridLayoutWidget_3)
         self.burgers_layout_2.setMargin(0)
         self.burgers_layout_2.setObjectName(_fromUtf8("burgers_layout_2"))
-        self.verticalLayoutWidget_8 = QtGui.QWidget(self.burger_tab)
-        self.verticalLayoutWidget_8.setGeometry(QtCore.QRect(10, 780, 481, 80))
-        self.verticalLayoutWidget_8.setObjectName(_fromUtf8("verticalLayoutWidget_8"))
-        self.burger_salad_layout_2 = QtGui.QVBoxLayout(self.verticalLayoutWidget_8)
-        self.burger_salad_layout_2.setMargin(0)
-        self.burger_salad_layout_2.setObjectName(_fromUtf8("burger_salad_layout_2"))
+        self.frame_7 = QtGui.QFrame(self.burger_tab)
+        self.frame_7.setGeometry(QtCore.QRect(10, 750, 991, 55))
+        self.frame_7.setStyleSheet(_fromUtf8("background:orange;\n"
+"QCheckBox{\n"
+"color:black;\n"
+"}\n"
+""))
+        self.frame_7.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.frame_7.setFrameShadow(QtGui.QFrame.Raised)
+        self.frame_7.setObjectName(_fromUtf8("frame_7"))
+        self.horizontalLayoutWidget_7 = QtGui.QWidget(self.frame_7)
+        self.horizontalLayoutWidget_7.setGeometry(QtCore.QRect(0, 0, 991, 51))
+        self.horizontalLayoutWidget_7.setObjectName(_fromUtf8("horizontalLayoutWidget_7"))
+        self.burger_custom_sauce_layout = QtGui.QHBoxLayout(self.horizontalLayoutWidget_7)
+        self.burger_custom_sauce_layout.setMargin(0)
+        self.burger_custom_sauce_layout.setObjectName(_fromUtf8("burger_custom_sauce_layout"))
+        self.frame_8 = QtGui.QFrame(self.burger_tab)
+        self.frame_8.setGeometry(QtCore.QRect(10, 810, 991, 55))
+        self.frame_8.setStyleSheet(_fromUtf8("background:rgb(92, 255, 165);\n"
+"QCheckBox{\n"
+"background:orange;\n"
+"color:black;\n"
+"}\n"
+""))
+        self.frame_8.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.frame_8.setFrameShadow(QtGui.QFrame.Raised)
+        self.frame_8.setObjectName(_fromUtf8("frame_8"))
+        self.horizontalLayoutWidget_8 = QtGui.QWidget(self.frame_8)
+        self.horizontalLayoutWidget_8.setGeometry(QtCore.QRect(0, 0, 991, 51))
+        self.horizontalLayoutWidget_8.setObjectName(_fromUtf8("horizontalLayoutWidget_8"))
+        self.burger_custom_salad_layout = QtGui.QHBoxLayout(self.horizontalLayoutWidget_8)
+        self.burger_custom_salad_layout.setMargin(0)
+        self.burger_custom_salad_layout.setObjectName(_fromUtf8("burger_custom_salad_layout"))
         self.tabWidget.addTab(self.burger_tab, _fromUtf8(""))
         self.other_tab = QtGui.QWidget()
         self.other_tab.setObjectName(_fromUtf8("other_tab"))
@@ -428,7 +479,7 @@ class Ui_Dialog(object):
         self.search_results_grid_layout.setObjectName(_fromUtf8("search_results_grid_layout"))
 
         self.retranslateUi(Dialog)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -455,12 +506,28 @@ class Ui_Dialog(object):
         self.existing_customer_confirm_button_3.setText(_translate("Dialog", "Search", None))
         self.label_3.setText(_translate("Dialog", "Existing Customer Search", None))
 
+
+
+    """------------------------------------------------------------------------------
+    Function           : display_kebabs
+    Description        : This function retrieves a list of kebab options from the 
+                         Controller_Cart_Dialog class. It then iterates through 
+                         all of the options, creates a salad and sauce combobox
+                         selection for each item and an add button for the item
+                         to be added to the cart.
+    Parameters         : kebabs_list (This parameter is fetched by Controller_Cart_Dialog
+                         class which accesses the DatabaseConnection class -> get_kebabs()
+                         method which iterates through the Items table in the database selecting
+                         items with type = 'kebab' only. The list is then passed to this method
+                         which is directly called in Controller_Cart_Dialog
+    Returns            : Void
+    ------------------------------------------------------------------------------"""
     def display_kebabs(self, kebabs_list):
         length = len(kebabs_list)
         place_holder = 0 #holds the position of widget
         for i in range(length):
-            salad_options = ['All', 'L/O/R/W', 'No Salad']
-            sauce_options = ['Chilli Sauce', 'Garlic Mayo', 'Mayo', 'BBQ', 'No Sauce']
+            salad_options = ['All', 'L/O/R/W', 'No Salad', 'Custom Salad']
+            sauce_options = ['Chilli Sauce', 'Garlic Mayo', 'Mayo', 'BBQ', 'No Sauce', 'Custom Sauce']
             salad_box     = QComboBox()
             sauce_box     = QComboBox()
             salad_box.addItems(salad_options)
@@ -499,23 +566,49 @@ class Ui_Dialog(object):
             else:
                 place_holder = 1
                 
+    
+    """------------------------------------------------------------------------------
+    Function           : display_salads_options
+    Description        : This function retrieves a list of custom salad variables from
+                         the Controller_Cart_Dialog class. It then creates 
+                         dynamic variables to store each check box thus allowing user
+                         to select specific salad options. 
+                         This function is called directly by the Controller_Cart_Dialog.
+    Parameters         : salad_list (A list of salad options available fetched by 
+                         databaseConnection class, get_custom_salads method, which is 
+                         retrieved by Controller_Cart_Dialog and passed to this function.
+    Returns            : Void
+    ------------------------------------------------------------------------------"""
     def display_salad_options(self, salad_list):
         tmp_holder = QHBoxLayout()
         tmp_group = QGroupBox()
-        length = len(salad_list)
-        dynamic_var_name = [None] * length
-        for x in range(0, len(salad_list)):
-            print "x" + str(x)
-            dynamic_var_name[x] = salad_list[x]
-            tmp_holder.addWidget(QCheckBox(dynamic_var_name[x]))
+        salads_length = len(salad_list)
+        salads_var = [None] * salads_length
+        for x in range(0, salads_length):
+            salads_var[x] = salad_list[x]
+            tmp_holder.addWidget(QCheckBox(salads_var[x]))
         tmp_group.setLayout(tmp_holder)
-        self.custom_salad_layout.addWidget(tmp_group)
+        self.custom_salads_layout.addWidget(tmp_group)
         
-        
+    """------------------------------------------------------------------------------
+    Function           : display_sauce_options
+    Description        :This function retrieves a list of custom salad variables from
+                        the Controller_Cart_Dialog class. It then creates 
+                        dynamic variables to store each check box thus allowing user
+                        to select specific sauce options. 
+                        This function is called directly by the Controller_Cart_Dialog.
+    Parameters         : sauce_list (A list of sauce options available fetched by 
+                         databaseConnection class, get_custom_salads method, which is 
+                         retrieved by Controller_Cart_Dialog and passed to this function.
+    Returns            : Void
+    ------------------------------------------------------------------------------"""
     def display_sauce_options(self, sauce_list):
         tmp_holder = QHBoxLayout()
         tmp_group = QGroupBox()
-        for x in range(0, len(sauce_list)):
-            tmp_holder.addWidget(QCheckBox(sauce_list[x]))
+        sauces_length = len(sauce_list)
+        sauces_var = [None] * sauces_length
+        for x in range(0, sauces_length):
+            sauces_var[x] = sauce_list[x]
+            tmp_holder.addWidget(QCheckBox(sauces_var[x]))
         tmp_group.setLayout(tmp_holder)
-        self.custom_sauce_layout.addWidget(tmp_group)
+        self.custom_sauces_layout.addWidget(tmp_group)

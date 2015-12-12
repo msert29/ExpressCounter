@@ -9,7 +9,8 @@ DESCRIPTION : This class is instanced upon new order click event by the user.
               new order request.
               
 ------------------------------------------------------------------------------"""
-                                                                                
+#from DatabaseConnection import Model_Database
+import Model_Database                                                                           
 
 """------------------------------------------------------------------------------
                      Development Diary
@@ -21,7 +22,7 @@ DESCRIPTION : This class is instanced upon new order click event by the user.
               
 -------------------------------------------------------------------------------"""
 
-import DatabaseConnection
+from Model_Database import DatabaseConnection
 import View_Cart_Dialog 
 from PyQt4.QtCore import Qt 
 from PyQt4.Qt import QDialog, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox,\
