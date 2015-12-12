@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'core.ui'
 #
-# Created: Sat Dec 12 13:22:30 2015
+# Created: Sat Dec 12 14:37:07 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -27,7 +27,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(1280, 1024)
+        MainWindow.resize(1280, 950)
         MainWindow.setStyleSheet(_fromUtf8("background:white;\n"
 "\n"
 "QHBoxLayout::hover {\n"
@@ -82,6 +82,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
 
+    
     def draw_icons(self):     
         neworder_icon = QtGui.QPixmap('images/icn-phone2.png')
         manager_icon = QPixmap('images/admin-icon.png')

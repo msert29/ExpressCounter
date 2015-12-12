@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'new_Cart_resolution.ui'
 #
-# Created: Sat Dec 12 13:06:31 2015
+# Created: Sat Dec 12 14:40:54 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -28,7 +28,7 @@ except AttributeError:
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
-        Dialog.resize(1280, 1024)
+        Dialog.resize(1280, 950)
         Dialog.setStyleSheet(_fromUtf8("QPushButton {\n"
 " background: gray;\n"
 " color:white;\n"
@@ -55,7 +55,7 @@ class Ui_Dialog(object):
 "\n"
 ""))
         self.tabWidget = QtGui.QTabWidget(Dialog)
-        self.tabWidget.setGeometry(QtCore.QRect(10, 30, 841, 991))
+        self.tabWidget.setGeometry(QtCore.QRect(10, 30, 841, 901))
         self.tabWidget.setStyleSheet(_fromUtf8(" QTabBar::tab {\n"
 "  background: gray;\n"
 "  color: white;\n"
@@ -65,7 +65,7 @@ class Ui_Dialog(object):
 "    border-radius: 5px;\n"
 "    border-color: beige;\n"
 "    font: 15px;\n"
-"    min-width: 11em;\n"
+"    min-width: 8em;\n"
 "    min-height:3em;\n"
 "    padding: 6px;\n"
 "   margin-bottom:5px;\n"
@@ -83,7 +83,7 @@ class Ui_Dialog(object):
         self.kebab_tab = QtGui.QWidget()
         self.kebab_tab.setObjectName(_fromUtf8("kebab_tab"))
         self.kebabs_frame = QtGui.QFrame(self.kebab_tab)
-        self.kebabs_frame.setGeometry(QtCore.QRect(10, 10, 811, 761))
+        self.kebabs_frame.setGeometry(QtCore.QRect(10, 10, 811, 671))
         self.kebabs_frame.setStyleSheet(_fromUtf8("QFrame {\n"
 " border:none;\n"
 "}\n"
@@ -106,8 +106,8 @@ class Ui_Dialog(object):
 "color:black;\n"
 "border-radius:0px;\n"
 "border: 1px solid rgb(150, 150, 150);\n"
-"min-width:360px;\n"
-"min-height:40px;\n"
+"min-width:340px;\n"
+"min-height:35px;\n"
 "padding-left:0px;\n"
 "}\n"
 "\n"
@@ -124,13 +124,13 @@ class Ui_Dialog(object):
         self.kebabs_frame.setFrameShadow(QtGui.QFrame.Raised)
         self.kebabs_frame.setObjectName(_fromUtf8("kebabs_frame"))
         self.gridLayoutWidget_2 = QtGui.QWidget(self.kebabs_frame)
-        self.gridLayoutWidget_2.setGeometry(QtCore.QRect(0, 0, 811, 761))
+        self.gridLayoutWidget_2.setGeometry(QtCore.QRect(0, 0, 811, 671))
         self.gridLayoutWidget_2.setObjectName(_fromUtf8("gridLayoutWidget_2"))
         self.kebabs_layout = QtGui.QGridLayout(self.gridLayoutWidget_2)
         self.kebabs_layout.setMargin(0)
         self.kebabs_layout.setObjectName(_fromUtf8("kebabs_layout"))
         self.custom_Frame = QtGui.QFrame(self.kebab_tab)
-        self.custom_Frame.setGeometry(QtCore.QRect(10, 780, 811, 61))
+        self.custom_Frame.setGeometry(QtCore.QRect(10, 690, 811, 61))
         self.custom_Frame.setStyleSheet(_fromUtf8("background:orange;\n"
 "QCheckBox{\n"
 "color:black;\n"
@@ -146,7 +146,7 @@ class Ui_Dialog(object):
         self.custom_salads_layout.setMargin(0)
         self.custom_salads_layout.setObjectName(_fromUtf8("custom_salads_layout"))
         self.custom_Frame_2 = QtGui.QFrame(self.kebab_tab)
-        self.custom_Frame_2.setGeometry(QtCore.QRect(10, 850, 811, 61))
+        self.custom_Frame_2.setGeometry(QtCore.QRect(10, 760, 811, 61))
         self.custom_Frame_2.setStyleSheet(_fromUtf8("background:rgb(92, 255, 165);\n"
 "QCheckBox{\n"
 "background:orange;\n"
@@ -166,20 +166,20 @@ class Ui_Dialog(object):
         self.pizza_tab = QtGui.QWidget()
         self.pizza_tab.setObjectName(_fromUtf8("pizza_tab"))
         self.frame_4 = QtGui.QFrame(self.pizza_tab)
-        self.frame_4.setGeometry(QtCore.QRect(10, 810, 821, 101))
+        self.frame_4.setGeometry(QtCore.QRect(10, 730, 821, 91))
         self.frame_4.setStyleSheet(_fromUtf8("background:rgb(255, 147, 85);\n"
 "color:black;"))
         self.frame_4.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame_4.setFrameShadow(QtGui.QFrame.Raised)
         self.frame_4.setObjectName(_fromUtf8("frame_4"))
         self.horizontalLayoutWidget_3 = QtGui.QWidget(self.frame_4)
-        self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(0, 0, 821, 101))
+        self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(0, 0, 821, 91))
         self.horizontalLayoutWidget_3.setObjectName(_fromUtf8("horizontalLayoutWidget_3"))
         self.horizontalLayout = QtGui.QHBoxLayout(self.horizontalLayoutWidget_3)
         self.horizontalLayout.setMargin(0)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.pizza_frame = QtGui.QFrame(self.pizza_tab)
-        self.pizza_frame.setGeometry(QtCore.QRect(10, 10, 821, 791))
+        self.pizza_frame.setGeometry(QtCore.QRect(10, 10, 821, 711))
         self.pizza_frame.setStyleSheet(_fromUtf8("QFrame {\n"
 "border:none;\n"
 "}"))
@@ -187,7 +187,7 @@ class Ui_Dialog(object):
         self.pizza_frame.setFrameShadow(QtGui.QFrame.Raised)
         self.pizza_frame.setObjectName(_fromUtf8("pizza_frame"))
         self.verticalLayoutWidget_5 = QtGui.QWidget(self.pizza_frame)
-        self.verticalLayoutWidget_5.setGeometry(QtCore.QRect(0, 0, 821, 791))
+        self.verticalLayoutWidget_5.setGeometry(QtCore.QRect(0, 0, 821, 711))
         self.verticalLayoutWidget_5.setObjectName(_fromUtf8("verticalLayoutWidget_5"))
         self.pizzas_layout = QtGui.QVBoxLayout(self.verticalLayoutWidget_5)
         self.pizzas_layout.setMargin(0)
@@ -196,13 +196,13 @@ class Ui_Dialog(object):
         self.burger_tab = QtGui.QWidget()
         self.burger_tab.setObjectName(_fromUtf8("burger_tab"))
         self.gridLayoutWidget_3 = QtGui.QWidget(self.burger_tab)
-        self.gridLayoutWidget_3.setGeometry(QtCore.QRect(10, 10, 811, 761))
+        self.gridLayoutWidget_3.setGeometry(QtCore.QRect(10, 10, 811, 671))
         self.gridLayoutWidget_3.setObjectName(_fromUtf8("gridLayoutWidget_3"))
         self.burgers_layout_2 = QtGui.QGridLayout(self.gridLayoutWidget_3)
         self.burgers_layout_2.setMargin(0)
         self.burgers_layout_2.setObjectName(_fromUtf8("burgers_layout_2"))
         self.frame_7 = QtGui.QFrame(self.burger_tab)
-        self.frame_7.setGeometry(QtCore.QRect(10, 780, 811, 61))
+        self.frame_7.setGeometry(QtCore.QRect(10, 690, 811, 61))
         self.frame_7.setStyleSheet(_fromUtf8("background:orange;\n"
 "QCheckBox{\n"
 "color:black;\n"
@@ -218,7 +218,7 @@ class Ui_Dialog(object):
         self.burger_custom_sauce_layout.setMargin(0)
         self.burger_custom_sauce_layout.setObjectName(_fromUtf8("burger_custom_sauce_layout"))
         self.frame_8 = QtGui.QFrame(self.burger_tab)
-        self.frame_8.setGeometry(QtCore.QRect(10, 850, 811, 61))
+        self.frame_8.setGeometry(QtCore.QRect(10, 760, 811, 61))
         self.frame_8.setStyleSheet(_fromUtf8("background:rgb(92, 255, 165);\n"
 "QCheckBox{\n"
 "background:orange;\n"
@@ -238,7 +238,7 @@ class Ui_Dialog(object):
         self.other_tab = QtGui.QWidget()
         self.other_tab.setObjectName(_fromUtf8("other_tab"))
         self.others_frame = QtGui.QFrame(self.other_tab)
-        self.others_frame.setGeometry(QtCore.QRect(10, 10, 811, 901))
+        self.others_frame.setGeometry(QtCore.QRect(10, 10, 811, 801))
         self.others_frame.setStyleSheet(_fromUtf8("QFrame {\n"
 "border:none;\n"
 "}"))
@@ -246,14 +246,14 @@ class Ui_Dialog(object):
         self.others_frame.setFrameShadow(QtGui.QFrame.Raised)
         self.others_frame.setObjectName(_fromUtf8("others_frame"))
         self.gridLayoutWidget_4 = QtGui.QWidget(self.others_frame)
-        self.gridLayoutWidget_4.setGeometry(QtCore.QRect(0, 0, 811, 901))
+        self.gridLayoutWidget_4.setGeometry(QtCore.QRect(0, 0, 811, 801))
         self.gridLayoutWidget_4.setObjectName(_fromUtf8("gridLayoutWidget_4"))
         self.others_layout = QtGui.QGridLayout(self.gridLayoutWidget_4)
         self.others_layout.setMargin(0)
         self.others_layout.setObjectName(_fromUtf8("others_layout"))
         self.tabWidget.addTab(self.other_tab, _fromUtf8(""))
         self.cart_view = QtGui.QListWidget(Dialog)
-        self.cart_view.setGeometry(QtCore.QRect(880, 100, 391, 861))
+        self.cart_view.setGeometry(QtCore.QRect(880, 100, 391, 771))
         self.cart_view.setStyleSheet(_fromUtf8("background:rgb(240, 240, 240);\n"
 "margin-top:5px;\n"
 "border-top-left-radius: 5px;\n"
@@ -278,7 +278,7 @@ class Ui_Dialog(object):
         self.label.setWordWrap(False)
         self.label.setObjectName(_fromUtf8("label"))
         self.pushButton = QtGui.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(880, 970, 191, 51))
+        self.pushButton.setGeometry(QtCore.QRect(880, 880, 191, 51))
         self.pushButton.setStyleSheet(_fromUtf8("QPushButton {\n"
 "background: rgb(171, 171, 171);\n"
 "color:black;\n"
@@ -290,7 +290,7 @@ class Ui_Dialog(object):
 "}"))
         self.pushButton.setObjectName(_fromUtf8("pushButton"))
         self.pushButton_2 = QtGui.QPushButton(Dialog)
-        self.pushButton_2.setGeometry(QtCore.QRect(1080, 970, 191, 51))
+        self.pushButton_2.setGeometry(QtCore.QRect(1080, 880, 191, 51))
         self.pushButton_2.setStyleSheet(_fromUtf8("QPushButton {\n"
 "background: rgb(171, 171, 171);\n"
 "color:black;\n"
@@ -315,7 +315,6 @@ class Ui_Dialog(object):
         self.label.setText(_translate("Dialog", "Order Summary", None))
         self.pushButton.setText(_translate("Dialog", "Cancel", None))
         self.pushButton_2.setText(_translate("Dialog", "Confirm", None))
-
 
     """------------------------------------------------------------------------------
     Function           : display_kebabs
