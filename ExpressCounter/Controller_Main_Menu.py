@@ -27,19 +27,21 @@ DESCRIPTION : This class is responsible for handling user Events. It initiliazes
 -------------------------------------------------------------------------------"""
 import sys
 from PyQt4 import QtGui
-from PyQt4.Qt import QLabel, QPixmap, QObject, QEvent, QDialog, QSpinBox, \
-        QPushButton, QComboBox, QCheckBox, QHBoxLayout, QGridLayout
+from PyQt4.Qt import QObject, QEvent
 from PyQt4.QtCore import pyqtSlot, pyqtSignal
+
+
 import View_Main_Menu
 import Controller_Cart_Dialog 
-#from Model_Database import DatabaseConnection
-import Model_Database
+import Model_Database_Dialog
+
+
 class Controller_Main_Menu(QtGui.QMainWindow):
     
     def __init__(self):
         super(Controller_Main_Menu, self).__init__()
         # Establish a connection during startup
-        self.establish_database = Model_Database.DatabaseConnection.Model_Database()
+        self.establish_database = Model_Database_Dialog.Model_Database_Dialog()
         self.establish_database.establish_connection()
          # Initialize the view element and draw it
         self.main_view = View_Main_Menu.Ui_MainWindow()

@@ -33,9 +33,9 @@ import sys
 from PyQt4 import QtGui
 
 
-class Model_Database(QSqlDatabase):
+class Model_Database_Dialog(QSqlDatabase):
     def __init__(self):
-        super(Model_Database, self).__init__()
+        super(Model_Database_Dialog, self).__init__()
         
     """------------------------------------------------------------------------------
     Function           : establish_connection

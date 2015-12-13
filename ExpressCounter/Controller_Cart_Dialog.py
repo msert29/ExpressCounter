@@ -9,8 +9,7 @@ DESCRIPTION : This class is instanced upon new order click event by the user.
               new order request.
               
 ------------------------------------------------------------------------------"""
-#from DatabaseConnection import Model_Database
-import Model_Database                                                                           
+import Model_Database_Dialog                                                                           
 
 """------------------------------------------------------------------------------
                      Development Diary
@@ -22,7 +21,6 @@ import Model_Database
               
 -------------------------------------------------------------------------------"""
 
-from Model_Database import DatabaseConnection
 import View_Cart_Dialog 
 from PyQt4.QtCore import Qt 
 from PyQt4.Qt import QDialog, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox,\
@@ -33,7 +31,7 @@ class Cart_Controller_Class(QDialog):
         super(Cart_Controller_Class, self).__init__()
         self.cart_view_init = View_Cart_Dialog.Ui_Dialog()
         self.cart_view_init.setupUi(self)
-        self.database = DatabaseConnection.Model_Database()
+        self.database = Model_Database_Dialog.Model_Database_Dialog()
         
         kebabs_list  = self.database.get_kebabs()
         salad_list   = self.database.get_custom_salads()
