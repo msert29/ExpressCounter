@@ -76,30 +76,10 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.draw_icons()
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
 
     
-    def draw_icons(self):     
-        neworder_icon = QtGui.QPixmap('images/icn-phone2.png')
-        manager_icon = QPixmap('images/admin-icon.png')
-        search_icon = QPixmap('images/search-icon.png')
-        newcustomer_icon = QPixmap('images/newcustomer-icon.png')
-        
-        self.neworder_lbl = QLabel("Place an order")
-        self.manager_lbl = QLabel("Manager Log in")
-        self.search_lbl = QLabel("Search")
-        self.newcustomer_lbl = QLabel("New Customer Entry")
-        
-        self.manager_lbl.setPixmap(manager_icon)
-        self.search_lbl.setPixmap(search_icon)
-        self.neworder_lbl.setPixmap(neworder_icon)
-        self.newcustomer_lbl.setPixmap(newcustomer_icon)
-        
-        self.new_order_layout.addWidget(self.neworder_lbl)
-        self.manager_layout.addWidget(self.manager_lbl)
-        self.search_order_layout.addWidget(self.search_lbl)
-        self.newcustomer_layout.addWidget(self.newcustomer_lbl)
+    

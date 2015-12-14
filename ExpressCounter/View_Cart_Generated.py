@@ -8,9 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import Qt 
-from PyQt4.Qt import QDialog, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox,\
-    QComboBox, QPushButton, QCheckBox
+from PyQt4.Qt import QObject
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -25,7 +23,7 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class Ui_Dialog(object):
+class Ui_Dialog(QObject):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
         Dialog.resize(1280, 950)
@@ -316,108 +314,3 @@ class Ui_Dialog(object):
         self.pushButton.setText(_translate("Dialog", "Cancel", None))
         self.pushButton_2.setText(_translate("Dialog", "Confirm", None))
 
-    """------------------------------------------------------------------------------
-    Function           : display_kebabs
-    Description        : This function retrieves a list of kebab options from the 
-                         Controller_Cart_Dialog class. It then iterates through 
-                         all of the options, creates a salad and sauce combobox
-                         selection for each item and an add button for the item
-                         to be added to the cart.
-    Parameters         : kebabs_list (This parameter is fetched by Controller_Cart_Dialog
-                         class which accesses the DatabaseConnection class -> get_kebabs()
-                         method which iterates through the Items table in the database selecting
-                         items with type = 'kebab' only. The list is then passed to this method
-                         which is directly called in Controller_Cart_Dialog
-    Returns            : Void
-    ------------------------------------------------------------------------------"""
-    
-    def display_kebabs(self, kebabs_list):
-        length = len(kebabs_list)
-        place_holder = 0 #holds the position of widget
-        for i in range(length):
-            salad_options = ['All', 'L/O/R/W', 'No Salad', 'Custom Salad']
-            sauce_options = ['Chilli Sauce', 'Garlic Mayo', 'Mayo', 'BBQ', 'No Sauce', 'Custom Sauce']
-            salad_box     = QComboBox()
-            sauce_box     = QComboBox()
-            salad_box.addItems(salad_options)
-            sauce_box.addItems(sauce_options)
-            
-            add_button = QPushButton("Add")
-            widget_holder = QGroupBox()
-            core = QVBoxLayout()
-            top_layout = QVBoxLayout()
-            bottom_layout = QHBoxLayout()
-            add_button_holder = QVBoxLayout()
-            add_button_holder.addWidget(add_button)
-            name = QLabel(kebabs_list[i]['name'])
-            name.setAlignment(Qt.AlignCenter)
-            add_button_holder.setAlignment(Qt.AlignCenter)
-            top_layout.addWidget(name)
-            bottom_layout.addWidget(salad_box)
-            bottom_layout.addWidget(sauce_box)
-            core.addLayout(top_layout)
-            core.addLayout(bottom_layout)
-            core.addLayout(add_button_holder)
-            
-            widget_holder.setLayout(core)
-            # Check for row
-            if (i == 2) or (i == 3):
-                self.kebabs_layout.addWidget(widget_holder, 1, place_holder)
-            elif (i == 4) or (i == 5):
-                self.kebabs_layout.addWidget(widget_holder, 2, place_holder)
-            elif (i == 6) or (i == 7):
-                self.kebabs_layout.addWidget(widget_holder, 3, place_holder)
-            else:
-                self.kebabs_layout.addWidget(widget_holder, 0, place_holder)
-            # Increment the place holder
-            if (place_holder == 1):
-                place_holder = 0
-            else:
-                place_holder = 1
-                
-    
-    """------------------------------------------------------------------------------
-    Function           : display_salads_options
-    Description        : This function retrieves a list of custom salad variables from
-                         the Controller_Cart_Dialog class. It then creates 
-                         dynamic variables to store each check box thus allowing user
-                         to select specific salad options. 
-                         This function is called directly by the Controller_Cart_Dialog.
-    Parameters         : salad_list (A list of salad options available fetched by 
-                         databaseConnection class, get_custom_salads method, which is 
-                         retrieved by Controller_Cart_Dialog and passed to this function.
-    Returns            : Void
-    ------------------------------------------------------------------------------"""
-    def display_salad_options(self, salad_list):
-        tmp_holder = QHBoxLayout()
-        tmp_group = QGroupBox()
-        salads_length = len(salad_list)
-        salads_var = [None] * salads_length
-        for x in range(0, salads_length):
-            salads_var[x] = salad_list[x]
-            tmp_holder.addWidget(QCheckBox(salads_var[x]))
-        tmp_group.setLayout(tmp_holder)
-        self.custom_salads_layout.addWidget(tmp_group)
-        
-    """------------------------------------------------------------------------------
-    Function           : display_sauce_options
-    Description        :This function retrieves a list of custom salad variables from
-                        the Controller_Cart_Dialog class. It then creates 
-                        dynamic variables to store each check box thus allowing user
-                        to select specific sauce options. 
-                        This function is called directly by the Controller_Cart_Dialog.
-    Parameters         : sauce_list (A list of sauce options available fetched by 
-                         databaseConnection class, get_custom_salads method, which is 
-                         retrieved by Controller_Cart_Dialog and passed to this function.
-    Returns            : Void
-    ------------------------------------------------------------------------------"""
-    def display_sauce_options(self, sauce_list):
-        tmp_holder = QHBoxLayout()
-        tmp_group = QGroupBox()
-        sauces_length = len(sauce_list)
-        sauces_var = [None] * sauces_length
-        for x in range(0, sauces_length):
-            sauces_var[x] = sauce_list[x]
-            tmp_holder.addWidget(QCheckBox(sauces_var[x]))
-        tmp_group.setLayout(tmp_holder)
-        self.custom_sauces_layout.addWidget(tmp_group)
