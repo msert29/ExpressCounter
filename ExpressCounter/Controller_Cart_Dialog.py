@@ -52,24 +52,75 @@ class Cart_Controller_Class(QDialog):
 
 
         # Create two arrays which will hold a sauce and salad
-        # selection for each corresponding kebab
+        # selection for each corresponding kebab 
+        # Values for each array is assign in set_salad and set_sauce
         self.__salad = [None] * len(kebabs_list)
         self.__sauce = [None] * len(kebabs_list)
-        # Make sure we initiliaze each array with first default value
-        # i.e. All Salad and Chilli sauce selection must be selected 
-        # because they are displayed and until the user changes combobox index
-        # the value will not be updated i.e. it will be null, therefore keep 
-        # the default value of all salad and chilli sauce as user might not 
-        # make a selection 
+        """ 
+            Make sure we initiliaze each array with first default value
+            i.e. All Salad and Chilli sauce selection must be selected 
+            because they are displayed and until the user changes combobox index
+            the value will not be updated i.e. it will be null, therefore keep 
+            the default value of all salad and chilli sauce as user might not 
+            make a selection 
+        """
         self.initiliaze_salad_sauce_array(self.__salad, self.__sauce)
         
         
+        """ 
+            salad_x and sauce_x are global variables from the View_Cart_Custom Class
+            They are a list of Comboboxes holding values of salad and sauce selection
+            They are neccesary for the handle_salad/sauce_selection functions
+            therefore they are retreived and passed to these functions
+        """
         salad_x = self.cart_view_init.salad_x
         sauce_x = self.cart_view_init.sauce_x
+        add_x   = self.cart_view_init.add_button_x
         self.handle_sauce_selection(sauce_x)
         self.handle_salad_selection(salad_x)
+        self.handle_add_button(add_x, kebabs_list)
         
         
+    """------------------------------------------------------------------------------
+    Function    :   handle_add_button
+    Description :   This function handles events when the add button has been clicked.
+                    It receives an array of add_button_x of type QPushButton, one 
+                    for each corresponding kebab. It also receives a kebabs_list array
+                    and depending on the add_button_x clicked event, it connect to
+                    the add_to_cart slot supplying the kebab_list[x]['name'], salad[x]
+                    sauce[x] and kebab_list[x]['price'] as parameters. The kebab_list
+                    and add_x are corresponding arrays as add_x is populated with 
+                    kebab_list array in View_Cart_Custom class.
+    Parameters  :   add_x (An array of Pushbuttons received from View_Cart_Custom and 
+                    kebabs_list (received from Model_Database_Dialog.
+    Returns     :   Void
+    
+    ------------------------------------------------------------------------------"""  
+        
+    def handle_add_button(self, add_x, kebabs_list):
+        add_x[0].clicked.connect(lambda : self.add_to_cart(kebabs_list[0]['name'], self.__salad[0], self.__sauce[0], kebabs_list[0]['price']))
+        add_x[1].clicked.connect(lambda : self.add_to_cart(kebabs_list[1]['name'], self.__salad[1], self.__sauce[1], kebabs_list[1]['price']))
+        add_x[2].clicked.connect(lambda : self.add_to_cart(kebabs_list[2]['name'], self.__salad[2], self.__sauce[2], kebabs_list[2]['price']))
+        add_x[3].clicked.connect(lambda : self.add_to_cart(kebabs_list[3]['name'], self.__salad[3], self.__sauce[3], kebabs_list[3]['price']))
+        add_x[4].clicked.connect(lambda : self.add_to_cart(kebabs_list[4]['name'], self.__salad[4], self.__sauce[4], kebabs_list[4]['price']))
+        add_x[5].clicked.connect(lambda : self.add_to_cart(kebabs_list[5]['name'], self.__salad[5], self.__sauce[5], kebabs_list[5]['price']))
+        add_x[6].clicked.connect(lambda : self.add_to_cart(kebabs_list[6]['name'], self.__salad[6], self.__sauce[6], kebabs_list[6]['price']))
+        add_x[7].clicked.connect(lambda : self.add_to_cart(kebabs_list[7]['name'], self.__salad[7], self.__sauce[7], kebabs_list[7]['price']))
+
+        
+    """------------------------------------------------------------------------------
+    Function    :   add_to_cart (slot)
+    Description :   This slot is executed once the add button of any kebab is clicked.
+                    It is currently outputting the selection messages.
+    Parameters  :   name(kebab name), salad (salad selection), sauce(sauce selection)
+                    and price (item price)
+                    kebabs_list (received from Model_Database_Dialog.
+    Returns     :   Void
+    
+    ------------------------------------------------------------------------------""" 
+    @pyqtSlot(str, str, str, int)
+    def add_to_cart(self, name, salad, sauce, price):
+        print "Name: " + name + "\nSalad: " + salad + "\nSauce: " + sauce + "\nPrice: " + str(price)
     """------------------------------------------------------------------------------
     Function    : initialiaze_salad_sauce_array
     Description : This function recieves two fixed sized arrays whom hold salad
