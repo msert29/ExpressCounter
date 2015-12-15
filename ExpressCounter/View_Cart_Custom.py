@@ -67,18 +67,18 @@ class View_Cart_Custom(QObject):
         self.salad_x = [None] * length
         self.sauce_x = [None] * length
         self.add_button_x = [None] * length
-        self.selected_salad_option = ""
-        self.selected_sauce_option = "Chilli Sauce"
+        self.size_x = [None] * length
+
         for i in range(length):
             salad_options = ['All Salad', 'L/O/R/W', 'No Salad', 'Custom Salad']
             sauce_options = ['Chilli Sauce', 'Garlic Mayo', 'Mayo', 'BBQ', 'No Sauce', 'Custom Sauce']
-            #salad_box     = QComboBox()
+            size_options  = ['Small', 'Large']
             self.salad_x[i]    = QComboBox()
             self.sauce_x[i]    = QComboBox()
-            #salad_box.addItems(salad_options)
+            self.size_x[i]     = QComboBox()
             self.salad_x[i].addItems(salad_options)
             self.sauce_x[i].addItems(sauce_options)
-            
+            self.size_x[i].addItems(size_options)
             self.add_button_x[i] = QPushButton("Add")
             widget_holder = QGroupBox()
             core = QVBoxLayout()
@@ -90,6 +90,7 @@ class View_Cart_Custom(QObject):
             name.setAlignment(Qt.AlignCenter)
             add_button_holder.setAlignment(Qt.AlignCenter)
             top_layout.addWidget(name)
+            bottom_layout.addWidget(self.size_x[i])
             bottom_layout.addWidget(self.salad_x[i])
             bottom_layout.addWidget(self.sauce_x[i])
             core.addLayout(top_layout)
@@ -105,6 +106,14 @@ class View_Cart_Custom(QObject):
                 self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 2, place_holder)
             elif (i == 6) or (i == 7):
                 self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 3, place_holder)
+            elif (i == 8) or (i == 9):
+                self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 4, place_holder)
+            elif (i == 10) or (i == 11):
+                self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 5, place_holder)
+            elif (i == 11) or (i == 12):  
+                self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 6, place_holder)
+            elif (i == 13) or (i == 14):  
+                self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 7, place_holder)    
             else:
                 self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 0, place_holder)
             # Increment the place holder
@@ -131,10 +140,10 @@ class View_Cart_Custom(QObject):
         tmp_holder = QHBoxLayout()
         tmp_group = QGroupBox()
         salads_length = len(salad_list)
-        salads_var = [None] * salads_length
+        self.salads_var = [None] * salads_length
         for x in range(0, salads_length):
-            salads_var[x] = salad_list[x]
-            tmp_holder.addWidget(QCheckBox(salads_var[x]))
+            self.salads_var[x] = QCheckBox(salad_list[x])
+            tmp_holder.addWidget(self.salads_var[x])
         tmp_group.setLayout(tmp_holder)
         self.generated_cart_ui.custom_salads_layout.addWidget(tmp_group)
         
@@ -154,10 +163,10 @@ class View_Cart_Custom(QObject):
         tmp_holder = QHBoxLayout()
         tmp_group = QGroupBox()
         sauces_length = len(sauce_list)
-        sauces_var = [None] * sauces_length
+        self.sauces_var = [None] * sauces_length
         for x in range(0, sauces_length):
-            sauces_var[x] = sauce_list[x]
-            tmp_holder.addWidget(QCheckBox(sauces_var[x]))
+            self.sauces_var[x] = QCheckBox(sauce_list[x])
+            tmp_holder.addWidget(self.sauces_var[x])
         tmp_group.setLayout(tmp_holder)
         self.generated_cart_ui.custom_sauces_layout.addWidget(tmp_group)
     

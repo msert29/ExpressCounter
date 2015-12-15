@@ -60,6 +60,33 @@ class Model_Database_Dialog(QSqlDatabase):
             QMessageBox.critical(None, "Database Error", db.lastError().text())   
 
 
+
+
+    """------------------------------------------------------------------------------
+    Function           : get_custom_sauces
+    Description        : This function does a query into the database selecting all
+                         entries with type kebab and size small.
+                         The reason why were only selecting small sized kebabs is 
+                         because all items have small and large sizes. We want to 
+                         keep the menu simple without too much data. The only difference
+                         is the price which is worked out in the calculate price method below.
+                         This method is called in the add_to_cart slot in Controller_Cart_Dialog.
+                         It then iterates through the results appending each result to
+                         a dynamic array. 
+                         This function is directly called by Controller_Cart_Dialog
+    Parameters         : none
+    Returns            : list_of_kebabs_array (Which is used by Controller_Cart_Dialog
+    ------------------------------------------------------------------------------""" 
+     
+    def get_kebabs(self):
+        list_of_kebabs_array = []
+        query = QSqlQuery()
+        query.exec_("""SELECT * FROM `Products` WHERE `product_type` LIKE 'Kebab' AND `product_size` LIKE 'Small' ORDER BY `product_id` ASC""")
+        while (query.next()):
+            kebab_dict = {'id': query.value(0).toString(), 'type': query.value(1).toString(), 'name':query.value(2).toString(), 'price': query.value(4).toString()}
+            list_of_kebabs_array.append(kebab_dict)
+        return list_of_kebabs_array
+
     """------------------------------------------------------------------------------
     Function           : get_pizzas
     Description        : This function does a query into the database selecting 
@@ -96,25 +123,7 @@ class Model_Database_Dialog(QSqlDatabase):
             list_of_burgers_array.append(burger_dict)
         return list_of_burgers_array
         
-    
-    """------------------------------------------------------------------------------
-    Function           : get_kebabs
-    Description        : This function does a query into the database selecting
-                         items with type = 'Kebabs' and then stores
-                         the returned information in a dictionary. For each item iteration
-                         it appends the dictionary to a dynamic array which is returned.
-    Parameters         : none
-    Returns            : list_of_kebabs_array (Which is used by Controller_Cart_Dialog
-    ------------------------------------------------------------------------------"""
-    def get_kebabs(self):
-        list_of_kebabs_array = []
-        query = QSqlQuery()
-        query.exec_("""SELECT * FROM `Items` WHERE `type` LIKE 'Kebab'""")
-        while (query.next()):
-            kebab_dict = {'id': query.value(0).toString(), 'type': query.value(1).toString(), 'name':query.value(2).toString(), 'price': query.value(3).toString()}
-            list_of_kebabs_array.append(kebab_dict)
-        return list_of_kebabs_array
-        
+
         
     """------------------------------------------------------------------------------
     Function           : get_others
@@ -134,7 +143,23 @@ class Model_Database_Dialog(QSqlDatabase):
             list_of_others_array.append(other_dict)
             return list_of_others_array
         
-    
+    """------------------------------------------------------------------------------
+    Function           : get_price
+    Description        : This function does a query into the database selecting
+                         items with name = 'product_name' and size = product_size
+                         It returns the price of the matching entry. It is called by
+                         the add_to_cart slot form the Controller_Cart_Dialog class.
+    Parameters         : product_name, product_size
+    Returns            : Price
+    ------------------------------------------------------------------------------"""    
+    def get_price(self, product_name, product_size):
+        query = QSqlQuery()
+        query.prepare("""SELECT `product_price` FROM `Products` WHERE `product_name` LIKE ? AND `product_size` LIKE ?""")
+        query.bindValue(0, product_name)
+        query.bindValue(1, product_size)
+        query.exec_()
+        while (query.next()):
+            return query.value(0).toString()
     
     """------------------------------------------------------------------------------
     Function           : get_custom_salads
@@ -173,7 +198,7 @@ class Model_Database_Dialog(QSqlDatabase):
         return list_of_sauces_array   
         
         
-        
+
     """------------------------------------------------------------------------------
     Function           : get_all_items
     Description        : This function retrieves all items in the Items table.
@@ -193,7 +218,3 @@ class Model_Database_Dialog(QSqlDatabase):
             print "Name: " + query.value(2).toString()
             print "Price: "+ query.value(3).toString()
         return array_of_items
-    
-   
-    
-    

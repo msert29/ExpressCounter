@@ -115,7 +115,7 @@ class Ui_Dialog(QObject):
 " }\n"
 "\n"
 "QComboBox {\n"
-"min-width:170px;\n"
+"min-width:115px;\n"
 "min-height:45;\n"
 "}"))
         self.kebabs_frame.setFrameShape(QtGui.QFrame.StyledPanel)

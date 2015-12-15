@@ -26,6 +26,8 @@ DESCRIPTION : This class is responsible for handling user Events. It initiliazes
               
 -------------------------------------------------------------------------------"""
 import sys
+import sip
+sip.setapi('QString', 2)
 from PyQt4 import QtGui
 from PyQt4.Qt import QObject, QEvent
 from PyQt4.QtCore import pyqtSlot, pyqtSignal
