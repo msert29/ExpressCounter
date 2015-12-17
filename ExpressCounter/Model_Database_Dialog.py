@@ -99,9 +99,9 @@ class Model_Database_Dialog(QSqlDatabase):
     def get_pizzas(self):
         list_of_pizza_array = []
         query = QSqlQuery()
-        query.exec_("""SELECT * FROM `Items` WHERE `type` LIKE `pizza` """)
+        query.exec_("""SELECT * FROM `Products` WHERE `product_type` LIKE 'Pizza' AND `product_size` LIKE '9' ORDER BY `product_id` ASC""")
         while (query.next()):
-            pizza_dict = {'id': query.value(0).toString(), 'type': query.value(1).toString(), 'name':query.value(2).toString(), 'price': query.value(3).toString()}
+            pizza_dict = {'id': query.value(0).toString(), 'type': query.value(1).toString(), 'name':query.value(2).toString(), 'price': query.value(4).toString()}
             list_of_pizza_array.append(pizza_dict)
         return list_of_pizza_array
         
@@ -198,7 +198,45 @@ class Model_Database_Dialog(QSqlDatabase):
         return list_of_sauces_array   
         
         
-
+    """------------------------------------------------------------------------------
+    Function           : get_pizza_toppings
+    Description        : This function does a query into the database selecting all
+                         entries in the Toppings table.
+                         It then iterates through the results saving each to a dictionary
+                         Each dictionary is then apppending to a dynamic array. 
+                         This array is returned
+                         This function is directly called by Controller_Cart_Dialog
+    Parameters         : none
+    Returns            : list_of_toppings_array (Which is used by Controller_Cart_Dialog)
+    ------------------------------------------------------------------------------"""  
+    def get_pizza_toppings(self):
+        list_of_toppings_array = []
+        query = QSqlQuery()
+        query.exec_("""SELECT * FROM `Toppings` WHERE `size` = 9""")
+        while (query.next()):
+            topping_dict = {'id': query.value(0).toString(), 'name': query.value(1).toString(), 'size':query.value(2).toString(), 'price': query.value(3).toString()}
+            list_of_toppings_array.append(topping_dict)
+        return list_of_toppings_array
+    
+    """ ------------------------------------------------------------------------------
+    Function           : get_pizza_topping_price
+    Description        : This function does a query into the database aiming to retreive
+                         the price of the given topping. Toppings can be either 0.90 pence
+                         or pound 1 depending on pizza size. Therefore we will need to distinguish
+                         between pizza toppings. 
+    Parameters         : topping_name (name of the pizza topping) size (size of the pizza topping
+                            which can be 9 or 12 in lieue with pizza size)
+    Returns            :  query.value(0).toString() (returned query result from database)
+    ------------------------------------------------------------------------------"""  
+    
+    
+    def get_pizza_topping_price(self, topping_name, size):
+        query = QSqlQuery()
+        query.exec_("""SELECT `price` FROM `Toppings` WHERE `topping_name` LIKE ? AND `size` = ? """)
+        while (query.next()):
+            return query.value(0).toString()
+         
+         
     """------------------------------------------------------------------------------
     Function           : get_all_items
     Description        : This function retrieves all items in the Items table.

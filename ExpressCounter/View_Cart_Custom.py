@@ -57,30 +57,34 @@ class View_Cart_Custom(QObject):
     Returns            : Void
     ------------------------------------------------------------------------------"""
     def display_kebabs(self, kebabs_list):
-        length = len(kebabs_list)
+        kebabs_length = len(kebabs_list)
         #holds the position of widget
         place_holder = 0 
         # Create combobox variables which will be assigned in the loop
         # needs to be dynamic to capture value changed event for each
         # two arrays with length equal to kebab_list size.
         # we will iterate and assign combobox to each one
-        self.salad_x = [None] * length
-        self.sauce_x = [None] * length
-        self.add_button_x = [None] * length
-        self.size_x = [None] * length
+        self.salad_options = [None] * kebabs_length
+        self.sauce_options = [None] * kebabs_length
+        self.add_button_x  = [None] * kebabs_length
+        self.size_options  = [None] * kebabs_length
 
-        for i in range(length):
-            salad_options = ['All Salad', 'L/O/R/W', 'No Salad', 'Custom Salad']
-            sauce_options = ['Chilli Sauce', 'Garlic Mayo', 'Mayo', 'BBQ', 'No Sauce', 'Custom Sauce']
-            size_options  = ['Small', 'Large']
-            self.salad_x[i]    = QComboBox()
-            self.sauce_x[i]    = QComboBox()
-            self.size_x[i]     = QComboBox()
-            self.salad_x[i].addItems(salad_options)
-            self.sauce_x[i].addItems(sauce_options)
-            self.size_x[i].addItems(size_options)
+        for i in range(kebabs_length):
+            salad_options_str = ['All Salad', 'L/O/R/W', 'No Salad', 'Custom Salad']
+            sauce_options_str = ['Chilli Sauce', 'Garlic Mayo', 'Mayo', 'BBQ', 'No Sauce', 'Custom Sauce']
+            size_options_str  = ['Small', 'Large']
+            self.salad_options[i]    = QComboBox()
+            self.sauce_options[i]    = QComboBox()
+            self.size_options[i]     = QComboBox()
+            self.salad_options[i].addItems(salad_options_str)
+            self.sauce_options[i].addItems(sauce_options_str)
+            self.size_options[i].addItems(size_options_str)
             self.add_button_x[i] = QPushButton("Add")
-            widget_holder = QGroupBox()
+            
+            # Need a groupbox which will hold a bundle of QLabel, QComboBox and QPushbutton
+            kebab_group_box = QGroupBox()
+             
+            # Need a layout which will hold nested layouts 
             core = QVBoxLayout()
             top_layout = QVBoxLayout()
             bottom_layout = QHBoxLayout()
@@ -90,32 +94,32 @@ class View_Cart_Custom(QObject):
             name.setAlignment(Qt.AlignCenter)
             add_button_holder.setAlignment(Qt.AlignCenter)
             top_layout.addWidget(name)
-            bottom_layout.addWidget(self.size_x[i])
-            bottom_layout.addWidget(self.salad_x[i])
-            bottom_layout.addWidget(self.sauce_x[i])
+            bottom_layout.addWidget(self.size_options[i])
+            bottom_layout.addWidget(self.salad_options[i])
+            bottom_layout.addWidget(self.sauce_options[i])
             core.addLayout(top_layout)
             core.addLayout(bottom_layout)
             core.addLayout(add_button_holder)
             
-            widget_holder.setLayout(core)
+            kebab_group_box.setLayout(core)
             
             # Check for row
             if (i == 2) or (i == 3):
-                self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 1, place_holder)
+                self.generated_cart_ui.kebabs_layout.addWidget(kebab_group_box, 1, place_holder)
             elif (i == 4) or (i == 5):
-                self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 2, place_holder)
+                self.generated_cart_ui.kebabs_layout.addWidget(kebab_group_box, 2, place_holder)
             elif (i == 6) or (i == 7):
-                self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 3, place_holder)
+                self.generated_cart_ui.kebabs_layout.addWidget(kebab_group_box, 3, place_holder)
             elif (i == 8) or (i == 9):
-                self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 4, place_holder)
+                self.generated_cart_ui.kebabs_layout.addWidget(kebab_group_box, 4, place_holder)
             elif (i == 10) or (i == 11):
-                self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 5, place_holder)
+                self.generated_cart_ui.kebabs_layout.addWidget(kebab_group_box, 5, place_holder)
             elif (i == 11) or (i == 12):  
-                self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 6, place_holder)
+                self.generated_cart_ui.kebabs_layout.addWidget(kebab_group_box, 6, place_holder)
             elif (i == 13) or (i == 14):  
-                self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 7, place_holder)    
+                self.generated_cart_ui.kebabs_layout.addWidget(kebab_group_box, 7, place_holder)    
             else:
-                self.generated_cart_ui.kebabs_layout.addWidget(widget_holder, 0, place_holder)
+                self.generated_cart_ui.kebabs_layout.addWidget(kebab_group_box, 0, place_holder)
             # Increment the place holder
             if (place_holder == 1):
                 place_holder = 0
@@ -140,16 +144,16 @@ class View_Cart_Custom(QObject):
         tmp_holder = QHBoxLayout()
         tmp_group = QGroupBox()
         salads_length = len(salad_list)
-        self.salads_var = [None] * salads_length
+        self.custom_salad_options = [None] * salads_length
         for x in range(0, salads_length):
-            self.salads_var[x] = QCheckBox(salad_list[x])
-            tmp_holder.addWidget(self.salads_var[x])
+            self.custom_salad_options[x] = QCheckBox(salad_list[x])
+            tmp_holder.addWidget(self.custom_salad_options[x])
         tmp_group.setLayout(tmp_holder)
         self.generated_cart_ui.custom_salads_layout.addWidget(tmp_group)
         
     """------------------------------------------------------------------------------
-    @Function           : display_sauce_options
-    @Description        :This function retrieves a list of custom salad variables from
+    Function           : display_sauce_options
+    Description        :This function retrieves a list of custom salad variables from
                         the Controller_Cart_Dialog class. It then creates 
                         dynamic variables to store each check box thus allowing user
                         to select specific sauce options. 
@@ -163,11 +167,78 @@ class View_Cart_Custom(QObject):
         tmp_holder = QHBoxLayout()
         tmp_group = QGroupBox()
         sauces_length = len(sauce_list)
-        self.sauces_var = [None] * sauces_length
+        self.custom_sauce_options = [None] * sauces_length
         for x in range(0, sauces_length):
-            self.sauces_var[x] = QCheckBox(sauce_list[x])
-            tmp_holder.addWidget(self.sauces_var[x])
+            self.custom_sauce_options[x] = QCheckBox(sauce_list[x])
+            tmp_holder.addWidget(self.custom_sauce_options[x])
         tmp_group.setLayout(tmp_holder)
         self.generated_cart_ui.custom_sauces_layout.addWidget(tmp_group)
+        
+        
+    """------------------------------------------------------------------------------
+    Function        : display_pizzas
+    Description     : Receives a list of pizzas which then creates a size combobox
+                       for pizza size selection, a QCheckBox which allows custom 
+                       topping addition and a QPushButton to add the selected item
+                       to the cart.
+    Args            : pizza_list (retreived from the model_database_dialog class)
+    Returns         : Void
     
+    ------------------------------------------------------------------------------"""
+    def display_pizzas(self, pizza_list):
+        pizza_length             = len(pizza_list)
+        self.pizza_size          = [None] * pizza_length
+        self.pizza_add_button    = [None] * pizza_length
+        self.pizza_extra_check_box  = [None] * pizza_length
+        for p in range(pizza_length):
+            pizza_name = QLabel(pizza_list[p]['name'])
+            pizza_size_string = ['9', '12']
+            self.pizza_size[p] = QComboBox()
+            self.pizza_size[p].addItems(pizza_size_string)
+        
+            self.pizza_extra_check_box[p] = QCheckBox("Extra")
+            self.pizza_add_button[p] = QPushButton("Add")
+            vertical_box_layout = QHBoxLayout()
     
+            vertical_box_layout.addWidget(pizza_name)
+            vertical_box_layout.addWidget(self.pizza_size[p])
+            vertical_box_layout.addWidget(self.pizza_extra_check_box[p])
+            vertical_box_layout.addWidget(self.pizza_add_button[p])
+            
+            pizza_group_box = QGroupBox()
+
+            pizza_group_box.setLayout(vertical_box_layout)
+            self.generated_cart_ui.pizzas_layout.addWidget(pizza_group_box)
+            
+            
+    """------------------------------------------------------------------------------
+    Function        : display_custom_pizza_toppings
+    Description     : Receives a list of toppings from the Controller_Cart class
+                      it then iterates through all these toppings appending them
+                      to the horizantalLayout. It allows the user to specifically
+                      choose custom pizza toppings.
+    Args            : toppings_list (retreived from the model_database_dialog class)
+    Returns         : Void
+    
+    ------------------------------------------------------------------------------"""
+    def display_custom_pizza_toppings(self, toppings_list):
+        topping_length = len(toppings_list)
+        # Layout variables to display data
+        custom_topping_top_layout = QHBoxLayout()
+        custom_topping_bot_layout = QHBoxLayout()
+        join_layouts              = QVBoxLayout()
+        layout_into_group         = QGroupBox()
+       
+        self.custom_topping_options = [None] * topping_length
+        for x in range(0, topping_length):
+            if x <= 6:
+                self.custom_topping_options[x] = QCheckBox(toppings_list[x]['name'])
+                custom_topping_top_layout.addWidget(self.custom_topping_options[x])
+            else:
+                self.custom_topping_options[x] = QCheckBox(toppings_list[x]['name'])
+                custom_topping_bot_layout.addWidget(self.custom_topping_options[x])
+
+        join_layouts.addLayout(custom_topping_top_layout)
+        join_layouts.addLayout(custom_topping_bot_layout)
+        layout_into_group.setLayout(join_layouts)
+        self.generated_cart_ui.horizontalLayout.addWidget(layout_into_group)
