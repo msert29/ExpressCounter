@@ -227,7 +227,7 @@ class View_Cart_Custom(QObject):
         custom_topping_top_layout = QHBoxLayout()
         custom_topping_bot_layout = QHBoxLayout()
         join_layouts              = QVBoxLayout()
-        layout_into_group         = QGroupBox()
+        self.layout_into_group         = QGroupBox()
        
         self.custom_topping_options = [None] * topping_length
         for x in range(0, topping_length):
@@ -240,5 +240,7 @@ class View_Cart_Custom(QObject):
 
         join_layouts.addLayout(custom_topping_top_layout)
         join_layouts.addLayout(custom_topping_bot_layout)
-        layout_into_group.setLayout(join_layouts)
-        self.generated_cart_ui.horizontalLayout.addWidget(layout_into_group)
+        self.layout_into_group.setLayout(join_layouts)
+        self.layout_into_group.hide()
+        self.generated_cart_ui.horizontalLayout.addWidget(self.layout_into_group)
+        
