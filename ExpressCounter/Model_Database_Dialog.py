@@ -117,7 +117,7 @@ class Model_Database_Dialog(QSqlDatabase):
     def get_burgers(self):
         list_of_burgers_array = []
         query = QSqlQuery()
-        query.exec_("""SELECT * FROM `Items` WHERE `type` LIKE `burger` """)
+        query.exec_("""SELECT * FROM `Products` WHERE `product_type` LIKE 'Burger' AND `product_size` LIKE 'Small' ORDER BY `product_id` ASC""")
         while (query.next()):
             burger_dict = {'id': query.value(0).toString(), 'type': query.value(1).toString(), 'name':query.value(2).toString(), 'price': query.value(3).toString()}
             list_of_burgers_array.append(burger_dict)

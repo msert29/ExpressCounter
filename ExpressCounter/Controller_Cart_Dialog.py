@@ -40,10 +40,14 @@ class Cart_Controller_Class(QDialog):
         """ Retrieve a list of products from the model_database """
         kebabs_list  = self.database.get_kebabs()
         pizzas_list  = self.database.get_pizzas()
-        burgers_list = self.database.get_pizzas()
+        burgers_list = self.database.get_burgers()
         others_list  = self.database.get_others()
         
         
+        
+        # A list of custom salads and sauces used by burger and kebab options
+        salad_list    = self.database.get_custom_salads()
+        sauce_list    = self.database.get_custom_sauces()
         """---------------------------------------------------------------------------------
         |
         |
@@ -51,10 +55,8 @@ class Cart_Controller_Class(QDialog):
         |
         |
         ---------------------------------------------------------------------------------"""
-        # Variable declarations
-        # A list of custom salads and sauces
-        salad_list    = self.database.get_custom_salads()
-        sauce_list    = self.database.get_custom_sauces()
+        
+        
         
         # Need to store all custom selected salads and sauces into an array
         self.__custom_salad_array = []
@@ -145,8 +147,47 @@ class Cart_Controller_Class(QDialog):
             self.handle_pizza_size_selection(pizza_size_combobox)
             self.handle_pizza_extra_checkbox_selection(pizza_extra_check_box)
             self.handle_custom_topping_selection(toppings_list)
-            
             self.handle_pizza_add_button(pizza_add_button, pizzas_list)
+            
+            
+            """---------------------------------------------------------------------------------
+            |
+            |
+            |                                   Burger Section
+            |
+            |
+            ---------------------------------------------------------------------------------"""
+            
+            # Three fixed sized arrays which will hold cheese, salad and sauce selection for each burger
+            # They have to be private thus self__ declared making it viewable by this class only
+            # These arrays will be initialized preventing any errors if the user doesn't make
+            # any salad, cheese or sauce selection.
+            self.__burger_salad_list  = [None] * len(burgers_list)
+            self.__burger_sauce_list  = [None] * len(burgers_list)
+            self.__burger_cheese_list = [None] * len(burgers_list)
+            
+            # And two dynamic arrays for custom salad and sauce list
+            self.__burger_custom_salad_list = []
+            self.__burger_custom_sauce_list = []
+            
+            
+            self.cart_view_init.display_burgers(burgers_list)
+            self.cart_view_init.display_burger_salad_options(salad_list)
+            self.cart_view_init.display_burger_sauce_options(sauce_list)
+            # Burgers are initiliazed, now get Combobox and buttons for each burger option
+            burger_salad_option   = self.cart_view_init.burger_salad_options
+            burger_sauce_option   = self.cart_view_init.burger_sauce_options
+            burger_cheese_option  = self.cart_view_init.burger_cheese_option
+            
+            
+            
+            self.handle_burger_salad_selection(burger_salad_option)
+            self.handle_burger_sauce_selection(burger_sauce_option)
+            self.handle_burger_cheese_selection(burger_cheese_option)
+            
+            self.handle_burger_custom_sauce_selection(self.cart_view_init.custom_burger_sauce_options, sauce_list)
+            self.handle_burger_custom_salad_selection(self.cart_view_init.custom_burger_salad_options, salad_list)
+            
         else:
             QMessageBox.critical(None, "No Kebabs returned!", "No Kebab products where found, please check your database entries!")
 
@@ -680,23 +721,154 @@ class Cart_Controller_Class(QDialog):
     ------------------------------------------------------------------------------""" 
     @pyqtSlot(str, str, str, str)
     def add_to_cart_pizza(self, size, name):
-        print("Hereeee")
         price = self.database.get_price(name, size)
         
         #check if any toppings requested and update the price accordingly
         if (len(self.__custom_topping_list) > 0):
-            if (size == '9'):
-                plus = (len(self.__custom_topping_list) * 0.90)
-                price = float(price) + plus
-            elif (size == '12'):
-                plus = (len(self.__custom_topping_list) * 1)
-                price = float(price) + plus
-            else:
-                QMessageBox.critical(None, "Price Error", "Pizza Custom topping price update error! unkown size!: " + str(size))   
-        
+            topping_price = self.calculate_topping_price(size)
+            price = float(price) + topping_price
         
         print("Size: " + str(size))
         print("\nName: " + name)
         print("\nPrice: " + str(price))
-        self.__cat_toppings = " ".join(self.__custom_topping_list)
-        print (self.__cat_toppings)
+        
+        if (len(self.__custom_topping_list) > 0):
+            self.__cat_toppings = " ".join(self.__custom_topping_list)
+            print (self.__cat_toppings)
+        
+    """
+    A list of custom toppings requested by the user therefore calculate the price of the toppings requested.
+    """
+    def calculate_topping_price(self, size):
+        if (size == '9'):
+            plus = (len(self.__custom_topping_list) * 0.90)
+            return float(plus)
+        elif (size == '12'):
+            plus = (len(self.__custom_topping_list) * 1)
+            return float(plus)
+        else:
+            QMessageBox.critical(None, "Price Error", "Pizza Custom topping price update error! unkown size!: " + str(size))
+
+
+    
+    
+    """--------------------------------------------------------------------------------------------------------------------------------------------------------
+    |
+    | Burgers Section Start
+    |
+    --------------------------------------------------------------------------------------------------------------------------------------------------------"""
+    #def initialize_burger_options(self, burgers_list):
+        
+    
+    
+    def handle_burger_salad_selection(self, burger_salad_option):
+        try: 
+            burger_salad_option[0].activated.connect(lambda : self.set_burger_salad(0, burger_salad_option[0].currentText()))
+            burger_salad_option[1].activated.connect(lambda : self.set_burger_salad(1, burger_salad_option[1].currentText()))
+            burger_salad_option[2].activated.connect(lambda : self.set_burger_salad(2, burger_salad_option[2].currentText()))
+            burger_salad_option[3].activated.connect(lambda : self.set_burger_salad(3, burger_salad_option[3].currentText()))
+            burger_salad_option[4].activated.connect(lambda : self.set_burger_salad(4, burger_salad_option[4].currentText()))
+            burger_salad_option[5].activated.connect(lambda : self.set_burger_salad(5, burger_salad_option[5].currentText()))
+            burger_salad_option[6].activated.connect(lambda : self.set_burger_salad(6, burger_salad_option[6].currentText()))
+        except IndexError:
+            QMessageBox.critical(None, "Burger salad Index error!", "Index error has been raised in Burger salad change option event !")
+            
+            
+    def handle_burger_sauce_selection(self, burger_sauce_option):
+        try:
+            burger_sauce_option[0].activated.connect(lambda : self.set_burger_sauce(0, burger_sauce_option[0].currentText()))
+            burger_sauce_option[1].activated.connect(lambda : self.set_burger_sauce(1, burger_sauce_option[1].currentText()))
+            burger_sauce_option[2].activated.connect(lambda : self.set_burger_sauce(2, burger_sauce_option[2].currentText()))
+            burger_sauce_option[3].activated.connect(lambda : self.set_burger_sauce(3, burger_sauce_option[3].currentText()))
+            burger_sauce_option[4].activated.connect(lambda : self.set_burger_sauce(4, burger_sauce_option[4].currentText()))
+            burger_sauce_option[5].activated.connect(lambda : self.set_burger_sauce(5, burger_sauce_option[5].currentText()))
+            burger_sauce_option[6].activated.connect(lambda : self.set_burger_sauce(6, burger_sauce_option[6].currentText()))
+        except IndexError:
+            QMessageBox.critical(None, "Burger sauce Index error!", "Index error has been raised in Burger sauce change option event !")
+
+
+    def handle_burger_cheese_selection(self, burger_cheese_option):
+        try:
+            burger_cheese_option[0].activated.connect(lambda : self.set_burger_cheese_selection(0, burger_cheese_option[0].currentText()))
+            burger_cheese_option[1].activated.connect(lambda : self.set_burger_cheese_selection(1, burger_cheese_option[1].currentText()))
+            burger_cheese_option[2].activated.connect(lambda : self.set_burger_cheese_selection(2, burger_cheese_option[2].currentText()))
+            burger_cheese_option[3].activated.connect(lambda : self.set_burger_cheese_selection(3, burger_cheese_option[3].currentText()))
+            burger_cheese_option[4].activated.connect(lambda : self.set_burger_cheese_selection(4, burger_cheese_option[4].currentText()))
+            burger_cheese_option[5].activated.connect(lambda : self.set_burger_cheese_selection(5, burger_cheese_option[5].currentText()))
+            burger_cheese_option[6].activated.connect(lambda : self.set_burger_cheese_selection(6, burger_cheese_option[6].currentText()))
+         
+        except IndexError:
+            QMessageBox.critical(None, "Burger sauce Index error!", "Index error has been raised in Burger sauce change option event !")
+
+    def handle_burger_custom_sauce_selection(self, burger_custom_sauce_list, sauce_list):
+        try:
+            burger_custom_sauce_list[0].stateChanged.connect(lambda : self.set_burger_custom_sauce(sauce_list[0], burger_custom_sauce_list[0].checkState()))
+            burger_custom_sauce_list[1].stateChanged.connect(lambda : self.set_burger_custom_sauce(sauce_list[1], burger_custom_sauce_list[1].checkState()))
+            burger_custom_sauce_list[2].stateChanged.connect(lambda : self.set_burger_custom_sauce(sauce_list[2], burger_custom_sauce_list[2].checkState()))
+            burger_custom_sauce_list[3].stateChanged.connect(lambda : self.set_burger_custom_sauce(sauce_list[3], burger_custom_sauce_list[3].checkState()))
+            burger_custom_sauce_list[4].stateChanged.connect(lambda : self.set_burger_custom_sauce(sauce_list[4], burger_custom_sauce_list[4].checkState()))
+            burger_custom_sauce_list[5].stateChanged.connect(lambda : self.set_burger_custom_sauce(sauce_list[5], burger_custom_sauce_list[5].checkState()))
+            burger_custom_sauce_list[6].stateChanged.connect(lambda : self.set_burger_custom_sauce(sauce_list[6], burger_custom_sauce_list[6].checkState()))
+        except IndexError:
+            QMessageBox.critical(None, "Burger custom sauce Index Error", "Index error raised during custom sauce selection")
+    
+    def handle_burger_custom_salad_selection(self, burger_custom_salad_list, sauce_list):
+        try:
+            burger_custom_salad_list[0].stateChanged.connect(lambda : self.set_burger_custom_salad(sauce_list[0], burger_custom_salad_list[0].checkState()))
+            burger_custom_salad_list[1].stateChanged.connect(lambda : self.set_burger_custom_salad(sauce_list[1], burger_custom_salad_list[1].checkState()))
+            burger_custom_salad_list[2].stateChanged.connect(lambda : self.set_burger_custom_salad(sauce_list[2], burger_custom_salad_list[2].checkState()))
+            burger_custom_salad_list[3].stateChanged.connect(lambda : self.set_burger_custom_salad(sauce_list[3], burger_custom_salad_list[3].checkState()))
+            burger_custom_salad_list[4].stateChanged.connect(lambda : self.set_burger_custom_salad(sauce_list[4], burger_custom_salad_list[4].checkState()))
+            burger_custom_salad_list[5].stateChanged.connect(lambda : self.set_burger_custom_salad(sauce_list[5], burger_custom_salad_list[5].checkState()))
+            burger_custom_salad_list[6].stateChanged.connect(lambda : self.set_burger_custom_salad(sauce_list[6], burger_custom_salad_list[6].checkState()))
+        except IndexError:
+            QMessageBox.critical(None, "Burger custom salad Index Error", "Index error raised during custom salad selection")
+    
+    
+    pyqtSlot(str)
+    def set_burger_salad(self, burger_number, salad_choice):
+        if (salad_choice == "Custom Salad"):
+            self.cart_view_init.burger_salad_group.show()
+        else:
+            self.cart_view_init.burger_salad_group.hide()
+
+        self.__burger_salad_list[burger_number] = salad_choice
+        print ("Salad Choice: " + salad_choice)
+        
+    pyqtSlot(str)
+    def set_burger_sauce(self, burger_number, sauce_choice):
+        if (sauce_choice == "Custom Sauce"):
+            self.cart_view_init.burger_sauce_group.show()
+        else:
+            self.cart_view_init.burger_sauce_group.hide()
+        self.__burger_sauce_list[burger_number] = sauce_choice
+        print ("Sauce Choice: " + sauce_choice)
+    
+    pyqtSlot(str)
+    def set_burger_cheese_selection(self, burger_number, cheese_choice):
+        self.__burger_cheese_list[burger_number] = cheese_choice
+        print ("Cheese choice: " + cheese_choice)
+        
+    pyqtSlot(str)
+    def set_burger_custom_sauce(self, burger_custom_sauce, state):
+        if (state == Qt.Checked):
+            print("Added: " + burger_custom_sauce)
+            self.__burger_custom_sauce_list.append(burger_custom_sauce)
+        elif (state == Qt.Unchecked):
+            print ("Removed: " + burger_custom_sauce)
+            row_no = self.__burger_custom_sauce_list.index(burger_custom_sauce)
+            self.__burger_custom_sauce_list.pop(row_no)
+        else:
+            QMessageBox.critical(None, "Burger custom sauce checkbox unkown", "Burger custom sauce checkbox is in an unknown state!")
+    pyqtSlot(str)
+    def set_burger_custom_salad(self, burger_custom_salad, state):
+        if (state == Qt.Checked):
+            print ("Added: " + burger_custom_salad)
+            self.__burger_custom_salad_list.append(burger_custom_salad)
+        elif (state == Qt.Unchecked):
+            print ("Removed: " + burger_custom_salad)
+            row_no = self.__burger_custom_salad_list.index(burger_custom_salad)
+            self.__burger_custom_salad_list.pop(row_no)
+        else:
+            QMessageBox.critical(None, "Burger custom salad checkbox unkown", "Burger custom salad checkbox is in an unknown state!")
+        

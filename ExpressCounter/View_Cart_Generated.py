@@ -2,13 +2,13 @@
 
 # Form implementation generated from reading ui file 'new_Cart_resolution.ui'
 #
-# Created: Sat Dec 12 14:40:54 2015
+# Created: Fri Dec 18 12:01:58 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-from PyQt4.Qt import QObject
+
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -23,7 +23,7 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class Ui_Dialog(QObject):
+class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
         Dialog.resize(1280, 950)
@@ -91,24 +91,30 @@ class Ui_Dialog(QObject):
 "border-radius: 0px;\n"
 "border-top-left-radius: 9px;\n"
 "border-top-right-radius: 9px;\n"
-"max-width:370px;\n"
+"max-width:950px;\n"
 "max-height:170px;\n"
 "}\n"
 "\n"
 "QLabel {\n"
-"    font: 63 20pt \"Ubuntu\";\n"
-"   color:black;\n"
+"    font: 63 17pt \"Ubuntu\";\n"
+"    color:black;\n"
+"    margin-bottom:0px;\n"
 "}\n"
+
 "QPushButton {\n"
 "background: rgb(252, 83, 86);\n"
 "color:black;\n"
-"font: 63 15pt \"Ubuntu\";\n"
 "border-radius:0px;\n"
 "border: 1px solid rgb(150, 150, 150);\n"
-"margin-top: 0px;\n"
-"min-width:344px;\n"
-"max-height:35px;\n"
+"font: 63 10pt \"Ubuntu\";\n"
+"border-top-right-radius: 9px;\n"
+"border-bottom-right-radius: 9px;\n"
+"border-top-left-radius: 9px;\n"
+"border-bottom-left-radius: 9px;\n"
+"min-width:370px;\n"
+"max-height:700px;\n"
 "padding-left:0px;\n"
+"margin-top:5px;\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
@@ -119,6 +125,7 @@ class Ui_Dialog(QObject):
 "QComboBox {\n"
 "min-width:115px;\n"
 "min-height:38;\n"
+"margin-bottom:5px;\n"
 "}"))
         self.kebabs_frame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.kebabs_frame.setFrameShadow(QtGui.QFrame.Raised)
@@ -240,12 +247,6 @@ class Ui_Dialog(QObject):
         self.tabWidget.addTab(self.pizza_tab, _fromUtf8(""))
         self.burger_tab = QtGui.QWidget()
         self.burger_tab.setObjectName(_fromUtf8("burger_tab"))
-        self.gridLayoutWidget_3 = QtGui.QWidget(self.burger_tab)
-        self.gridLayoutWidget_3.setGeometry(QtCore.QRect(10, 10, 811, 671))
-        self.gridLayoutWidget_3.setObjectName(_fromUtf8("gridLayoutWidget_3"))
-        self.burgers_layout_2 = QtGui.QGridLayout(self.gridLayoutWidget_3)
-        self.burgers_layout_2.setMargin(0)
-        self.burgers_layout_2.setObjectName(_fromUtf8("burgers_layout_2"))
         self.frame_7 = QtGui.QFrame(self.burger_tab)
         self.frame_7.setGeometry(QtCore.QRect(10, 690, 811, 61))
         self.frame_7.setStyleSheet(_fromUtf8("background:orange;\n"
@@ -279,6 +280,65 @@ class Ui_Dialog(QObject):
         self.burger_custom_salad_layout = QtGui.QHBoxLayout(self.horizontalLayoutWidget_8)
         self.burger_custom_salad_layout.setMargin(0)
         self.burger_custom_salad_layout.setObjectName(_fromUtf8("burger_custom_salad_layout"))
+        self.burgers_frame = QtGui.QFrame(self.burger_tab)
+        self.burgers_frame.setGeometry(QtCore.QRect(10, 10, 811, 671))
+        self.burgers_frame.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.burgers_frame.setFrameShadow(QtGui.QFrame.Raised)
+        self.burgers_frame.setObjectName(_fromUtf8("burgers_frame"))
+        self.burgers_frame.setStyleSheet(_fromUtf8("QFrame {\n"
+"border:none;\n}"
+"QGroupBox {\n"
+"border: 1px solid rgb(150, 150, 150);\n"
+"background-color:rgb(253, 253, 253);\n"
+"border-radius: 0px;\n"
+"border-top-left-radius: 9px;\n"
+"border-top-right-radius: 9px;\n"
+"border-bottom-right-radius: 9px;\n"
+"border-bottom-left-radius: 9px;\n"
+"max-width:950px;\n"
+"max-height:170px;\n"
+"}\n"
+"\n"
+"QLabel {\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;\n"
+"}\n"
+"QPushButton {\n"
+"background: rgb(252, 83, 86);\n"
+"color:black;\n"
+"border-radius:0px;\n"
+"border: 1px solid rgb(150, 150, 150);\n"
+"font: 63 15pt \"Ubuntu\";\n"
+"border-top-right-radius: 9px;\n"
+"border-bottom-right-radius: 9px;\n"
+"border-top-left-radius: 9px;\n"
+"border-bottom-left-radius: 9px;\n"
+"margin-top: 0px;\n"
+"min-width:370px;\n"
+"max-height:40px;\n"
+"padding-left:0px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"  background: rgb(255, 0, 0);\n"
+"  color:black;\n"
+" }\n"
+"\n"
+"QCheckBox{\n"
+"max-width:150px;\n"
+"min-height:50;\n"
+"font: 63 15pt \"Ubuntu\";\n"
+"}"
+"QComboBox {\n"
+"max-width:150px;\n"
+"min-height:50;\n"
+"}"))
+        self.gridLayoutWidget_3 = QtGui.QWidget(self.burgers_frame)
+        self.gridLayoutWidget_3.setGeometry(QtCore.QRect(0, 0, 811, 671))
+        self.gridLayoutWidget_3.setObjectName(_fromUtf8("gridLayoutWidget_3"))
+        self.burgers_layout_2 = QtGui.QGridLayout(self.gridLayoutWidget_3)
+        self.burgers_layout_2.setMargin(0)
+        self.burgers_layout_2.setObjectName(_fromUtf8("burgers_layout_2"))
         self.tabWidget.addTab(self.burger_tab, _fromUtf8(""))
         self.other_tab = QtGui.QWidget()
         self.other_tab.setObjectName(_fromUtf8("other_tab"))
@@ -348,7 +408,7 @@ class Ui_Dialog(QObject):
         self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
 
         self.retranslateUi(Dialog)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(3)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):

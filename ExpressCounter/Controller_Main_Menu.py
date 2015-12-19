@@ -107,15 +107,15 @@ class Controller_Main_Menu(QtGui.QMainWindow):
         
     @pyqtSlot()
     def on_search_order_request(self):
-        print "Search order loaded"
+        print ("Search order loaded")
         
     @pyqtSlot()
     def on_manager_mode_request(self):
-        print "Manager mode loaded"
+        print ("Manager mode loaded")
       
     @pyqtSlot()
     def on_create_new_customer_request(self):
-        print "New customer dialog loaded"
+        print ("New customer dialog loaded")
         
     
         
