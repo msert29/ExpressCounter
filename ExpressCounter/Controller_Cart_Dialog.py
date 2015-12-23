@@ -11,6 +11,8 @@ DESCRIPTION : This class is instanced upon new order click event by the user.
               
 ------------------------------------------------------------------------------"""
 import Model_Database_Dialog                                                                           
+from Crypto.Util.number import size
+from __builtin__ import classmethod
 
 """------------------------------------------------------------------------------
                      Development Diary
@@ -24,14 +26,29 @@ import Model_Database_Dialog
 -------------------------------------------------------------------------------"""
 
 import View_Cart_Custom
-from PyQt4.QtCore import Qt , pyqtSlot
+from PyQt4.QtCore import Qt , pyqtSlot, pyqtSignal
 from PyQt4.Qt import QDialog, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox,\
-    QComboBox, QPushButton, QMessageBox
+    QComboBox, QPushButton, QMessageBox, QMainWindow, QListWidgetItem,\
+    QListWidget
 
 
 class Cart_Controller_Class(QDialog):
+    new_product_inserted = pyqtSignal()
+    shopping_list = []
     def __init__(self):
         super(Cart_Controller_Class, self).__init__()
+        
+        # Holds the total price of the cart
+        self.total_price = 0.00
+        
+        self.product = Product()
+        
+        # A custom event installed on the 
+        # QListWidget item which will print 
+        # the last item in the cart to the 
+        # QListWidget. It is emitted once a product is inserted to the cart
+        self.new_product_inserted.connect(self.new_item_inserted_event)
+        
         
         self.cart_view_init = View_Cart_Custom.View_Cart_Custom()
         self.cart_view_init.setupUI(self)
@@ -44,10 +61,21 @@ class Cart_Controller_Class(QDialog):
         others_list  = self.database.get_others()
         
         
-        
         # A list of custom salads and sauces used by burger and kebab options
         salad_list    = self.database.get_custom_salads()
         sauce_list    = self.database.get_custom_sauces()
+        
+        # used to clear the checkboxes by clear_salad_sauce_checkbox method
+        self.__salad_list_private = self.database.get_custom_salads()
+        self.__sauce_list_private = self.database.get_custom_salads()
+        
+        
+        
+        
+        
+        
+        
+        
         """---------------------------------------------------------------------------------
         |
         |
@@ -57,10 +85,13 @@ class Cart_Controller_Class(QDialog):
         ---------------------------------------------------------------------------------"""
         
         
-        
+
         # Need to store all custom selected salads and sauces into an array
         self.__custom_salad_array = []
         self.__custom_sauce_array = []
+        
+        self.__cat_salad_list_to_string = ""
+        self.__cat_sauce_list_to_string = ""
         """ 
             For each kebab option, a salad and sauce selection from a 
             combobox is available. If the user doesn't select a custom
@@ -114,7 +145,8 @@ class Cart_Controller_Class(QDialog):
             self.handle_custom_sauce_selection(self.__sauce_list_from_custom, sauce_list)
             self.handle_add_button(self.__add_x_button_from_custom, kebabs_list)
             
-            
+        else:
+            QMessageBox.critical(None, "No Kebabs returned!", "No Kebab products where found, please check your database entries!")   
             
             """---------------------------------------------------------------------------------
             |
@@ -123,9 +155,12 @@ class Cart_Controller_Class(QDialog):
             |
             |
             ---------------------------------------------------------------------------------"""
+        if (len(pizzas_list) > 0):
             # Variables used to store size and custom topping selections
             self.__pizza_size = [None] * len(pizzas_list)
             self.__custom_topping_list = []
+            # A string which will hold custom toppings in one string
+            self.__cat_toppings = ""
             # Get a list of toppings from the database and send it to View_Cart_Custom to be displayed
             toppings_list = self.database.get_pizza_toppings()
             self.cart_view_init.display_pizzas(pizzas_list)
@@ -148,8 +183,8 @@ class Cart_Controller_Class(QDialog):
             self.handle_pizza_extra_checkbox_selection(pizza_extra_check_box)
             self.handle_custom_topping_selection(toppings_list)
             self.handle_pizza_add_button(pizza_add_button, pizzas_list)
-            
-            
+        else:
+            QMessageBox.critical(None, "No Pizzas returned!", "No Pizza products where found, please check your database connection and entries!")    
             """---------------------------------------------------------------------------------
             |
             |
@@ -158,6 +193,7 @@ class Cart_Controller_Class(QDialog):
             |
             ---------------------------------------------------------------------------------"""
             
+        if (len(burgers_list) > 0):
             # Three fixed sized arrays which will hold cheese, salad and sauce selection for each burger
             # They have to be private thus self__ declared making it viewable by this class only
             # These arrays will be initialized preventing any errors if the user doesn't make
@@ -170,8 +206,11 @@ class Cart_Controller_Class(QDialog):
             self.__burger_custom_salad_list = []
             self.__burger_custom_sauce_list = []
             
+            self.__cat_burger_custom_salad = ""
+            self.__cat_burger_custom_sauce = ""
             
             self.cart_view_init.display_burgers(burgers_list)
+            self.initialize_burger_options(burgers_list)
             self.cart_view_init.display_burger_salad_options(salad_list)
             self.cart_view_init.display_burger_sauce_options(sauce_list)
             # Burgers are initiliazed, now get Combobox and buttons for each burger option
@@ -188,9 +227,9 @@ class Cart_Controller_Class(QDialog):
             self.handle_burger_custom_sauce_selection(self.cart_view_init.custom_burger_sauce_options, sauce_list)
             self.handle_burger_custom_salad_selection(self.cart_view_init.custom_burger_salad_options, salad_list)
             
+            self.handle_burger_add_button(self.cart_view_init.burger_add_button, burgers_list)
         else:
-            QMessageBox.critical(None, "No Kebabs returned!", "No Kebab products where found, please check your database entries!")
-
+            QMessageBox.critical(None, "No Burgers returned!", "No Burger products where found, please check your database connection and entries!")    
         
         
         
@@ -232,16 +271,16 @@ class Cart_Controller_Class(QDialog):
         
     def handle_add_button(self, add_x, kebabs_list):
         try:
-            add_x[0].clicked.connect(lambda : self.add_to_cart(self.__kebab_size[0], kebabs_list[0]['name'], self.__salad[1], self.__sauce[1]))
-            add_x[1].clicked.connect(lambda : self.add_to_cart(self.__kebab_size[1], kebabs_list[1]['name'], self.__salad[1], self.__sauce[1]))
-            add_x[2].clicked.connect(lambda : self.add_to_cart(self.__kebab_size[2], kebabs_list[2]['name'], self.__salad[2], self.__sauce[2]))
-            add_x[3].clicked.connect(lambda : self.add_to_cart(self.__kebab_size[3], kebabs_list[3]['name'], self.__salad[3], self.__sauce[3]))
-            add_x[4].clicked.connect(lambda : self.add_to_cart(self.__kebab_size[4], kebabs_list[4]['name'], self.__salad[4], self.__sauce[4]))
-            add_x[5].clicked.connect(lambda : self.add_to_cart(self.__kebab_size[5], kebabs_list[5]['name'], self.__salad[5], self.__sauce[5]))
-            add_x[6].clicked.connect(lambda : self.add_to_cart(self.__kebab_size[6], kebabs_list[6]['name'], self.__salad[6], self.__sauce[6]))
-            add_x[7].clicked.connect(lambda : self.add_to_cart(self.__kebab_size[7], kebabs_list[7]['name'], self.__salad[7], self.__sauce[7]))
-            add_x[8].clicked.connect(lambda : self.add_to_cart(self.__kebab_size[8], kebabs_list[8]['name'], self.__salad[8], self.__sauce[8]))
-            add_x[9].clicked.connect(lambda : self.add_to_cart(self.__kebab_size[9], kebabs_list[9]['name'], self.__salad[9], self.__sauce[9]))
+            add_x[0].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[0], kebabs_list[0]['name'], self.__salad[0], self.__sauce[0]))
+            add_x[1].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[1], kebabs_list[1]['name'], self.__salad[1], self.__sauce[1]))
+            add_x[2].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[2], kebabs_list[2]['name'], self.__salad[2], self.__sauce[2]))
+            add_x[3].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[3], kebabs_list[3]['name'], self.__salad[3], self.__sauce[3]))
+            add_x[4].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[4], kebabs_list[4]['name'], self.__salad[4], self.__sauce[4]))
+            add_x[5].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[5], kebabs_list[5]['name'], self.__salad[5], self.__sauce[5]))
+            add_x[6].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[6], kebabs_list[6]['name'], self.__salad[6], self.__sauce[6]))
+            add_x[7].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[7], kebabs_list[7]['name'], self.__salad[7], self.__sauce[7]))
+            add_x[8].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[8], kebabs_list[8]['name'], self.__salad[8], self.__sauce[8]))
+            add_x[9].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[9], kebabs_list[9]['name'], self.__salad[9], self.__sauce[9]))
         except IndexError:
             QMessageBox.critical(None, "Kebab Index Error", "Error while getting the price of kebab:")   
 
@@ -262,15 +301,45 @@ class Cart_Controller_Class(QDialog):
     
     ------------------------------------------------------------------------------""" 
     @pyqtSlot(str, str, str, str)
-    def add_to_cart(self, size, name, salad, sauce):
+    def add_to_cart_kebab(self, size, name, salad, sauce):
         price = self.database.get_price(name, size)
-        print ("Size: " + str(size) + "\nName: " + name + "\nSalad: " + salad + "\nSauce: " + sauce + "\nPrice: " + price)
-        self.__cat_salad_list_to_string = " ".join(self.__custom_salad_array)
-        self.__cat_sauce_list_to_string = " ".join(self.__custom_sauce_array)
-        print (self.__cat_salad_list_to_string)
-        print (self.__cat_sauce_list_to_string)
+       
         
-
+        if (len(self.__custom_salad_array) > 0):
+            self.__cat_salad_list_to_string = " ".join(self.__custom_salad_array)
+        if (len(self.__custom_sauce_array) > 0):
+            self.__cat_sauce_list_to_string = " ".join(self.__custom_sauce_array)
+            
+            
+    
+        
+        # both custom salad and sauce requested therefore pass them as sald and sauce
+        if ((salad == "Custom Salad") and (sauce == "Custom Sauce")):
+            if (len(self.__custom_salad_array) > 0):  
+                if (len(self.__custom_sauce_array) > 0):
+                    self.add_to_cart_method("Kebab", size, name, price, self.__cat_salad_list_to_string, self.__cat_sauce_list_to_string)
+                else:
+                    QMessageBox.critical(None, "Custom salad and sauce selected but sauce empty list", "Custom Salad and sauce option has been selected but no sauce option is selected!")
+            else:
+                QMessageBox.critical(None, "Custom salad and sauce selected but salad is empty list", "Custom Salad and sauce option has been selected but no salad  is selected!")
+        #only sauce is requested therefore pass custom sauce and keep salad as combobox value
+        elif ((salad != "Custom Salad") and (sauce == "Custom Sauce")):
+            if (len(self.__custom_sauce_array) > 0):
+                self.add_to_cart_method("Kebab", size, name, price, salad, self.__cat_sauce_list_to_string)
+            else:
+                QMessageBox.critical(None, "Custom sauce is selected but not specified!", "Custom sauce option is selected but no custom sauce selection has been specified!")
+        # only salad is requested therefore pass sauce as combobox value
+        elif ((salad == "Custom Salad") and (sauce != "Custom Sauce")):
+            if (len(self.__custom_salad_array) > 0):
+                self.add_to_cart_method("Kebab", size, name, price, self.__cat_salad_list_to_string, sauce)
+            else:
+                QMessageBox.critical(None, "Custom salad is selected but not specified!", "Custom salad option is selected but no custom salad selection has been specified!")
+        # both not requested therefore pass combobx values for each
+        elif ((salad != "Custom Salad") and (sauce != "Custom Sauce")):
+            self.add_to_cart_method("Kebab", size, name, price, salad, sauce)
+        else:
+            QMessageBox.critical(None, "Invalid custom salad/sauce condition", "Whislt supplying parameters to shopping list, else branch executed!")
+                    
     """--------------------------------------------------------------------------------------------------------------------------------------------------------
     |
     | Kebab Section : Common salad, sauce and size selection related method. All belong to QComboBox group.
@@ -463,12 +532,14 @@ class Cart_Controller_Class(QDialog):
     @pyqtSlot(str, int)
     def custom_salad_added(self, salad_option, state):
         if (state == Qt.Checked):
-            #print (salad_option + " is checked state!")
+            #print (salad_option + " is added!")
             self.__custom_salad_array.append(salad_option)
         elif (state == Qt.Unchecked):
             # Remove the option selected but we will need the row number
+            #print (salad_option + " is removed!")
             row_no = self.__custom_salad_array.index(salad_option)
             self.__custom_salad_array.pop(row_no)
+            self.__cat_salad_list_to_string = ""
 
         else:
             print (salad_option + " is in an unknown state!")
@@ -505,14 +576,52 @@ class Cart_Controller_Class(QDialog):
     @pyqtSlot(str, int)
     def custom_sauce_added(self, sauce_option, state):
         if (state == Qt.Checked):
+            #print (sauce_option + " is Added")
             self.__custom_sauce_array.append(sauce_option)
         elif (state == Qt.Unchecked):
+            #print (sauce_option + " is Removed")
             row_no = self.__custom_sauce_array.index(sauce_option)
             self.__custom_sauce_array.pop(row_no)
+            self.__cat_sauce_list_to_string = ""
         else:
             print (sauce_option + " is in an unknown state!")
             
+    
+    
+    
+    """ We will need to clear the custom salad and sauce checkboxes once the user adds them to the cart """
+    def clear_salad_sauce_checkboxes(self, sauce_var, salad_var, salad_list, sauce_list):
+        for x in range (0, len(salad_list)):
+            if (salad_var[x].checkState() == Qt.Checked):
+                salad_var[x].toggle()
+        
+        for y in range (0, len (sauce_list)):
+            if (sauce_var[y].checkState() == Qt.Checked):
+                sauce_var[y].toggle()
             
+        # Clear the strings which hold custom salad and sauce choices
+        del self.__custom_salad_array[:]
+        del self.__custom_sauce_array[:]
+        self.__cat_sauce_list_to_string = ""
+        self.__cat_salad_list_to_string = ""
+        
+        
+    def clear_burger_salad_sauce_checkboxes(self, sauce_var, salad_var, salad_list, sauce_list):
+        for x in range (0, len(salad_list)):
+            if (salad_var[x].checkState() == Qt.Checked):
+                salad_var[x].toggle()
+        
+        for y in range (0, len (sauce_list)):
+            if (sauce_var[y].checkState() == Qt.Checked):
+                sauce_var[y].toggle()
+            
+        # Clear the strings which hold custom salad and sauce choices
+        del self.__burger_custom_salad_list[:]
+        del self.__burger_custom_sauce_list[:]
+        self.__cat_burger_custom_salad = ""
+        self.__cat_burger_custom_sauce = ""
+        
+        
     """--------------------------------------------------------------------------------------------------------------------------------------------------------------------
     |  Pizza Section User Triggered Event handling Code
     |  
@@ -631,7 +740,11 @@ class Cart_Controller_Class(QDialog):
     def enable_all_extra_checkboxes(self, pizza_extra_checkbox):
         for x in range(0, len(pizza_extra_checkbox)):
             pizza_extra_checkbox[x].setEnabled(True)
+        
+        # As the user made the selection and therefore disabled the Extra checkbox
+        # we will need to clear the toppings list 
         self.clear_selected_checkboxes()
+        
         
         
         
@@ -671,12 +784,14 @@ class Cart_Controller_Class(QDialog):
         if state == Qt.Checked:
             self.__custom_topping_list.append(selected_topping)
         elif state == Qt.Unchecked:
+            #print ("Removed" + selected_topping)
             rowNo = self.__custom_topping_list.index(selected_topping)
             self.__custom_topping_list.pop(rowNo)
+            # Clear concatenated list as well as we pass the value of this to shopping list
+            self.__cat_toppings = ""
         else:
             QMessageBox.critical(None, "Invalid topping checkbox state!", "The topping checkbox is in an unkown state")
             
-    @pyqtSlot(str)
     def clear_selected_checkboxes(self):
         for x in range(0, len(self.__custom_topping_option)):
             if (self.__custom_topping_option[x].checkState() == Qt.Checked):
@@ -719,7 +834,7 @@ class Cart_Controller_Class(QDialog):
     TODO        :   Implement a cart class which shall be executed once items are inserted into the database
     
     ------------------------------------------------------------------------------""" 
-    @pyqtSlot(str, str, str, str)
+    @pyqtSlot(str, str)
     def add_to_cart_pizza(self, size, name):
         price = self.database.get_price(name, size)
         
@@ -727,14 +842,15 @@ class Cart_Controller_Class(QDialog):
         if (len(self.__custom_topping_list) > 0):
             topping_price = self.calculate_topping_price(size)
             price = float(price) + topping_price
-        
-        print("Size: " + str(size))
-        print("\nName: " + name)
-        print("\nPrice: " + str(price))
-        
-        if (len(self.__custom_topping_list) > 0):
+            # concatenate the toppings into one string 
             self.__cat_toppings = " ".join(self.__custom_topping_list)
-            print (self.__cat_toppings)
+            
+            # Now send it to the shopping list
+            self.add_to_cart_method("Pizza", size, name, price, self.__cat_toppings)
+        else:
+            self.add_to_cart_method("Pizza", size, name, price)
+        
+        
         
     """
     A list of custom toppings requested by the user therefore calculate the price of the toppings requested.
@@ -757,8 +873,13 @@ class Cart_Controller_Class(QDialog):
     | Burgers Section Start
     |
     --------------------------------------------------------------------------------------------------------------------------------------------------------"""
-    #def initialize_burger_options(self, burgers_list):
-        
+    # Initialize the combobox variables with first values
+    def initialize_burger_options(self, burgers_list):
+        for x in range (0, len(burgers_list)):
+            self.__burger_salad_list[x]  = "All Salad"
+            self.__burger_sauce_list[x]  = "Chilli Sauce"
+            self.__burger_cheese_list[x] = "No Cheese"
+    
     
     
     def handle_burger_salad_selection(self, burger_salad_option):
@@ -825,50 +946,205 @@ class Cart_Controller_Class(QDialog):
             QMessageBox.critical(None, "Burger custom salad Index Error", "Index error raised during custom salad selection")
     
     
+    
+    def handle_burger_add_button(self, burger_add_button, burger_list):
+        try:
+            burger_add_button[0].clicked.connect(lambda : self.add_to_cart_burger(0, burger_list[0]['name']))
+            burger_add_button[1].clicked.connect(lambda : self.add_to_cart_burger(1, burger_list[1]['name']))
+            burger_add_button[2].clicked.connect(lambda : self.add_to_cart_burger(2, burger_list[2]['name']))
+            burger_add_button[3].clicked.connect(lambda : self.add_to_cart_burger(3, burger_list[3]['name']))
+            burger_add_button[4].clicked.connect(lambda : self.add_to_cart_burger(4, burger_list[4]['name']))
+            burger_add_button[5].clicked.connect(lambda : self.add_to_cart_burger(5, burger_list[5]['name']))
+            burger_add_button[6].clicked.connect(lambda : self.add_to_cart_burger(6, burger_list[6]['name']))
+        except IndexError:
+            QMessageBox.critical(None, "Burger add button index error", "Index Error raised while handling burger add request!")
+    
+    
     pyqtSlot(str)
     def set_burger_salad(self, burger_number, salad_choice):
-        if (salad_choice == "Custom Salad"):
-            self.cart_view_init.burger_salad_group.show()
-        else:
-            self.cart_view_init.burger_salad_group.hide()
-
         self.__burger_salad_list[burger_number] = salad_choice
-        print ("Salad Choice: " + salad_choice)
+    
         
     pyqtSlot(str)
     def set_burger_sauce(self, burger_number, sauce_choice):
-        if (sauce_choice == "Custom Sauce"):
-            self.cart_view_init.burger_sauce_group.show()
-        else:
-            self.cart_view_init.burger_sauce_group.hide()
         self.__burger_sauce_list[burger_number] = sauce_choice
-        print ("Sauce Choice: " + sauce_choice)
+        #print ("Sauce Choice: " + sauce_choice)
     
     pyqtSlot(str)
     def set_burger_cheese_selection(self, burger_number, cheese_choice):
         self.__burger_cheese_list[burger_number] = cheese_choice
-        print ("Cheese choice: " + cheese_choice)
+    
         
     pyqtSlot(str)
     def set_burger_custom_sauce(self, burger_custom_sauce, state):
         if (state == Qt.Checked):
-            print("Added: " + burger_custom_sauce)
+            
             self.__burger_custom_sauce_list.append(burger_custom_sauce)
         elif (state == Qt.Unchecked):
-            print ("Removed: " + burger_custom_sauce)
+            
             row_no = self.__burger_custom_sauce_list.index(burger_custom_sauce)
             self.__burger_custom_sauce_list.pop(row_no)
         else:
             QMessageBox.critical(None, "Burger custom sauce checkbox unkown", "Burger custom sauce checkbox is in an unknown state!")
+            
     pyqtSlot(str)
     def set_burger_custom_salad(self, burger_custom_salad, state):
         if (state == Qt.Checked):
-            print ("Added: " + burger_custom_salad)
             self.__burger_custom_salad_list.append(burger_custom_salad)
         elif (state == Qt.Unchecked):
-            print ("Removed: " + burger_custom_salad)
             row_no = self.__burger_custom_salad_list.index(burger_custom_salad)
             self.__burger_custom_salad_list.pop(row_no)
         else:
             QMessageBox.critical(None, "Burger custom salad checkbox unkown", "Burger custom salad checkbox is in an unknown state!")
+            
+            
+    pyqtSlot(str)
+    def add_to_cart_burger(self, burger_number, burger_name):
+        price = self.database.get_price(burger_name, "Small")
         
+        if (self.__burger_cheese_list[burger_number] == "Cheese"):
+            price = float(price) + 0.20
+        
+        
+        # Check if the custom salad/sauce list is populated 
+        # concatenate them into one string if they are 
+        if (len (self.__burger_custom_salad_list) > 0):
+            self.__cat_burger_custom_salad = " ".join(self.__burger_custom_salad_list)
+        
+        if (len (self.__burger_custom_sauce_list) > 0):
+            self.__cat_burger_custom_sauce = " ".join(self.__burger_custom_sauce_list)
+        
+        
+        # both custom salad and sauce requested therefore pass them as salad and sauce
+        if ((self.__burger_salad_list[burger_number] == "Custom Salad") and (self.__burger_sauce_list[burger_number] == "Custom Sauce")):
+            if (len(self.__burger_custom_salad_list) > 0):  
+                if (len(self.__burger_custom_sauce_list) > 0):
+                    self.add_to_cart_method("Burger", burger_name, self.__burger_cheese_list[burger_number], price, self.__cat_burger_custom_salad, self.__cat_burger_custom_sauce)
+                else:
+                    QMessageBox.critical(None, "1 Custom salad and sauce selected but sauce empty list", "Custom Salad and sauce option has been selected but no sauce option is selected!")
+            else:
+                QMessageBox.critical(None, "2 Custom salad and sauce selected but salad is empty list", "Custom Salad and sauce option has been selected but no salad  is selected!")
+        #only sauce is requested therefore pass custom sauce and keep salad as combobox value
+        elif ((self.__burger_salad_list[burger_number] != "Custom Salad") and (self.__burger_sauce_list[burger_number] == "Custom Sauce")):
+            if (len(self.__burger_custom_sauce_list) > 0):
+                self.add_to_cart_method("Burger", burger_name, self.__burger_cheese_list[burger_number], price, self.__burger_salad_list[burger_number], self.__cat_burger_custom_sauce)
+            else:
+                QMessageBox.critical(None, "3 Custom sauce is selected but not specified!", "Custom sauce option is selected but no custom sauce selection has been specified!")
+        # only salad is requested therefore pass sauce as combobox value
+        elif ((self.__burger_salad_list[burger_number] == "Custom Salad") and (self.__burger_sauce_list[burger_number] != "Custom Sauce")):
+            if (len(self.__burger_custom_salad_list) > 0):
+                self.add_to_cart_method("Burger", burger_name, self.__burger_cheese_list[burger_number], price, self.__cat_burger_custom_salad, self.__burger_sauce_list[burger_number])                
+            else:
+                QMessageBox.critical(None, "4 Custom salad is selected but not specified!", "Custom salad option is selected but no custom salad selection has been specified!")
+        # both not requested therefore pass combobx values for each
+        elif ((self.__burger_salad_list[burger_number] != "Custom Salad") and ( self.__burger_sauce_list[burger_number] != "Custom Sauce")):
+            self.add_to_cart_method("Burger", burger_name, self.__burger_cheese_list[burger_number], price, self.__burger_salad_list[burger_number], self.__burger_sauce_list[burger_number])       
+        else:
+            QMessageBox.critical(None, "5 Invalid custom salad/sauce condition", "Whislt supplying parameters to shopping list, else branch executed!")
+            
+        
+    
+    def add_to_cart_method(self, *args):
+        if (args[0] == "Kebab"):
+            self.kebab_added(args[0], args[1], args[2], args[3], args[4], args[5])
+        elif (args[0] == "Pizza"):
+            # Check if custom toppings requested 
+            if (len(args) > 4):
+                self.pizza_added(args[0], args[1], args[2], args[3], args[4])
+            else:
+                self.pizza_added(args[0], args[1], args[2], args[3])
+        elif (args[0] == "Burger"):
+            self.burger_added(args[0], args[1], args[2], args[3], args[4], args[5])
+        elif (args[0] == "Other"):
+            print ("Other passed")
+        else:
+            QMessageBox.critical(None, "Unkown product Type passed!", "Unkown type has been passed!")
+         
+        # A new product has been added to the cart
+        # emit the signal which will update the cart_view in generated
+        # view here
+        self.new_product_inserted.emit()
+
+        # At this stage we need to clear the seleced custom sauce and salad 
+        self.clear_salad_sauce_checkboxes(self.__sauce_list_from_custom, self.__salad_list_from_custom, self.__salad_list_private, self.__sauce_list_private)
+        self.clear_burger_salad_sauce_checkboxes(self.cart_view_init.custom_burger_sauce_options, 
+                                                 self.cart_view_init.custom_burger_salad_options, self.__salad_list_private, self.__sauce_list_private)
+        
+        
+        
+        
+    @pyqtSlot()
+    def new_item_inserted_event(self):
+        self.send_data_to_list_view()
+        print ("Total Price: " + str(self.total_price))
+
+    def send_data_to_list_view(self):
+        if len(self.shopping_list) > 0:
+            data = self.get_value_of_item(self.shopping_list[-1])
+            list_view_item = QListWidgetItem(data)
+            self.cart_view_init.send_data_to_list_view(list_view_item)
+        
+        
+    def get_value_of_item(self, item):
+        if item.type == "Kebab":
+            return (str(item.size) + " " + item.name + " \n" + " -" + item.salad + "\n -" + item.sauce)
+        elif item.type == "Burger":
+            return (item.name + " with " + item.cheese +  "\n" + " -" + item.salad + "\n -" + item.sauce)
+        elif item.type == "Pizza":
+            try:
+                return (str(item.size) + " " + item.name + "\n - Extra: " + item.toppings)
+            except AttributeError:
+                    pass
+                    return (str(item.size) + " " + item.name)
+        elif item.type == "Other":
+            return (item.name + str(item.price))
+        else:
+            QMessageBox.critical(None, "Unkown product Type passed!", "Unkown type has been passed!")
+            
+    
+            
+    def pizza_added(self, product_type, size, name, price, *args):
+        self.product.type = product_type
+        self.product.size = size
+        self.product.name = name
+        self.product.price = price
+        if len(args) > 0:
+            self.product.toppings = args[0]        
+        self.shopping_list.append(self.product)
+       
+        self.total_price = self.total_price + float(price)
+        
+    def kebab_added(self, product_type, size, name, price, salad, sauce):
+        self.product.type = product_type
+        self.product.size  = size
+        self.product.name  = name
+        self.product.price = price
+        self.product.salad = salad
+        self.product.sauce = sauce
+        self.shopping_list.append(self.product)
+        self.total_price = float(self.total_price) + float(price)
+        
+        
+    def burger_added(self,  product_type, name, cheese, price, salad, sauce):
+        self.product.type = product_type
+        self.product.name   = name
+        self.product.cheese = cheese
+        self.product.price  = price
+        self.product.salad  = salad
+        self.product.sauce  = sauce
+        self.shopping_list.append(self.product)
+        self.total_price = float(self.total_price) + float(price)
+        
+        
+    def other_added(self, product_type, name, price):
+        self.product.type = product_type
+        self.product.name  = name
+        self.product.price = price
+        self.shopping_list.append(self.product)
+        self.total_price = self.total_price + float(price)
+            
+            
+# Python strcut equavilant
+# will hold product details
+class Product(QMainWindow):
+    pass

@@ -2,7 +2,11 @@ import View_Cart_Generated
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import Qt , pyqtSlot, pyqtSignal
 from PyQt4.Qt import QDialog, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox,\
-    QComboBox, QPushButton, QCheckBox, QObject, QEvent
+    QComboBox, QPushButton, QCheckBox, QObject, QEvent, QListWidget, QListWidgetItem,\
+    QStandardItemModel, QStandardItem
+
+
+
     
 """------------------------------------------------------------------------------
 FILE        : View_Cart_Custom
@@ -41,7 +45,7 @@ class View_Cart_Custom(QObject):
         
     def setupUI(self, dialog):
         self.generated_cart_ui.setupUi(dialog)
-    
+        
     """------------------------------------------------------------------------------
     Function           : display_kebabs
     Description        : This function retrieves a list of kebab options from the 
@@ -328,18 +332,18 @@ class View_Cart_Custom(QObject):
                          databaseConnection class, get_custom_salads method, which is 
                          retrieved by Controller_Cart_Dialog and passed to this function.
     Returns            : Void
+    todo : update description for burger 
     ------------------------------------------------------------------------------"""
     def display_burger_salad_options(self, salad_list):
         tmp_holder              = QHBoxLayout()
-        self.burger_salad_group = QGroupBox()
+        burger_salad_group = QGroupBox()
         salads_length = len(salad_list)
         self.custom_burger_salad_options = [None] * salads_length
         for x in range(0, salads_length):
             self.custom_burger_salad_options[x] = QCheckBox(salad_list[x])
             tmp_holder.addWidget(self.custom_burger_salad_options[x])
-        self.burger_salad_group.setLayout(tmp_holder)
-        self.burger_salad_group.hide()
-        self.generated_cart_ui.burger_custom_salad_layout.addWidget(self.burger_salad_group)
+        burger_salad_group.setLayout(tmp_holder)
+        self.generated_cart_ui.burger_custom_salad_layout.addWidget(burger_salad_group)
         
     """------------------------------------------------------------------------------
     Function           : display_sauce_options
@@ -352,17 +356,21 @@ class View_Cart_Custom(QObject):
                          databaseConnection class, get_custom_salads method, which is 
                          retrieved by Controller_Cart_Dialog and passed to this function.
     Returns             : Void
+    todo : update description
     ------------------------------------------------------------------------------"""
     def display_burger_sauce_options(self, sauce_list):
         tmp_holder              = QHBoxLayout()
-        self.burger_sauce_group = QGroupBox()
+        burger_sauce_group = QGroupBox()
         sauces_length = len(sauce_list)
         self.custom_burger_sauce_options = [None] * sauces_length
         for x in range(0, sauces_length):
             self.custom_burger_sauce_options[x] = QCheckBox(sauce_list[x])
             tmp_holder.addWidget(self.custom_burger_sauce_options[x])
-        self.burger_sauce_group.setLayout(tmp_holder)
-        self.burger_sauce_group.hide()
-        self.generated_cart_ui.burger_custom_sauce_layout.addWidget(self.burger_sauce_group)
+        burger_sauce_group.setLayout(tmp_holder)
+        self.generated_cart_ui.burger_custom_sauce_layout.addWidget(burger_sauce_group)
         
+        
+    def send_data_to_list_view(self, data):
+        self.generated_cart_ui.cart_view.addItem(data)
+
         
