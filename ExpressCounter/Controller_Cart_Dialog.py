@@ -41,13 +41,8 @@ class Cart_Controller_Class(QDialog):
         # Holds the total price of the cart
         self.total_price = 0.00
         
-        self.product = Product()
         
-        # A custom event installed on the 
-        # QListWidget item which will print 
-        # the last item in the cart to the 
-        # QListWidget. It is emitted once a product is inserted to the cart
-        self.new_product_inserted.connect(self.new_item_inserted_event)
+        
         
         
         self.cart_view_init = View_Cart_Custom.View_Cart_Custom()
@@ -72,7 +67,12 @@ class Cart_Controller_Class(QDialog):
         
         
         
-        
+        # A custom event installed on the 
+        # QListWidget item which will print 
+        # the last item in the cart to the 
+        # QListWidget. It is emitted once a product is inserted to the cart
+        self.new_product_inserted.connect(self.new_item_inserted_event)
+        self.handle_cart_clicks()
         
         
         
@@ -1069,9 +1069,7 @@ class Cart_Controller_Class(QDialog):
         self.clear_salad_sauce_checkboxes(self.__sauce_list_from_custom, self.__salad_list_from_custom, self.__salad_list_private, self.__sauce_list_private)
         self.clear_burger_salad_sauce_checkboxes(self.cart_view_init.custom_burger_sauce_options, 
                                                  self.cart_view_init.custom_burger_salad_options, self.__salad_list_private, self.__sauce_list_private)
-        
-        
-        
+            
         
     @pyqtSlot()
     def new_item_inserted_event(self):
@@ -1101,49 +1099,76 @@ class Cart_Controller_Class(QDialog):
         else:
             QMessageBox.critical(None, "Unkown product Type passed!", "Unkown type has been passed!")
             
-    
-            
+        
     def pizza_added(self, product_type, size, name, price, *args):
-        self.product.type = product_type
-        self.product.size = size
-        self.product.name = name
-        self.product.price = price
+        product = Product()
+        product.type = product_type
+        product.size = size
+        product.name = name
+        product.price = price
         if len(args) > 0:
-            self.product.toppings = args[0]        
-        self.shopping_list.append(self.product)
+            product.toppings = args[0]        
+        self.shopping_list.append(product)
        
         self.total_price = self.total_price + float(price)
         
     def kebab_added(self, product_type, size, name, price, salad, sauce):
-        self.product.type = product_type
-        self.product.size  = size
-        self.product.name  = name
-        self.product.price = price
-        self.product.salad = salad
-        self.product.sauce = sauce
-        self.shopping_list.append(self.product)
+        product = Product()
+        product.type = product_type
+        product.size  = size
+        product.name  = name
+        product.price = price
+        product.salad = salad
+        product.sauce = sauce
+        self.shopping_list.append(product)
         self.total_price = float(self.total_price) + float(price)
         
         
     def burger_added(self,  product_type, name, cheese, price, salad, sauce):
-        self.product.type = product_type
-        self.product.name   = name
-        self.product.cheese = cheese
-        self.product.price  = price
-        self.product.salad  = salad
-        self.product.sauce  = sauce
-        self.shopping_list.append(self.product)
+        product = Product()
+        product.type = product_type
+        product.name   = name
+        product.cheese = cheese
+        product.price  = price
+        product.salad  = salad
+        product.sauce  = sauce
+        self.shopping_list.append(product)
         self.total_price = float(self.total_price) + float(price)
         
         
     def other_added(self, product_type, name, price):
-        self.product.type = product_type
-        self.product.name  = name
-        self.product.price = price
-        self.shopping_list.append(self.product)
+        product = Product()
+        product.type = product_type
+        product.name  = name
+        product.price = price
+        self.shopping_list.append(product)
         self.total_price = self.total_price + float(price)
             
             
+    def handle_cart_clicks(self):
+        self.cart_view_init.generated_cart_ui.cart_view.itemActivated.connect(lambda : self.remove_item_from_cart(self.cart_view_init.generated_cart_ui.cart_view.currentRow()))
+        
+        
+        
+    pyqtSlot(int)
+    def remove_item_from_cart(self, row):
+        # Remove the selected item from the cart
+        self.cart_view_init.generated_cart_ui.cart_view.takeItem(row)
+        # We need to deduct the price before removing it from our list
+        # If there are no items in list, the price is always set to 0.00
+        # Else deduct the price of the removed item 
+        if (len(self.shopping_list) > 0):
+            self.total_price = self.total_price - float(self.shopping_list[row].price)
+        else:
+            self.total_price = 0.00
+        # remove it from the shopping list which holds all the items
+        self.shopping_list.pop(row)
+        
+        
+        #print ("Price amendment: " + str(self.total_price))
+        #print ("Removed " + self.shopping_list[row].name + "From number" + str(row))
+        
+        
 # Python strcut equavilant
 # will hold product details
 class Product(QMainWindow):
