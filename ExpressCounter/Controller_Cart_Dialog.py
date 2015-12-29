@@ -10,7 +10,8 @@ DESCRIPTION : This class is instanced upon new order click event by the user.
               new order request.
               
 ------------------------------------------------------------------------------"""
-import Model_Database_Dialog                                                                           
+import Model_Database_Dialog   
+import Controller_Customer_Dialog                                                                        
 from Crypto.Util.number import size
 from __builtin__ import classmethod
 
@@ -72,9 +73,11 @@ class Cart_Controller_Class(QDialog):
         # the last item in the cart to the 
         # QListWidget. It is emitted once a product is inserted to the cart
         self.new_product_inserted.connect(self.new_item_inserted_event)
+        
+        # Cart section user event handling
         self.handle_cart_clicks()
-        
-        
+        self.handle_clear_cart_button()
+        self.handle_cart_confirm_button()
         
         """---------------------------------------------------------------------------------
         |
@@ -271,16 +274,16 @@ class Cart_Controller_Class(QDialog):
         
     def handle_add_button(self, add_x, kebabs_list):
         try:
-            add_x[0].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[0], kebabs_list[0]['name'], self.__salad[0], self.__sauce[0]))
-            add_x[1].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[1], kebabs_list[1]['name'], self.__salad[1], self.__sauce[1]))
-            add_x[2].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[2], kebabs_list[2]['name'], self.__salad[2], self.__sauce[2]))
-            add_x[3].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[3], kebabs_list[3]['name'], self.__salad[3], self.__sauce[3]))
-            add_x[4].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[4], kebabs_list[4]['name'], self.__salad[4], self.__sauce[4]))
-            add_x[5].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[5], kebabs_list[5]['name'], self.__salad[5], self.__sauce[5]))
-            add_x[6].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[6], kebabs_list[6]['name'], self.__salad[6], self.__sauce[6]))
-            add_x[7].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[7], kebabs_list[7]['name'], self.__salad[7], self.__sauce[7]))
-            add_x[8].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[8], kebabs_list[8]['name'], self.__salad[8], self.__sauce[8]))
-            add_x[9].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[9], kebabs_list[9]['name'], self.__salad[9], self.__sauce[9]))
+            add_x[0].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[0], kebabs_list[0]['name'], self.__salad[0], self.__sauce[0], kebabs_list[0]['id']))
+            add_x[1].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[1], kebabs_list[1]['name'], self.__salad[1], self.__sauce[1], kebabs_list[1]['id']))
+            add_x[2].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[2], kebabs_list[2]['name'], self.__salad[2], self.__sauce[2], kebabs_list[2]['id']))
+            add_x[3].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[3], kebabs_list[3]['name'], self.__salad[3], self.__sauce[3], kebabs_list[3]['id']))
+            add_x[4].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[4], kebabs_list[4]['name'], self.__salad[4], self.__sauce[4], kebabs_list[4]['id']))
+            add_x[5].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[5], kebabs_list[5]['name'], self.__salad[5], self.__sauce[5], kebabs_list[5]['id']))
+            add_x[6].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[6], kebabs_list[6]['name'], self.__salad[6], self.__sauce[6], kebabs_list[6]['id']))
+            add_x[7].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[7], kebabs_list[7]['name'], self.__salad[7], self.__sauce[7], kebabs_list[7]['id']))
+            add_x[8].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[8], kebabs_list[8]['name'], self.__salad[8], self.__sauce[8], kebabs_list[8]['id']))
+            add_x[9].clicked.connect(lambda : self.add_to_cart_kebab(self.__kebab_size[9], kebabs_list[9]['name'], self.__salad[9], self.__sauce[9], kebabs_list[9]['id']))
         except IndexError:
             QMessageBox.critical(None, "Kebab Index Error", "Error while getting the price of kebab:")   
 
@@ -301,7 +304,7 @@ class Cart_Controller_Class(QDialog):
     
     ------------------------------------------------------------------------------""" 
     @pyqtSlot(str, str, str, str)
-    def add_to_cart_kebab(self, size, name, salad, sauce):
+    def add_to_cart_kebab(self, size, name, salad, sauce, id):
         price = self.database.get_price(name, size)
        
         
@@ -317,7 +320,7 @@ class Cart_Controller_Class(QDialog):
         if ((salad == "Custom Salad") and (sauce == "Custom Sauce")):
             if (len(self.__custom_salad_array) > 0):  
                 if (len(self.__custom_sauce_array) > 0):
-                    self.add_to_cart_method("Kebab", size, name, price, self.__cat_salad_list_to_string, self.__cat_sauce_list_to_string)
+                    self.add_to_cart_method("Kebab", size, name, price, self.__cat_salad_list_to_string, self.__cat_sauce_list_to_string, id)
                 else:
                     QMessageBox.critical(None, "Custom salad and sauce selected but sauce empty list", "Custom Salad and sauce option has been selected but no sauce option is selected!")
             else:
@@ -325,18 +328,18 @@ class Cart_Controller_Class(QDialog):
         #only sauce is requested therefore pass custom sauce and keep salad as combobox value
         elif ((salad != "Custom Salad") and (sauce == "Custom Sauce")):
             if (len(self.__custom_sauce_array) > 0):
-                self.add_to_cart_method("Kebab", size, name, price, salad, self.__cat_sauce_list_to_string)
+                self.add_to_cart_method("Kebab", size, name, price, salad, self.__cat_sauce_list_to_string, id)
             else:
                 QMessageBox.critical(None, "Custom sauce is selected but not specified!", "Custom sauce option is selected but no custom sauce selection has been specified!")
         # only salad is requested therefore pass sauce as combobox value
         elif ((salad == "Custom Salad") and (sauce != "Custom Sauce")):
             if (len(self.__custom_salad_array) > 0):
-                self.add_to_cart_method("Kebab", size, name, price, self.__cat_salad_list_to_string, sauce)
+                self.add_to_cart_method("Kebab", size, name, price, self.__cat_salad_list_to_string, sauce, id)
             else:
                 QMessageBox.critical(None, "Custom salad is selected but not specified!", "Custom salad option is selected but no custom salad selection has been specified!")
         # both not requested therefore pass combobx values for each
         elif ((salad != "Custom Salad") and (sauce != "Custom Sauce")):
-            self.add_to_cart_method("Kebab", size, name, price, salad, sauce)
+            self.add_to_cart_method("Kebab", size, name, price, salad, sauce, id)
         else:
             QMessageBox.critical(None, "Invalid custom salad/sauce condition", "Whislt supplying parameters to shopping list, else branch executed!")
                     
@@ -805,16 +808,16 @@ class Cart_Controller_Class(QDialog):
     
     def handle_pizza_add_button(self, pizza_add_button, pizzas_list):
         try:
-            pizza_add_button[0].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[0], pizzas_list[0]['name']))
-            pizza_add_button[1].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[1], pizzas_list[1]['name']))
-            pizza_add_button[2].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[2], pizzas_list[2]['name']))
-            pizza_add_button[3].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[3], pizzas_list[3]['name']))
-            pizza_add_button[4].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[4], pizzas_list[4]['name']))
-            pizza_add_button[5].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[5], pizzas_list[5]['name']))
-            pizza_add_button[6].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[6], pizzas_list[6]['name']))
-            pizza_add_button[7].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[7], pizzas_list[7]['name']))
-            pizza_add_button[8].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[8], pizzas_list[8]['name']))
-            pizza_add_button[9].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[9], pizzas_list[9]['name']))
+            pizza_add_button[0].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[0], pizzas_list[0]['name'], pizzas_list[0]['id']))
+            pizza_add_button[1].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[1], pizzas_list[1]['name'], pizzas_list[1]['id']))
+            pizza_add_button[2].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[2], pizzas_list[2]['name'], pizzas_list[2]['id']))
+            pizza_add_button[3].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[3], pizzas_list[3]['name'], pizzas_list[3]['id']))
+            pizza_add_button[4].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[4], pizzas_list[4]['name'], pizzas_list[4]['id']))
+            pizza_add_button[5].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[5], pizzas_list[5]['name'], pizzas_list[5]['id']))
+            pizza_add_button[6].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[6], pizzas_list[6]['name'], pizzas_list[6]['id']))
+            pizza_add_button[7].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[7], pizzas_list[7]['name'], pizzas_list[7]['id']))
+            pizza_add_button[8].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[8], pizzas_list[8]['name'], pizzas_list[8]['id']))
+            pizza_add_button[9].clicked.connect(lambda : self.add_to_cart_pizza(self.__pizza_size[9], pizzas_list[9]['name'], pizzas_list[9]['id']))
         except IndexError:
             QMessageBox.critical(None, "Kebab Index Error", "Error while getting the price of kebab:")   
 
@@ -835,7 +838,7 @@ class Cart_Controller_Class(QDialog):
     
     ------------------------------------------------------------------------------""" 
     @pyqtSlot(str, str)
-    def add_to_cart_pizza(self, size, name):
+    def add_to_cart_pizza(self, size, name, id):
         price = self.database.get_price(name, size)
         
         #check if any toppings requested and update the price accordingly
@@ -846,9 +849,9 @@ class Cart_Controller_Class(QDialog):
             self.__cat_toppings = " ".join(self.__custom_topping_list)
             
             # Now send it to the shopping list
-            self.add_to_cart_method("Pizza", size, name, price, self.__cat_toppings)
+            self.add_to_cart_method("Pizza", size, name, price, self.__cat_toppings, id)
         else:
-            self.add_to_cart_method("Pizza", size, name, price)
+            self.add_to_cart_method("Pizza", size, name, price, id)
         
         
         
@@ -949,13 +952,13 @@ class Cart_Controller_Class(QDialog):
     
     def handle_burger_add_button(self, burger_add_button, burger_list):
         try:
-            burger_add_button[0].clicked.connect(lambda : self.add_to_cart_burger(0, burger_list[0]['name']))
-            burger_add_button[1].clicked.connect(lambda : self.add_to_cart_burger(1, burger_list[1]['name']))
-            burger_add_button[2].clicked.connect(lambda : self.add_to_cart_burger(2, burger_list[2]['name']))
-            burger_add_button[3].clicked.connect(lambda : self.add_to_cart_burger(3, burger_list[3]['name']))
-            burger_add_button[4].clicked.connect(lambda : self.add_to_cart_burger(4, burger_list[4]['name']))
-            burger_add_button[5].clicked.connect(lambda : self.add_to_cart_burger(5, burger_list[5]['name']))
-            burger_add_button[6].clicked.connect(lambda : self.add_to_cart_burger(6, burger_list[6]['name']))
+            burger_add_button[0].clicked.connect(lambda : self.add_to_cart_burger(0, burger_list[0]['name'], burger_list[0]['id']))
+            burger_add_button[1].clicked.connect(lambda : self.add_to_cart_burger(1, burger_list[1]['name'], burger_list[1]['id']))
+            burger_add_button[2].clicked.connect(lambda : self.add_to_cart_burger(2, burger_list[2]['name'], burger_list[2]['id']))
+            burger_add_button[3].clicked.connect(lambda : self.add_to_cart_burger(3, burger_list[3]['name'], burger_list[3]['id']))
+            burger_add_button[4].clicked.connect(lambda : self.add_to_cart_burger(4, burger_list[4]['name'], burger_list[4]['id']))
+            burger_add_button[5].clicked.connect(lambda : self.add_to_cart_burger(5, burger_list[5]['name'], burger_list[5]['id']))
+            burger_add_button[6].clicked.connect(lambda : self.add_to_cart_burger(6, burger_list[6]['name'], burger_list[6]['id']))
         except IndexError:
             QMessageBox.critical(None, "Burger add button index error", "Index Error raised while handling burger add request!")
     
@@ -999,7 +1002,7 @@ class Cart_Controller_Class(QDialog):
             
             
     pyqtSlot(str)
-    def add_to_cart_burger(self, burger_number, burger_name):
+    def add_to_cart_burger(self, burger_number, burger_name, id):
         price = self.database.get_price(burger_name, "Small")
         
         if (self.__burger_cheese_list[burger_number] == "Cheese"):
@@ -1019,26 +1022,33 @@ class Cart_Controller_Class(QDialog):
         if ((self.__burger_salad_list[burger_number] == "Custom Salad") and (self.__burger_sauce_list[burger_number] == "Custom Sauce")):
             if (len(self.__burger_custom_salad_list) > 0):  
                 if (len(self.__burger_custom_sauce_list) > 0):
-                    self.add_to_cart_method("Burger", burger_name, self.__burger_cheese_list[burger_number], price, self.__cat_burger_custom_salad, self.__cat_burger_custom_sauce)
+                    self.add_to_cart_method("Burger", burger_name, self.__burger_cheese_list[burger_number], 
+                                            price, self.__cat_burger_custom_salad, self.__cat_burger_custom_sauce, id)
                 else:
-                    QMessageBox.critical(None, "1 Custom salad and sauce selected but sauce empty list", "Custom Salad and sauce option has been selected but no sauce option is selected!")
+                    QMessageBox.critical(None, "1 Custom salad and sauce selected but sauce empty list", 
+                                         "Custom Salad and sauce option has been selected but no sauce option is selected!")
             else:
-                QMessageBox.critical(None, "2 Custom salad and sauce selected but salad is empty list", "Custom Salad and sauce option has been selected but no salad  is selected!")
+                QMessageBox.critical(None, "2 Custom salad and sauce selected but salad is empty list", 
+                                     "Custom Salad and sauce option has been selected but no salad  is selected!")
         #only sauce is requested therefore pass custom sauce and keep salad as combobox value
         elif ((self.__burger_salad_list[burger_number] != "Custom Salad") and (self.__burger_sauce_list[burger_number] == "Custom Sauce")):
             if (len(self.__burger_custom_sauce_list) > 0):
-                self.add_to_cart_method("Burger", burger_name, self.__burger_cheese_list[burger_number], price, self.__burger_salad_list[burger_number], self.__cat_burger_custom_sauce)
+                self.add_to_cart_method("Burger", burger_name, self.__burger_cheese_list[burger_number], 
+                                        price, self.__burger_salad_list[burger_number], self.__cat_burger_custom_sauce, id)
             else:
-                QMessageBox.critical(None, "3 Custom sauce is selected but not specified!", "Custom sauce option is selected but no custom sauce selection has been specified!")
+                QMessageBox.critical(None, "3 Custom sauce is selected but not specified!", 
+                                     "Custom sauce option is selected but no custom sauce selection has been specified!")
         # only salad is requested therefore pass sauce as combobox value
         elif ((self.__burger_salad_list[burger_number] == "Custom Salad") and (self.__burger_sauce_list[burger_number] != "Custom Sauce")):
             if (len(self.__burger_custom_salad_list) > 0):
-                self.add_to_cart_method("Burger", burger_name, self.__burger_cheese_list[burger_number], price, self.__cat_burger_custom_salad, self.__burger_sauce_list[burger_number])                
+                self.add_to_cart_method("Burger", burger_name, self.__burger_cheese_list[burger_number], 
+                                        price, self.__cat_burger_custom_salad, self.__burger_sauce_list[burger_number], id)                
             else:
                 QMessageBox.critical(None, "4 Custom salad is selected but not specified!", "Custom salad option is selected but no custom salad selection has been specified!")
         # both not requested therefore pass combobx values for each
         elif ((self.__burger_salad_list[burger_number] != "Custom Salad") and ( self.__burger_sauce_list[burger_number] != "Custom Sauce")):
-            self.add_to_cart_method("Burger", burger_name, self.__burger_cheese_list[burger_number], price, self.__burger_salad_list[burger_number], self.__burger_sauce_list[burger_number])       
+            self.add_to_cart_method("Burger", burger_name, self.__burger_cheese_list[burger_number], 
+                                    price, self.__burger_salad_list[burger_number], self.__burger_sauce_list[burger_number], id)       
         else:
             QMessageBox.critical(None, "5 Invalid custom salad/sauce condition", "Whislt supplying parameters to shopping list, else branch executed!")
             
@@ -1046,15 +1056,16 @@ class Cart_Controller_Class(QDialog):
     
     def add_to_cart_method(self, *args):
         if (args[0] == "Kebab"):
-            self.kebab_added(args[0], args[1], args[2], args[3], args[4], args[5])
+            self.kebab_added(args[0], args[1], args[2], args[3], args[4], args[5], args[6])
         elif (args[0] == "Pizza"):
             # Check if custom toppings requested 
-            if (len(args) > 4):
-                self.pizza_added(args[0], args[1], args[2], args[3], args[4])
+            # remember size doesnt start from 0
+            if (len(args) > 5):
+                self.pizza_added(args[0], args[1], args[2], args[3], args[4], args[5])
             else:
-                self.pizza_added(args[0], args[1], args[2], args[3])
+                self.pizza_added(args[0], args[1], args[2], args[3], args[4])
         elif (args[0] == "Burger"):
-            self.burger_added(args[0], args[1], args[2], args[3], args[4], args[5])
+            self.burger_added(args[0], args[1], args[2], args[3], args[4], args[5], args[6])
         elif (args[0] == "Other"):
             print ("Other passed")
         else:
@@ -1106,13 +1117,16 @@ class Cart_Controller_Class(QDialog):
         product.size = size
         product.name = name
         product.price = price
-        if len(args) > 0:
-            product.toppings = args[0]        
+        if len(args) > 1:
+            product.toppings = args[0]
+            product.id       = args[1]
+        else:
+            product.id       = args[0]        
         self.shopping_list.append(product)
        
         self.total_price = self.total_price + float(price)
         
-    def kebab_added(self, product_type, size, name, price, salad, sauce):
+    def kebab_added(self, product_type, size, name, price, salad, sauce, p_id):
         product = Product()
         product.type = product_type
         product.size  = size
@@ -1120,11 +1134,12 @@ class Cart_Controller_Class(QDialog):
         product.price = price
         product.salad = salad
         product.sauce = sauce
+        product.id    = p_id
         self.shopping_list.append(product)
         self.total_price = float(self.total_price) + float(price)
         
         
-    def burger_added(self,  product_type, name, cheese, price, salad, sauce):
+    def burger_added(self,  product_type, name, cheese, price, salad, sauce, p_id):
         product = Product()
         product.type = product_type
         product.name   = name
@@ -1132,15 +1147,17 @@ class Cart_Controller_Class(QDialog):
         product.price  = price
         product.salad  = salad
         product.sauce  = sauce
+        product.id     = p_id
         self.shopping_list.append(product)
         self.total_price = float(self.total_price) + float(price)
         
         
-    def other_added(self, product_type, name, price):
+    def other_added(self, product_type, name, price, p_id):
         product = Product()
         product.type = product_type
         product.name  = name
         product.price = price
+        product.id    = p_id
         self.shopping_list.append(product)
         self.total_price = self.total_price + float(price)
             
@@ -1165,10 +1182,35 @@ class Cart_Controller_Class(QDialog):
         self.shopping_list.pop(row)
         
         
-        #print ("Price amendment: " + str(self.total_price))
-        #print ("Removed " + self.shopping_list[row].name + "From number" + str(row))
+    """
+    Function    : handle_clear_cart_button
+    Description : Upon user cart clear request, clear the cart content
+    """    
+    def handle_clear_cart_button(self):
+        self.cart_view_init.generated_cart_ui.pushButton.clicked.connect(self.clear_cart)
         
+    @pyqtSlot()
+    def clear_cart(self):
+        self.cart_view_init.generated_cart_ui.cart_view.clear()
+        # clear all the products in the array
+        # but check that the list isn't empty else it will cause an index error
+        if (len(self.shopping_list) > 0):
+            del self.shopping_list[:]
+        self.total_price = 0.00
         
+    def handle_cart_confirm_button(self):
+        self.cart_view_init.generated_cart_ui.pushButton_2.clicked.connect(self.cart_confirmed)
+        
+    pyqtSlot()
+    def cart_confirmed(self):
+        
+        # check if cart is not empty
+        if len (self.shopping_list) > 0:
+            self.customer_dialog = Controller_Customer_Dialog.Controller_Customer_Dialog(self.shopping_list, self.total_price)
+            self.customer_dialog.exec_()
+        else:
+            QMessageBox.critical(None, "Cart is empty!", "Cart data is confirmed however cart list is empty! Please add products to continue!")
+    
 # Python strcut equavilant
 # will hold product details
 class Product(QMainWindow):

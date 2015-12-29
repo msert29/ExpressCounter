@@ -59,7 +59,7 @@ class View_Main_Menu_Custom(object):
     Returns     :   Void
     ------------------------------------------------------------------------------"""
     def draw_icons(self):     
-        neworder_icon = QtGui.QPixmap(os.getcwd() + '/images/icn-phone2.png')
+        neworder_icon = QtGui.QPixmap(os.getcwd() + '/images/old-tel.png')
         manager_icon = QPixmap(os.getcwd() + '/images/admin-icon.png')
         search_icon = QPixmap(os.getcwd() +'/images/search-icon.png')
         newcustomer_icon = QPixmap(os.getcwd() +'/images/newcustomer-icon.png')

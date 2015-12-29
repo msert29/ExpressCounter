@@ -9,8 +9,9 @@ DESCRIPTION : The purpose of this class is to establish a connection with the
               rather than in a table form.
               
 ------------------------------------------------------------------------------"""
+from PyQt4.QtSql import QSqlQuery
                                                                                 
-
+from PyQt4.QtCore import QDateTime, QTime, QDate
 """------------------------------------------------------------------------------
                      Development Diary
 ----------------------------------------------------------------------------------
@@ -27,7 +28,7 @@ DESCRIPTION : The purpose of this class is to establish a connection with the
               
 -------------------------------------------------------------------------------"""
 
-from PyQt4.Qt import QSqlDatabase, QMessageBox, QSqlQuery
+from PyQt4.Qt import QSqlDatabase, QMessageBox, QSqlQuery, QVariant
 from PyQt4 import QtCore, QtSql
 import sys
 from PyQt4 import QtGui
@@ -256,3 +257,86 @@ class Model_Database_Dialog(QSqlDatabase):
             print "Name: " + query.value(2).toString()
             print "Price: "+ query.value(3).toString()
         return array_of_items
+    
+    
+    
+    
+    
+    def insert_all_to_database(self, shopping_list, total_price, customerid):
+        
+        last_id_no = 0
+        last_order_id_query = QSqlQuery()
+        last_order_id_query.exec_(""" SELECT `order_id` FROM `Orders`""")
+        while (last_order_id_query.next()):
+            last_id_no = last_order_id_query.value(0).toString()
+         
+        # get local time and date
+        # generate an order id
+        query = QSqlQuery()
+        
+        
+        current_time = QTime()
+        current_date = QDate()
+    
+        last_id_no = int(last_id_no) + 1
+        for x in range(0, len(shopping_list)):
+            try:
+                options = str(shopping_list[x].salad) + " " + str(shopping_list[x].sauce)
+            except AttributeError:
+                try:
+                    options =  str(shopping_list[x].toppings)
+                except AttributeError:
+                    options = "No Extra toppings"
+            
+            query.prepare("INSERT INTO `expresscounter`.`Orders` (`order_id` , `customer_id` ,`item_id` , `options` , `total_price` , `date_of_order` , `time_of_order`)"
+                            "VALUES (:order_id , :c_id , :i_id , :option , :total_price , :date , :time);")
+            query.bindValue(":order_id", str(last_id_no))
+            query.bindValue(":c_id", customerid)
+            query.bindValue(":i_id", shopping_list[x].id)
+            query.bindValue(":option", options)
+            query.bindValue(":total_price", total_price)
+            query.bindValue(":date", current_date.currentDate())
+            query.bindValue(":time", current_time.currentTime())
+
+            query.exec_()
+            # Check if we have an error returned and print it if true
+            #if (query.lastError()):
+            errorstr = str(query.lastError().text())   
+            print errorstr 
+            #QMessageBox.critical(None, "Error while executing MYSQL Statement! ", "Unable to insert orders into the orders database!" + str(errorstr))
+            
+            
+    def insert_new_customer(self, customer):
+        new_customer_data_query = QSqlQuery()
+        new_customer_data_query.prepare("INSERT INTO `expresscounter`.`Customers` (`customer_id` , `name` , `address` , `postcode` , `number`)"
+                                        "VALUES (:customer_id , :name , :address , :postcode , :number);")
+        new_customer_data_query.bindValue(":customer_id", "")
+        new_customer_data_query.bindValue(":name", str(customer.name))
+        new_customer_data_query.bindValue(":address", str(customer.address))
+        new_customer_data_query.bindValue(":postcode", str(customer.postcode))
+        new_customer_data_query.bindValue(":number", str(customer.telephone))
+        new_customer_data_query.exec_()
+        
+        #if (new_customer_data_query.lastError()):
+         #   errorstr = str(new_customer_data_query.lastError().text())
+          #  QMessageBox.critical(None, "Unable to insert new customer!", "The following error returned while executing MYSQL Statement: " + errorstr)
+        #else:
+        # get the created customers id as no errors returned
+        #customer_id = self.get_customer_id(str(customer.name), str(customer.address), str(customer.postcode), str(customer.telephone))
+        #return customer_id
+    
+    def get_customer_id(self, name, address, postcode, number):
+        search_for_id = QSqlQuery()
+        search_for_id.prepare("""SELECT customer_id FROM Customers WHERE name LIKE ? AND address LIKE ? AND postcode LIKE ? AND number LIKE ?""")
+        search_for_id.bindValue(0, name)
+        search_for_id.bindValue(1, address)
+        search_for_id.bindValue(2, postcode)
+        search_for_id.bindValue(3, number)
+        search_for_id.exec_()
+        while(search_for_id.next()):
+            customer_id = search_for_id.value(0).toString()
+        print "Id: " + str(customer_id)
+        return customer_id
+    
+    
+    
