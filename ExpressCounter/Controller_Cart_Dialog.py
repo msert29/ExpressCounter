@@ -1163,7 +1163,7 @@ class Cart_Controller_Class(QDialog):
             
             
     def handle_cart_clicks(self):
-        self.cart_view_init.generated_cart_ui.cart_view.itemActivated.connect(lambda : self.remove_item_from_cart(self.cart_view_init.generated_cart_ui.cart_view.currentRow()))
+        self.cart_view_init.generated_cart_ui.cart_view.itemClicked.connect(lambda : self.remove_item_from_cart(self.cart_view_init.generated_cart_ui.cart_view.currentRow()))
         
         
         

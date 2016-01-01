@@ -340,3 +340,85 @@ class Model_Database_Dialog(QSqlDatabase):
     
     
     
+    def search_existing_customer(self, *args):
+        # if all inputs are inserted then they will be bigger than one
+        
+        results_array = []
+        
+        search_all_q = QSqlQuery()
+        if (len(args) > 3):
+            name = args[0]
+            addr = args[1]
+            post = args[2]
+            tel  = args[3]
+            
+            search_all_q.prepare("SELECT * FROM Customers WHERE name LIKE ? AND address LIKE ? AND postcode LIKE ? AND number LIKE ?")
+            search_all_q.bindValue(0, name)
+            search_all_q.bindValue(1, addr)
+            search_all_q.bindValue(2, post)
+            search_all_q.bindValue(3, tel)
+            search_all_q.exec_()
+            while (search_all_q.next()):
+                results_dictionary = {'id' : search_all_q.value(0).toString(), 'name' : search_all_q.value(1).toString(), 'address' : search_all_q.value(2).toString(),
+                                      'postcode' : search_all_q.value(3).toString(), 'number' : search_all_q.value(4).toString()}
+                results_array.append(results_dictionary)
+            return results_array
+        elif (args[0] == "name"):
+            
+            name = args[1]
+            
+            search_all_q.prepare("SELECT * FROM Customers WHERE name LIKE ?")
+            search_all_q.bindValue(0, name)
+            search_all_q.exec_()
+            while (search_all_q.next()):
+                results_dictionary = {'id' : search_all_q.value(0).toString(), 'name' : search_all_q.value(1).toString(), 'address' : search_all_q.value(2).toString(),
+                                      'postcode' : search_all_q.value(3).toString(), 'number' : search_all_q.value(4).toString()}
+                results_array.append(results_dictionary)
+            return results_array
+            errorstr = str(search_all_q.lastError().text())
+            print errorstr
+        elif (args[0] == "address"):
+            addr = args[1]
+            
+            search_all_q.prepare("SELECT * FROM `Customers` WHERE address LIKE ?")
+            search_all_q.bindValue(0, addr)
+            search_all_q.exec_()
+            while (search_all_q.next()):
+                results_dictionary = {'id' : search_all_q.value(0).toString(), 'name' : search_all_q.value(1).toString(), 'address' : search_all_q.value(2).toString(),
+                                      'postcode' : search_all_q.value(3).toString(), 'number' : search_all_q.value(4).toString()}
+                results_array.append(results_dictionary)
+            return results_array
+            errorstr = str(search_all_q.lastError().text())
+            print errorstr
+        elif (args[0] == "postcode"):
+            postcode = args[1]
+            
+            search_all_q.prepare("SELECT * FROM `Customers` WHERE postcode LIKE ?")
+            search_all_q.bindValue(0, postcode)
+            search_all_q.exec_()
+            while (search_all_q.next()):
+                results_dictionary = {'id' : search_all_q.value(0).toString(), 'name' : search_all_q.value(1).toString(), 'address' : search_all_q.value(2).toString(),
+                                      'postcode' : search_all_q.value(3).toString(), 'number' : search_all_q.value(4).toString()}
+                results_array.append(results_dictionary)
+            return results_array
+            errorstr = str(search_all_q.lastError().text())
+            print errorstr
+        elif (args[0] == "tel"):
+            tel = args[1]
+        
+            search_all_q.prepare("SELECT * FROM `Customers` WHERE number LIKE ?")
+            search_all_q.bindValue(0, tel)
+            search_all_q.exec_()
+            while (search_all_q.next()):
+                results_dictionary = {'id' : search_all_q.value(0).toString(), 'name' : search_all_q.value(1).toString(), 'address' : search_all_q.value(2).toString(),
+                                      'postcode' : search_all_q.value(3).toString(), 'number' : search_all_q.value(4).toString()}
+                results_array.append(results_dictionary)
+            return results_array
+            errorstr = str(search_all_q.lastError().text())
+            print errorstr
+        else:
+            print "Unknown "
+            
+    
+    
+    
