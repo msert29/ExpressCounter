@@ -1206,7 +1206,7 @@ class Cart_Controller_Class(QDialog):
         
         # check if cart is not empty
         if len (self.shopping_list) > 0:
-            self.customer_dialog = Controller_Customer_Dialog.Controller_Customer_Dialog(self.shopping_list, self.total_price)
+            self.customer_dialog = Controller_Customer_Dialog.Controller_Customer_Dialog(self, self.shopping_list, self.total_price)
             self.customer_dialog.exec_()
         else:
             QMessageBox.critical(None, "Cart is empty!", "Cart data is confirmed however cart list is empty! Please add products to continue!")

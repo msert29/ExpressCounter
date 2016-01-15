@@ -1,14 +1,18 @@
+# -*- coding: utf-8 -*-
 import View_Customer_Details_Custom
 import Model_Database_Dialog
-from PyQt4.Qt import QDialog, QMessageBox, QListWidgetItem
-
+from PyQt4.Qt import QDialog, QMessageBox
+import os
 class Controller_Customer_Dialog(QDialog):
     
-    def __init__(self, shopping_list, total_price):
-        super(Controller_Customer_Dialog, self).__init__()
+    def __init__(self, parent_widget, shopping_list, total_price):
+        super(Controller_Customer_Dialog, self).__init__(parent=parent_widget)
         
         self.customer_view_custom = View_Customer_Details_Custom.View_Customer_Details_Custom()
         self.customer_view_custom.setupUi(self)
+        
+        # To be used to print pound sign
+        self.__pound = u'\xa3' 
         
         # Cart data from Controller cart dialog
         self.__shopping_list = shopping_list
@@ -47,9 +51,11 @@ class Controller_Customer_Dialog(QDialog):
         
     def cart_confirmed(self):
         if self.__customerid:
+            self.file_i_o(self.__shopping_list, self.__total_price, self.__customerid)
             self.database.insert_all_to_database(self.__shopping_list, self.__total_price, self.__customerid)
-            QMessageBox.critical(None, "Order received!", "Order is correctly inserted into the database")
+            QMessageBox.information(None, "Order received!", "Order is correctly inserted into the database")
             self.close()
+            self.parent().close()
         else:
             QMessageBox.critical(None, "No customer selected or added!", "Please either add a new customer or search for a customer and make a selection!")
     def operation_cancel(self):
@@ -155,5 +161,55 @@ class Controller_Customer_Dialog(QDialog):
                 QMessageBox.critical(None, "Customer id failed", "Customer id retreive operation failed!")
                 
 
+    def file_i_o(self, order, price, customer):
+        cur_dir = os.getcwd()
+        product_len = len(order)
+        f = open('order.txt', 'w')
+        for x in range(0, product_len):
+            if (order[x].type == "Kebab"):
+                self.echo_kebab(f, order[x])
+            elif (order[x].type == "Pizza"):
+                self.echo_pizza(f, order[x])
+            elif (order[x].type == "Burger"):
+                self.echo_burger(f, order[x])
+            elif (order[x].type == "Other"):
+                self.echo_other(f, order[x])
+            else:
+                QMessageBox.critical(None, "Unkown product type", "An unkown product type ha been passed to file write")
+        
+        f.write("\nTotal Price: " + self.__pound.encode('utf8') + str(price) + "0")
+        f.write("\nCustomer id: " + str(customer))
+        f.close()
+        
+    def echo_kebab(self, f, order):
+        f.write(order.size + " " + order.name)
+        f.write("\n-" + str(order.salad))
+        f.write("\n-" + str(order.sauce))
+        f.write("\n \t \t \t " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
+        f.write("\n")
+        return
+    
+    def echo_pizza(self, f, order):
+        f.write(order.size + " " + order.name)
+        try:
+            f.write("\n-Extra: " + str(order.toppings))
+        except AttributeError:
+            pass
+        f.write("\n \t \t \t " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
+        f.write("\n")
+        return
+    
+    def echo_burger(self, f, order):
+        f.write(order.name +" "+order.cheese)
+        f.write("\n-" + str(order.salad))
+        f.write("\n-" + str(order.sauce))
+        f.write("\n\t \t \t " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
+        f.write("\n")
+        return
+    
+    def echo_other(self, f, order):
+        f.write(order.name)
+        f.write("\n \t \t \t " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
+        f.write("\n")
 class New_Customer(object):
     pass
