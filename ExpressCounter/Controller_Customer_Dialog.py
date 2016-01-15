@@ -2,7 +2,8 @@
 import View_Customer_Details_Custom
 import Model_Database_Dialog
 from PyQt4.Qt import QDialog, QMessageBox
-import os
+import subprocess
+
 class Controller_Customer_Dialog(QDialog):
     
     def __init__(self, parent_widget, shopping_list, total_price):
@@ -162,7 +163,6 @@ class Controller_Customer_Dialog(QDialog):
                 
 
     def file_i_o(self, order, price, customer):
-        cur_dir = os.getcwd()
         product_len = len(order)
         f = open('order.txt', 'w')
         for x in range(0, product_len):
@@ -180,6 +180,7 @@ class Controller_Customer_Dialog(QDialog):
         f.write("\nTotal Price: " + self.__pound.encode('utf8') + str(price) + "0")
         f.write("\nCustomer id: " + str(customer))
         f.close()
+        subprocess.call(['./test.sh'])
         
     def echo_kebab(self, f, order):
         f.write(order.size + " " + order.name)
