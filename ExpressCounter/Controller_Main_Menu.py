@@ -35,6 +35,7 @@ from PyQt4.QtCore import pyqtSlot, pyqtSignal
 
 import View_Main_Menu_Custom
 import Controller_Cart_Dialog 
+import Controller_Order_Dialog
 import Model_Database_Dialog
 
 
@@ -107,6 +108,8 @@ class Controller_Main_Menu(QtGui.QMainWindow):
         
     @pyqtSlot()
     def on_search_order_request(self):
+        self.order_search = Controller_Order_Dialog.Controller_Order_Dialog()
+        self.order_search.exec_()
         print ("Search order loaded")
         
     @pyqtSlot()

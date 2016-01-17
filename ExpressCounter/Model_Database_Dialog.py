@@ -304,7 +304,7 @@ class Model_Database_Dialog(QSqlDatabase):
             errorstr = str(query.lastError().text())   
             print errorstr 
             #QMessageBox.critical(None, "Error while executing MYSQL Statement! ", "Unable to insert orders into the orders database!" + str(errorstr))
-            
+        return last_id_no
             
     def insert_new_customer(self, customer):
         new_customer_data_query = QSqlQuery()
@@ -338,7 +338,19 @@ class Model_Database_Dialog(QSqlDatabase):
         print "Id: " + str(customer_id)
         return customer_id
     
-    
+    """ This function receives the id of the customer and returns the 
+        customer details upon finding matching results
+        Called from the file_io from contreoller_customer dialog class
+    """
+    def get_customer_details(self, customer_id):
+        search_customer = QSqlQuery()
+        search_customer.prepare("""SELECT * FROM Customers WHERE customer_id LIKE ?""")
+        search_customer.bindValue(0, customer_id)
+        search_customer.exec_()
+        while (search_customer.next()):
+            customer_details = { 'name' : search_customer.value(1).toString(), 'address' : search_customer.value(2).toString(), \
+            'postcode' : search_customer.value(3).toString(),  'telephone' : search_customer.value(4).toString()}
+        return customer_details
     
     def search_existing_customer(self, *args):
         # if all inputs are inserted then they will be bigger than one
@@ -420,5 +432,19 @@ class Model_Database_Dialog(QSqlDatabase):
             print "Unknown "
             
     
+    
+    def search_order_by_id(self, order_id):
+        order_result = []
+        order_search = QSqlQuery()
+        order_search.prepare("SELECT * FROM Orders WHERE order_id LIKE ?")
+        order_search.bindValue(0, order_id)
+        order_search.exec_()
+        while (order_search.next()):
+            order_result_dict = {'id' : order_search.value(0).toString(), 'customer_id' : order_search.value(1).toString(), \
+                            'item_id' : order_search.value(2).toString(), 'options' : order_search.value(3).toString(), \
+                            'price' : order_search.value(4).toString(), 'date' : order_search.value(5).toString(), \
+                            'time' : order_search.value(6).toString()}
+            order_result.append(order_result_dict)
+        return order_result
     
     

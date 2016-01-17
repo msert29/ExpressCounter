@@ -52,8 +52,9 @@ class Controller_Customer_Dialog(QDialog):
         
     def cart_confirmed(self):
         if self.__customerid:
-            self.file_i_o(self.__shopping_list, self.__total_price, self.__customerid)
-            self.database.insert_all_to_database(self.__shopping_list, self.__total_price, self.__customerid)
+            # Insert all to details into database and which also returns order id which will be printed as well
+            order_id = self.database.insert_all_to_database(self.__shopping_list, self.__total_price, self.__customerid)
+            self.file_i_o(self.__shopping_list, self.__total_price, self.__customerid, order_id)
             QMessageBox.information(None, "Order received!", "Order is correctly inserted into the database")
             self.close()
             self.parent().close()
@@ -61,6 +62,7 @@ class Controller_Customer_Dialog(QDialog):
             QMessageBox.critical(None, "No customer selected or added!", "Please either add a new customer or search for a customer and make a selection!")
     def operation_cancel(self):
         self.close()
+        self.parent().close()
         
     def handle_customer_search_entry(self):
         self.customer_view_custom.customer_generated_view.ex_name_edit.editingFinished.connect(lambda : self.search_by_name(self.customer_view_custom.customer_generated_view.ex_name_edit.text()))
@@ -160,11 +162,14 @@ class Controller_Customer_Dialog(QDialog):
                                                               self.__n_c.postcode, self.__n_c.telephone)
             if not (self.__customerid):
                 QMessageBox.critical(None, "Customer id failed", "Customer id retreive operation failed!")
-                
+            else:
+                QMessageBox.information(None, "Customer successfully inserted!", "Customer has been inserted, please confirm to complete order!")
 
-    def file_i_o(self, order, price, customer):
+    def file_i_o(self, order, price, customer, order_id):
         product_len = len(order)
         f = open('order.txt', 'w')
+        self.echo_header(f)
+        self.echo_order_id(f, order_id)
         for x in range(0, product_len):
             if (order[x].type == "Kebab"):
                 self.echo_kebab(f, order[x])
@@ -176,17 +181,20 @@ class Controller_Customer_Dialog(QDialog):
                 self.echo_other(f, order[x])
             else:
                 QMessageBox.critical(None, "Unkown product type", "An unkown product type ha been passed to file write")
-        
-        f.write("\nTotal Price: " + self.__pound.encode('utf8') + str(price) + "0")
-        f.write("\nCustomer id: " + str(customer))
+        f.write("___________________________")
+        f.write("\nTotal Price:       " + self.__pound.encode('utf8') + str(price) + "0")
+        f.write("\n___________________________")
+        self.echo_customer(f, customer)
+        f.write("\n___________________________")
         f.close()
-        subprocess.call(['./test.sh'])
+        # Start the bash script in order to print it
+        subprocess.Popen(['sh', 'printer.sh'])
         
     def echo_kebab(self, f, order):
         f.write(order.size + " " + order.name)
         f.write("\n-" + str(order.salad))
         f.write("\n-" + str(order.sauce))
-        f.write("\n \t \t \t " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
+        f.write("\n \t \t   " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
         f.write("\n")
         return
     
@@ -196,7 +204,7 @@ class Controller_Customer_Dialog(QDialog):
             f.write("\n-Extra: " + str(order.toppings))
         except AttributeError:
             pass
-        f.write("\n \t \t \t " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
+        f.write("\n \t \t   " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
         f.write("\n")
         return
     
@@ -204,13 +212,30 @@ class Controller_Customer_Dialog(QDialog):
         f.write(order.name +" "+order.cheese)
         f.write("\n-" + str(order.salad))
         f.write("\n-" + str(order.sauce))
-        f.write("\n\t \t \t " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
+        f.write("\n\t \t   " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
         f.write("\n")
         return
     
     def echo_other(self, f, order):
         f.write(order.name)
-        f.write("\n \t \t \t " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
+        f.write("\n \t \t   " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
         f.write("\n")
+        
+    def echo_header(self, f):
+        header_file = open('order_header.txt', 'r')
+        header_data = header_file.read()
+        f.write(header_data)
+        return 
+    def echo_customer(self, f, customer_id):
+        customer = self.database.get_customer_details(customer_id)
+        f.write("\nCustomer")
+        f.write("\nName:      " + str(customer['name']))
+        f.write("\nAddress:   " + str(customer['address']))
+        f.write("\nPostcode:  " + str(customer['postcode']))
+        f.write("\nTelephone: " + str(customer['telephone']))
+        return 
+    def echo_order_id(self, f, order_id):
+        f.write("   Order ID:" + str(order_id))
+        f.write("\n___________________________\n\n")
 class New_Customer(object):
     pass
