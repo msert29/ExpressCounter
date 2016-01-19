@@ -433,18 +433,105 @@ class Model_Database_Dialog(QSqlDatabase):
             
     
     
-    def search_order_by_id(self, order_id):
+    def search_order_by_name(self, customer_name):
+        order_result = []
+        customer = []
+        order_search = QSqlQuery()
+        customer_search = QSqlQuery()
+        order_id_array = []
+        customer_search.prepare("SELECT customer_id FROM Customers WHERE name LIKE ?")
+        customer_search.bindValue(0, customer_name)
+        customer_search.exec_()
+        while (customer_search.next()):
+            customer.append(customer_search.value(0).toString())
+        
+        for x in range(0, len(customer)):
+            order_search.prepare("SELECT * FROM Orders WHERE customer_id LIKE ?")
+            order_search.bindValue(0, customer[x])
+            order_search.exec_()
+            while (order_search.next()):
+                """ order ids are not unique ie for each product same order id is used 
+                for one order. This means that this query will return duplicate entries of
+                same order. What we do here is store the order id into a dynamic list, and then
+                and then we check that the order id hasn't appeared before, if it has we count the
+                query result as duplicate and dont append it to our list. """
+                order_id = order_search.value(0).toString()
+                order_id_array.append(order_id)
+                if (order_id_array.count(order_id) <= 1):
+                    product_name = self.get_product_name_by_id(order_search.value(2).toString())
+                    customer_details = self.get_customer_by_id(order_search.value(1).toString())
+                    order_result_dict = {'id' : order_search.value(0).toString(), 'customer_name' : customer_details['name'], \
+                                     'customer_address' : customer_details['address'], 'customer_postcode' : customer_details['postcode'], \
+                                     'customer_tel' : customer_details['tel'], \
+                                'product_name' : product_name, 'options' : order_search.value(3).toString(), \
+                                'price' : order_search.value(4).toString(), 'date' : order_search.value(5).toString(), \
+                                'time' : order_search.value(6).toString()}
+                    order_result.append(order_result_dict)
+        return order_result
+    
+    def search_order_by_id_for_display(self, order_id):
         order_result = []
         order_search = QSqlQuery()
         order_search.prepare("SELECT * FROM Orders WHERE order_id LIKE ?")
         order_search.bindValue(0, order_id)
         order_search.exec_()
         while (order_search.next()):
-            order_result_dict = {'id' : order_search.value(0).toString(), 'customer_id' : order_search.value(1).toString(), \
-                            'item_id' : order_search.value(2).toString(), 'options' : order_search.value(3).toString(), \
-                            'price' : order_search.value(4).toString(), 'date' : order_search.value(5).toString(), \
-                            'time' : order_search.value(6).toString()}
-            order_result.append(order_result_dict)
+            if (order_search.isValid()):
+                product_name = self.get_product_name_by_id(order_search.value(2).toString())
+                customer_details = self.get_customer_by_id(order_search.value(1).toString())
+                order_result_dict = {'id' : order_search.value(0).toString(), 'customer_name' : customer_details['name'], \
+                                     'customer_address' : customer_details['address'], 'customer_postcode' : customer_details['postcode'], \
+                                     'customer_tel' : customer_details['tel'], \
+                                'product_name' : product_name, 'options' : order_search.value(3).toString(), \
+                                'price' : order_search.value(4).toString(), 'date' : order_search.value(5).toString(), \
+                                'time' : order_search.value(6).toString()}
+                order_result.append(order_result_dict)
+              
         return order_result
+        
+       
+    def search_order_by_id(self, order_id):
+        order_result = []
+        order_search = QSqlQuery()
+        order_search.prepare("SELECT * FROM Orders WHERE order_id LIKE ?")
+        order_search.bindValue(0, order_id)
+        order_search.exec_()
+       
+        while (order_search.next()):
+            if (order_search.isValid()):
+                product_name = self.get_product_name_by_id(order_search.value(2).toString())
+                customer_details = self.get_customer_by_id(order_search.value(1).toString())
+                order_result_dict = {'id' : order_search.value(0).toString(), 'customer_name' : customer_details['name'], \
+                                     'customer_address' : customer_details['address'], 'customer_postcode' : customer_details['postcode'], \
+                                     'customer_tel' : customer_details['tel'], \
+                                'product_name' : product_name, 'options' : order_search.value(3).toString(), \
+                                'price' : order_search.value(4).toString(), 'date' : order_search.value(5).toString(), \
+                                'time' : order_search.value(6).toString()}
+                order_result.append(order_result_dict)
+                return order_result
     
-    
+            
+    # As product name is referenced with product id in the orders table
+    # we need to retreive the product name in order to print it as product id is un-meaningful
+    def get_product_name_by_id(self, product_id):
+        product_search = QSqlQuery()
+        product_search.prepare("SELECT * FROM Products WHERE product_id LIKE ?")
+        product_search.bindValue(0, product_id)
+        product_search.exec_()
+        while (product_search.next()):
+            # Concatenate the size and string values 
+            size_name = product_search.value(3).toString() + " " + product_search.value(2).toString()
+            return size_name
+        
+    # As product name is referenced with product id in the orders table
+    # we need to retreive the product name in order to print it as product id is un-meaningful
+    def get_customer_by_id(self, customer_id):
+        customer_search = QSqlQuery()
+        customer_search.prepare("SELECT * FROM Customers WHERE customer_id LIKE ?")
+        customer_search.bindValue(0, customer_id)
+        customer_search.exec_()
+        while (customer_search.next()):
+            customer_details = {'id' : customer_search.value(0).toString(), 'name' : customer_search.value(1).toString(), \
+                                'address' : customer_search.value(2).toString(), 'postcode' : customer_search.value(3).toString(),\
+                                'tel' : customer_search.value(4).toString()}
+            return customer_details
