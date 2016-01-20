@@ -37,6 +37,7 @@ import View_Main_Menu_Custom
 import Controller_Cart_Dialog 
 import Controller_Order_Dialog
 import Model_Database_Dialog
+import Controller_Signin_Dialog
 
 
 class Controller_Main_Menu(QtGui.QMainWindow):
@@ -44,6 +45,7 @@ class Controller_Main_Menu(QtGui.QMainWindow):
     def __init__(self):
         super(Controller_Main_Menu, self).__init__()
         # Establish a connection during startup
+        
         self.establish_database = Model_Database_Dialog.Model_Database_Dialog()
         self.establish_database.establish_connection()
         # Initialize the view element and draw it
@@ -51,6 +53,7 @@ class Controller_Main_Menu(QtGui.QMainWindow):
         self.main_view_custom.setupUi(self)
         self.show()
         self.handle_icon_clicks()
+        self.setWindowTitle("IYI Kayi - Express Counter")
 
     
     """------------------------------------------------------------------------------
@@ -113,14 +116,19 @@ class Controller_Main_Menu(QtGui.QMainWindow):
         
     @pyqtSlot()
     def on_manager_mode_request(self):
+        self.manager_signin = Controller_Signin_Dialog.Controller_Signin_Dialog()
+        self.manager_signin.exec_()
         print ("Manager mode loaded")
       
     @pyqtSlot()
     def on_create_new_customer_request(self):
         print ("New customer dialog loaded")
         
-    
-        
+    """ We will need to run this main dialog continiously preventing user accessing the system
+    uncomment out this method to prevent quitting main window
+    def closeEvent(self, event):
+        event.ignore()
+    """
 def main():
     app = QtGui.QApplication(sys.argv)
     vmm = Controller_Main_Menu()

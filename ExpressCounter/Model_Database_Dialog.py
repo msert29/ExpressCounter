@@ -619,7 +619,42 @@ class Model_Database_Dialog(QSqlDatabase):
                 order_result.append(order_result_dict)
                 return order_result
     
-            
+    """ This method is used by Controller_Manager_Dialog to retreive a list of orders placed according
+    to a specified date """
+    def search_order_by_date(self, date):
+        price_count = 0.00
+        order_count = 0
+        current_id = 0
+        tmp_id = 0
+        order_result = []
+        order_search = QSqlQuery()
+        order_search.prepare("SELECT * FROM Orders WHERE date_of_order LIKE ?")
+        order_search.bindValue(0, date)
+        order_search.exec_()
+       
+        while (order_search.next()):
+            current_id = order_search.value(0).toString()
+            """
+            Order IDs arent unique therefore price and order count should be calculate correctly
+            Here we make a selection of the order id returned by database against a tmp id
+            if they dont match, which means that we have a new order id, we store it and then
+            append it to our dictionary.
+            """
+            if (current_id != tmp_id):
+                customer_details = self.get_customer_by_id(order_search.value(1).toString())
+                price_count = price_count + float(order_search.value(4).toString())
+                order_count = order_count + 1
+                tmp_id = current_id
+                order_result_dict = {'id' : order_search.value(0).toString(), 'customer_name' : customer_details['name'], \
+                                'customer_address' : customer_details['address'], 'customer_postcode' : customer_details['postcode'], \
+                                'customer_tel' : customer_details['tel'], \
+                                'price' : order_search.value(4).toString(), 'date' : order_search.value(5).toString(), \
+                                'time' : order_search.value(6).toString(), 'price_count' : price_count, 'order_count' : order_count}
+                order_result.append(order_result_dict)
+        return order_result
+        
+        
+        
     # As product name is referenced with product id in the orders table
     # we need to retreive the product name in order to print it as product id is un-meaningful
     def get_product_name_by_id(self, product_id):
@@ -658,3 +693,17 @@ class Model_Database_Dialog(QSqlDatabase):
                                 'address' : customer_search.value(2).toString(), 'postcode' : customer_search.value(3).toString(),\
                                 'tel' : customer_search.value(4).toString()}
             return customer_details
+        
+    """ Manager Sign IN Section -----------------------------------------------------------"""
+    def check_manager_details(self, account_name, password):
+        manager_search = QSqlQuery()
+        manager_search.prepare("SELECT * FROM Manager WHERE name LIKE ? and password LIKE ?")
+        manager_search.bindValue(0, account_name)
+        manager_search.bindValue(1, password)
+        manager_search.exec_()
+        while (manager_search.next()):
+            if (manager_search.isValid()):
+                return True
+            else:
+                return False
+        
