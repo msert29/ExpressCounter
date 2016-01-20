@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'order_search.ui'
 #
-# Created: Mon Jan 18 23:28:59 2016
+# Created: Tue Jan 19 22:37:29 2016
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -28,7 +28,7 @@ class Ui_Dialog(object):
         Dialog.setObjectName(_fromUtf8("Dialog"))
         Dialog.resize(998, 948)
         self.cancel_button = QtGui.QPushButton(Dialog)
-        self.cancel_button.setGeometry(QtCore.QRect(10, 880, 471, 61))
+        self.cancel_button.setGeometry(QtCore.QRect(10, 880, 971, 61))
         self.cancel_button.setStyleSheet(_fromUtf8("QPushButton {\n"
 " background: gray;\n"
 " color:white;\n"
@@ -185,19 +185,6 @@ class Ui_Dialog(object):
 "}"))
         self.results_label.setAlignment(QtCore.Qt.AlignCenter)
         self.results_label.setObjectName(_fromUtf8("results_label"))
-        self.confirm_button = QtGui.QPushButton(Dialog)
-        self.confirm_button.setGeometry(QtCore.QRect(500, 880, 471, 61))
-        self.confirm_button.setStyleSheet(_fromUtf8("QPushButton {\n"
-" background: gray;\n"
-" color:white;\n"
-" padding: 10px;\n"
-" border-radius:5px 20px;\n"
-"}\n"
-"QPushButton::hover {\n"
-"background: rgb(20, 255, 67);\n"
-"color:black;\n"
-"} "))
-        self.confirm_button.setObjectName(_fromUtf8("confirm_button"))
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -231,5 +218,4 @@ class Ui_Dialog(object):
         item = self.table_search_result.horizontalHeaderItem(8)
         item.setText(_translate("Dialog", "Display", None))
         self.results_label.setText(_translate("Dialog", "Results", None))
-        self.confirm_button.setText(_translate("Dialog", "Print", None))
 

@@ -6,6 +6,7 @@ Created on Jan 17, 2016
 
 import View_Order_Custom
 import Model_Database_Dialog
+import Controller_Order_View_Dialog
 
 from PyQt4.Qt import QDialog, QMessageBox
 
@@ -80,12 +81,16 @@ class Controller_Order_Dialog(QDialog):
     
     def handle_order_view_click(self):
         button_group = self.order_view.get_button_group()
-        button_group.buttonClicked[int].connect(self.order_view.display_order)
+        button_group.buttonClicked[int].connect(self.initialize_display)
+    
+    def initialize_display(self, number):
+        order_id = self.order_view.calculate_id(number)
+        self.order_view_dialog = Controller_Order_View_Dialog.Controller_Order_View_Dialog(order_id)
+        self.order_view_dialog.exec_()
     
     def handle_order_operations(self):
         self.order_view.order_ui.search_button.clicked.connect(self.handle_order_search_req)
-        self.order_view.order_ui.cancel_button.clicked.connect(self.handle_order_search_cancel)
-        self.order_view.order_ui.confirm_button.clicked.connect(self.handle_order_print)
+        self.order_view.order_ui.cancel_button.clicked.connect(self.close)
         
     
     def handle_order_search_req(self):
@@ -117,9 +122,3 @@ class Controller_Order_Dialog(QDialog):
             print "Else"
             
             
-    
-    def handle_order_print(self):
-        print "Printing to "
-    
-    def handle_order_search_cancel(self):
-        self.close()
