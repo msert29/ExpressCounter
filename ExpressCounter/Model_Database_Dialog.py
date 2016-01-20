@@ -469,6 +469,114 @@ class Model_Database_Dialog(QSqlDatabase):
                     order_result.append(order_result_dict)
         return order_result
     
+    
+    def search_order_by_address(self, customer_address):
+        order_result = []
+        customer = []
+        order_search = QSqlQuery()
+        customer_search = QSqlQuery()
+        order_id_array = []
+        customer_search.prepare("SELECT customer_id FROM Customers WHERE address LIKE ?")
+        customer_search.bindValue(0, customer_address)
+        customer_search.exec_()
+        while (customer_search.next()):
+            customer.append(customer_search.value(0).toString())
+        
+        for x in range(0, len(customer)):
+            order_search.prepare("SELECT * FROM Orders WHERE customer_id LIKE ?")
+            order_search.bindValue(0, customer[x])
+            order_search.exec_()
+            while (order_search.next()):
+                """ order ids are not unique ie for each product same order id is used 
+                for one order. This means that this query will return duplicate entries of
+                same order. What we do here is store the order id into a dynamic list, and then
+                and then we check that the order id hasn't appeared before, if it has we count the
+                query result as duplicate and dont append it to our list. """
+                order_id = order_search.value(0).toString()
+                order_id_array.append(order_id)
+                if (order_id_array.count(order_id) <= 1):
+                    product_name = self.get_product_name_by_id(order_search.value(2).toString())
+                    customer_details = self.get_customer_by_id(order_search.value(1).toString())
+                    order_result_dict = {'id' : order_search.value(0).toString(), 'customer_name' : customer_details['name'], \
+                                     'customer_address' : customer_details['address'], 'customer_postcode' : customer_details['postcode'], \
+                                     'customer_tel' : customer_details['tel'], \
+                                'product_name' : product_name, 'options' : order_search.value(3).toString(), \
+                                'price' : order_search.value(4).toString(), 'date' : order_search.value(5).toString(), \
+                                'time' : order_search.value(6).toString()}
+                    order_result.append(order_result_dict)
+        return order_result
+    
+    def search_order_by_postcode(self, customer_postcode):
+        order_result = []
+        customer = []
+        order_search = QSqlQuery()
+        customer_search = QSqlQuery()
+        order_id_array = []
+        customer_search.prepare("SELECT customer_id FROM Customers WHERE postcode LIKE ?")
+        customer_search.bindValue(0, customer_postcode)
+        customer_search.exec_()
+        while (customer_search.next()):
+            customer.append(customer_search.value(0).toString())
+        
+        for x in range(0, len(customer)):
+            order_search.prepare("SELECT * FROM Orders WHERE customer_id LIKE ?")
+            order_search.bindValue(0, customer[x])
+            order_search.exec_()
+            while (order_search.next()):
+                """ order ids are not unique ie for each product same order id is used 
+                for one order. This means that this query will return duplicate entries of
+                same order. What we do here is store the order id into a dynamic list, and then
+                and then we check that the order id hasn't appeared before, if it has we count the
+                query result as duplicate and dont append it to our list. """
+                order_id = order_search.value(0).toString()
+                order_id_array.append(order_id)
+                if (order_id_array.count(order_id) <= 1):
+                    product_name = self.get_product_name_by_id(order_search.value(2).toString())
+                    customer_details = self.get_customer_by_id(order_search.value(1).toString())
+                    order_result_dict = {'id' : order_search.value(0).toString(), 'customer_name' : customer_details['name'], \
+                                     'customer_address' : customer_details['address'], 'customer_postcode' : customer_details['postcode'], \
+                                     'customer_tel' : customer_details['tel'], \
+                                'product_name' : product_name, 'options' : order_search.value(3).toString(), \
+                                'price' : order_search.value(4).toString(), 'date' : order_search.value(5).toString(), \
+                                'time' : order_search.value(6).toString()}
+                    order_result.append(order_result_dict)
+        return order_result
+    
+    def search_order_by_tel(self, customer_tel):
+        order_result = []
+        customer = []
+        order_search = QSqlQuery()
+        customer_search = QSqlQuery()
+        order_id_array = []
+        customer_search.prepare("SELECT customer_id FROM Customers WHERE number LIKE ?")
+        customer_search.bindValue(0, customer_tel)
+        customer_search.exec_()
+        while (customer_search.next()):
+            customer.append(customer_search.value(0).toString())
+        for x in range(0, len(customer)):
+            order_search.prepare("SELECT * FROM Orders WHERE customer_id LIKE ?")
+            order_search.bindValue(0, customer[x])
+            order_search.exec_()
+            while (order_search.next()):
+                """ order ids are not unique ie for each product same order id is used 
+                for one order. This means that this query will return duplicate entries of
+                same order. What we do here is store the order id into a dynamic list, and then
+                and then we check that the order id hasn't appeared before, if it has we count the
+                query result as duplicate and dont append it to our list. """
+                order_id = order_search.value(0).toString()
+                order_id_array.append(order_id)
+                if (order_id_array.count(order_id) <= 1):
+                    product_name = self.get_product_name_by_id(order_search.value(2).toString())
+                    customer_details = self.get_customer_by_id(order_search.value(1).toString())
+                    order_result_dict = {'id' : order_search.value(0).toString(), 'customer_name' : customer_details['name'], \
+                                     'customer_address' : customer_details['address'], 'customer_postcode' : customer_details['postcode'], \
+                                     'customer_tel' : customer_details['tel'], \
+                                'product_name' : product_name, 'options' : order_search.value(3).toString(), \
+                                'price' : order_search.value(4).toString(), 'date' : order_search.value(5).toString(), \
+                                'time' : order_search.value(6).toString()}
+                    order_result.append(order_result_dict)
+        return order_result
+    
     def search_order_by_id_for_display(self, order_id):
         order_result = []
         order_search = QSqlQuery()
@@ -535,7 +643,6 @@ class Model_Database_Dialog(QSqlDatabase):
         product_search.exec_()
         while (product_search.next()):
             # Concatenate the size and string values 
-            print "Product Type :" + product_search.value(0).toString()
             product_type = product_search.value(0).toString()
             return product_type
         

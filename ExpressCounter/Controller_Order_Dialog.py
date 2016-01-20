@@ -23,7 +23,7 @@ class Controller_Order_Dialog(QDialog):
         
         
     def handle_order_search_operations(self):
-        self.__order_id = 0
+        self.__order_id = ""
         self.__name     = ""
         self.__address  = ""
         self.__postcode = ""
@@ -41,7 +41,9 @@ class Controller_Order_Dialog(QDialog):
         
     
     def set_order_id(self, order_id):
-        if (order_id == "0") or (not order_id.isdigit()):
+        if (order_id == ""):
+            pass
+        elif (order_id == "0") or (not order_id.isdigit()):
             QMessageBox.critical(None, "Please input a number", "Please input a number or enter a number greater than zero")
         else:
             self.__order_id = order_id
@@ -53,14 +55,23 @@ class Controller_Order_Dialog(QDialog):
         
         
     def set_name(self, name):
-        self.__name = name
+        if (name.isdigit()):
+                QMessageBox.critical(None, "Not a valid name!", "Please input a valid name!")
+        elif (self.__name == ""):
+            pass
+        else:
+            self.__name = name
     
     def handle_address(self):
         self.order_view.order_ui.address_search_box.editingFinished.connect(\
                         lambda : self.set_address(self.order_view.order_ui.address_search_box.text()))
     
     def set_address(self, address):
-        self.__address = address
+        # can be alpha numeric so assign any value or if empty dont assign
+        if (address == ""):
+            pass
+        else:
+            self.__address = address
 
     
     def handle_postcode(self):
@@ -68,7 +79,10 @@ class Controller_Order_Dialog(QDialog):
                         lambda : self.set_postcode(self.order_view.order_ui.postcode_search_box.text()))
     
     def set_postcode(self, postcode):
-        self.__address = postcode
+        if (postcode == ""):
+            pass
+        else:
+            self.__postcode = postcode
         
         
     def handle_tel(self):
@@ -76,7 +90,10 @@ class Controller_Order_Dialog(QDialog):
                         lambda : self.set_tel(self.order_view.order_ui.tel_search_box.text()))
     
     def set_tel(self, tel):
-        self.__address = tel
+        if (tel == ""):
+            pass
+        else:
+            self.__tel = tel
         
     
     def handle_order_view_click(self):
@@ -96,29 +113,38 @@ class Controller_Order_Dialog(QDialog):
     def handle_order_search_req(self):
         if (self.__order_id) and (self.__name) and (self.__address) and (self.__postcode) and (self.__tel):
             print ("All")
-        elif (self.__order_id != 0):
+        elif (self.__order_id):
             order = self.database.search_order_by_id(self.__order_id)
             try:
                 if (len(order) > 0 ):
                     self.order_view.echo_order(order)
             except TypeError:
-                QMessageBox.critical(None, "No Results found!", "Please input a valid order number!")
+                QMessageBox.critical(None, "No Results found!", "Please input a valid order number entry!")
         elif (self.__name):
-            if (self.__name.isdigit()) or (self.__name == ""):
-                QMessageBox.critical(None, "Not a valid name!", "Please input a valid name!")
+            order = self.database.search_order_by_name(self.__name)
+            if (len(order) > 0 ):
+                self.order_view.echo_order(order)
             else:
-                order = self.database.search_order_by_name(self.__name)
-                if (len(order) > 0 ):
-                    self.order_view.echo_order(order)
-                else:
-                    QMessageBox.critical(None, "No Results found!", "Please input a valid name!")
-        elif (self.__address):
-            print self.__address
+                QMessageBox.critical(None, "No Results found!", "Please input a valid name entry!")
+        elif (self.__address != ""):
+            order = self.database.search_order_by_address(self.__address)
+            if (len(order) > 0 ):
+                self.order_view.echo_order(order)
+            else:
+                QMessageBox.critical(None, "No Results found!", "Please input a valid Address entry!")
         elif (self.__postcode):
-            print self.__postcode
+            order = self.database.search_order_by_postcode(self.__postcode)
+            if (len(order) > 0 ):
+                self.order_view.echo_order(order)
+            else:
+                QMessageBox.critical(None, "No Results found!", "Please input a valid Postcode entry!")
         elif (self.__tel):
-            print self.__tel
+            order = self.database.search_order_by_tel(self.__tel)
+            if (len(order) > 0 ):
+                self.order_view.echo_order(order)
+            else:
+                QMessageBox.critical(None, "No Results found!", "Please input a valid Telephone number entry!")
         else:
-            print "Else"
+            QMessageBox.critical(None, "No Results", "The query has returned no results, please input valid entries!.")
             
             

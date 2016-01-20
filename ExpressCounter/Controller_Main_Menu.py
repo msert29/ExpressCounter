@@ -110,7 +110,6 @@ class Controller_Main_Menu(QtGui.QMainWindow):
     def on_search_order_request(self):
         self.order_search = Controller_Order_Dialog.Controller_Order_Dialog()
         self.order_search.exec_()
-        print ("Search order loaded")
         
     @pyqtSlot()
     def on_manager_mode_request(self):

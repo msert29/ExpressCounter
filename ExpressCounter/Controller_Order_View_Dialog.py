@@ -47,7 +47,7 @@ class Controller_Order_View_Dialog(QDialog):
             else:
                 QMessageBox.critical(None, "Unkown product type", "An unkown product type ha been passed to file write")
         f.write("___________________________")
-        f.write("\nTotal Price:       " + self.__pound.encode('utf8') + str(order[0]['price']) + "0")
+        f.write("\nTotal Price:       " + self.__pound.encode('utf8') + str(float(order[0]['price'])) + "0")
         f.write("\n___________________________")
         self.echo_customer(f, order[0])
         f.write("\n___________________________")
@@ -57,14 +57,14 @@ class Controller_Order_View_Dialog(QDialog):
         
     def echo_kebab(self, f, order):
         f.write(order['product_name'])
-        f.write("\n-" + order['options'])
+        f.write("\n-" + order['options'] + "\n")
         f.write("\n")
         return
     
     def echo_pizza(self, f, order):
         f.write(order['product_name'])
         try:
-            f.write("\n-Extra: " + order['options'])
+            f.write("\n-Extra: " + order['options'] + "\n")
         except AttributeError:
             pass
         f.write("\n")
@@ -72,7 +72,7 @@ class Controller_Order_View_Dialog(QDialog):
     
     def echo_burger(self, f, order):
         f.write(order['product_name'])
-        f.write("\n-" + order['options'])
+        f.write("\n-" + order['options'] + "\n")
         f.write("\n")
         return
     
@@ -96,5 +96,3 @@ class Controller_Order_View_Dialog(QDialog):
     def echo_order_id(self, f, order_id):
         f.write("   Order ID:" + str(order_id))
         f.write("\n___________________________\n\n")
-class New_Customer(object):
-    pass
