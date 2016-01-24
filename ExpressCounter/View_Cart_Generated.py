@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'new_Cart_resolution.ui'
 #
-# Created: Fri Dec 18 12:01:58 2015
+# Created: Sat Jan 23 14:52:59 2016
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -123,7 +123,7 @@ class Ui_Dialog(object):
 " }\n"
 "\n"
 "QComboBox {\n"
-"min-width:115px;\n"
+"min-width:92px;\n"
 "min-height:38;\n"
 "margin-bottom:5px;\n"
 "}"))
@@ -357,8 +357,11 @@ class Ui_Dialog(object):
         self.others_layout.setMargin(0)
         self.others_layout.setObjectName(_fromUtf8("others_layout"))
         self.tabWidget.addTab(self.other_tab, _fromUtf8(""))
+        self.drinks_tab = QtGui.QWidget()
+        self.drinks_tab.setObjectName(_fromUtf8("drinks_tab"))
+        self.tabWidget.addTab(self.drinks_tab, _fromUtf8(""))
         self.cart_view = QtGui.QListWidget(Dialog)
-        self.cart_view.setGeometry(QtCore.QRect(880, 100, 391, 771))
+        self.cart_view.setGeometry(QtCore.QRect(880, 100, 391, 721))
         self.cart_view.setStyleSheet(_fromUtf8("background:rgb(240, 240, 240);\n"
 "margin-top:5px;\n"
 "border-top-left-radius: 5px;\n"
@@ -406,9 +409,32 @@ class Ui_Dialog(object):
 "color:white;\n"
 "}"))
         self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
+        self.frame = QtGui.QFrame(Dialog)
+        self.frame.setGeometry(QtCore.QRect(880, 830, 391, 41))
+
+        self.frame.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtGui.QFrame.Raised)
+        self.frame.setObjectName(_fromUtf8("frame"))
+        self.horizontalLayoutWidget_4 = QtGui.QWidget(self.frame)
+        self.horizontalLayoutWidget_4.setGeometry(QtCore.QRect(0, 0, 211, 41))
+        self.horizontalLayoutWidget_4.setObjectName(_fromUtf8("horizontalLayoutWidget_4"))
+        self.horizontalLayout_2 = QtGui.QHBoxLayout(self.horizontalLayoutWidget_4)
+        self.horizontalLayout_2.setMargin(0)
+        self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
+        self.label_2 = QtGui.QLabel(self.horizontalLayoutWidget_4)
+        self.label_2.setStyleSheet(_fromUtf8("font: 20pt \"Liberation Serif\";"))
+        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.horizontalLayout_2.addWidget(self.label_2)
+        self.verticalLayoutWidget = QtGui.QWidget(self.frame)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(210, 0, 181, 41))
+        self.verticalLayoutWidget.setObjectName(_fromUtf8("verticalLayoutWidget"))
+        self.total_price_display = QtGui.QVBoxLayout(self.verticalLayoutWidget)
+        self.total_price_display.setMargin(0)
+        self.total_price_display.setObjectName(_fromUtf8("total_price_display"))
 
         self.retranslateUi(Dialog)
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -417,7 +443,9 @@ class Ui_Dialog(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.pizza_tab), _translate("Dialog", "Pizzas", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.burger_tab), _translate("Dialog", "Burgers", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.other_tab), _translate("Dialog", "Others", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.drinks_tab), _translate("Dialog", "Drinks", None))
         self.label.setText(_translate("Dialog", "Order Summary", None))
         self.pushButton.setText(_translate("Dialog", "Cancel", None))
         self.pushButton_2.setText(_translate("Dialog", "Confirm", None))
+        self.label_2.setText(_translate("Dialog", "Total Price:  ", None))
 

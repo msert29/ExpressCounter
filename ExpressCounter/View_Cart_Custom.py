@@ -3,7 +3,7 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import Qt , pyqtSlot, pyqtSignal
 from PyQt4.Qt import QDialog, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox,\
     QComboBox, QPushButton, QCheckBox, QObject, QEvent, QListWidget, QListWidgetItem,\
-    QStandardItemModel, QStandardItem
+    QStandardItemModel, QStandardItem, QLineEdit
 
 
 
@@ -42,10 +42,16 @@ class View_Cart_Custom(QObject):
         super(View_Cart_Custom, self).__init__()
         # Import the generated GUI Elements
         self.generated_cart_ui = View_Cart_Generated.Ui_Dialog()
+        pound = u'\xa3'
+        self.__total_price_display = QLineEdit(pound + "00.00")
+        
         
     def setupUI(self, dialog):
         self.generated_cart_ui.setupUi(dialog)
+        self.generated_cart_ui.total_price_display.addWidget(self.__total_price_display)
         
+    def get_total_price(self):
+        return self.__total_price_display
     """------------------------------------------------------------------------------
     Function           : display_kebabs
     Description        : This function retrieves a list of kebab options from the 
@@ -72,14 +78,18 @@ class View_Cart_Custom(QObject):
         self.sauce_options = [None] * kebabs_length
         self.add_button_x  = [None] * kebabs_length
         self.size_options  = [None] * kebabs_length
+        self.wrap_pitta    = [None] * kebabs_length
 
         for i in range(kebabs_length):
+            wrap_pitta_str    = ['Pitta', 'Wrap']
             salad_options_str = ['All Salad', 'L/O/R/W', 'No Salad', 'Custom Salad']
             sauce_options_str = ['Chilli Sauce', 'Garlic Mayo', 'Mayo', 'BBQ', 'No Sauce', 'Custom Sauce']
             size_options_str  = ['Small', 'Large']
+            self.wrap_pitta[i]       = QComboBox()
             self.salad_options[i]    = QComboBox()
             self.sauce_options[i]    = QComboBox()
             self.size_options[i]     = QComboBox()
+            self.wrap_pitta[i].addItems(wrap_pitta_str)
             self.salad_options[i].addItems(salad_options_str)
             self.sauce_options[i].addItems(sauce_options_str)
             self.size_options[i].addItems(size_options_str)
@@ -98,6 +108,7 @@ class View_Cart_Custom(QObject):
             name.setAlignment(Qt.AlignCenter)
             add_button_holder.setAlignment(Qt.AlignCenter)
             top_layout.addWidget(name)
+            bottom_layout.addWidget(self.wrap_pitta[i])
             bottom_layout.addWidget(self.size_options[i])
             bottom_layout.addWidget(self.salad_options[i])
             bottom_layout.addWidget(self.sauce_options[i])

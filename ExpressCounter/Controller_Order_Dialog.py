@@ -18,8 +18,8 @@ class Controller_Order_Dialog(QDialog):
         self.order_view.setupUI(self)
         
         self.handle_order_search_operations()
-        
-        
+        self.order_view.order_ui.table_search_result.horizontalHeader().setStretchLastSection(True)
+        self.order_view.order_ui.table_search_result.verticalHeader().setStretchLastSection(True)
         
         
     def handle_order_search_operations(self):
@@ -57,7 +57,7 @@ class Controller_Order_Dialog(QDialog):
     def set_name(self, name):
         if (name.isdigit()):
                 QMessageBox.critical(None, "Not a valid name!", "Please input a valid name!")
-        elif (self.__name == ""):
+        elif (name.isspace()):
             pass
         else:
             self.__name = name
@@ -68,7 +68,7 @@ class Controller_Order_Dialog(QDialog):
     
     def set_address(self, address):
         # can be alpha numeric so assign any value or if empty dont assign
-        if (address == ""):
+        if (address.isspace()):
             pass
         else:
             self.__address = address
@@ -79,7 +79,7 @@ class Controller_Order_Dialog(QDialog):
                         lambda : self.set_postcode(self.order_view.order_ui.postcode_search_box.text()))
     
     def set_postcode(self, postcode):
-        if (postcode == ""):
+        if (postcode.isspace()):
             pass
         else:
             self.__postcode = postcode
@@ -90,7 +90,7 @@ class Controller_Order_Dialog(QDialog):
                         lambda : self.set_tel(self.order_view.order_ui.tel_search_box.text()))
     
     def set_tel(self, tel):
-        if (tel == ""):
+        if (tel.isspace()):
             pass
         else:
             self.__tel = tel
