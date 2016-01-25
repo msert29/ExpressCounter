@@ -16,7 +16,7 @@ class Controller_Order_Dialog(QDialog):
         self.database   = Model_Database_Dialog.Model_Database_Dialog()
         self.order_view = View_Order_Custom.View_Order_Custom()
         self.order_view.setupUI(self)
-        
+        self.setWindowTitle("Order Search")
         self.handle_order_search_operations()
         self.order_view.order_ui.table_search_result.horizontalHeader().setStretchLastSection(True)
         self.order_view.order_ui.table_search_result.verticalHeader().setStretchLastSection(True)
@@ -41,7 +41,7 @@ class Controller_Order_Dialog(QDialog):
         
     
     def set_order_id(self, order_id):
-        if (order_id == ""):
+        if (order_id.isspace()):
             pass
         elif (order_id == "0") or (not order_id.isdigit()):
             QMessageBox.critical(None, "Please input a number", "Please input a number or enter a number greater than zero")

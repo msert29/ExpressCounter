@@ -38,6 +38,7 @@ import Controller_Cart_Dialog
 import Controller_Order_Dialog
 import Model_Database_Dialog
 import Controller_Signin_Dialog
+import Controller_Customer_Mode_Dialog
 
 
 class Controller_Main_Menu(QtGui.QMainWindow):
@@ -118,10 +119,11 @@ class Controller_Main_Menu(QtGui.QMainWindow):
     def on_manager_mode_request(self):
         self.manager_signin = Controller_Signin_Dialog.Controller_Signin_Dialog()
         self.manager_signin.exec_()
-        print ("Manager mode loaded")
       
     @pyqtSlot()
     def on_create_new_customer_request(self):
+        self.customer_mode = Controller_Customer_Mode_Dialog.Controller_Customer_Mode_Dialog()
+        self.customer_mode.exec_()
         print ("New customer dialog loaded")
         
     """ We will need to run this main dialog continiously preventing user accessing the system

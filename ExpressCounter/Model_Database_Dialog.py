@@ -28,7 +28,7 @@ from PyQt4.QtCore import QDateTime, QTime, QDate
               
 -------------------------------------------------------------------------------"""
 
-from PyQt4.Qt import QSqlDatabase, QMessageBox, QSqlQuery, QVariant
+from PyQt4.Qt import QSqlDatabase, QMessageBox, QSqlQuery, QVariant, QSqlError
 from PyQt4 import QtCore, QtSql
 import sys
 from PyQt4 import QtGui
@@ -317,13 +317,11 @@ class Model_Database_Dialog(QSqlDatabase):
         new_customer_data_query.bindValue(":number", str(customer.telephone))
         new_customer_data_query.exec_()
         
-        #if (new_customer_data_query.lastError()):
-         #   errorstr = str(new_customer_data_query.lastError().text())
-          #  QMessageBox.critical(None, "Unable to insert new customer!", "The following error returned while executing MYSQL Statement: " + errorstr)
-        #else:
-        # get the created customers id as no errors returned
-        #customer_id = self.get_customer_id(str(customer.name), str(customer.address), str(customer.postcode), str(customer.telephone))
-        #return customer_id
+        error = new_customer_data_query.lastError()
+        if (error.type() == QSqlError.NoError):
+            QMessageBox.information(None, "Inserted!", "A new customer entry has succesfully been inserted!")
+        else:
+            QMessageBox.critical(None, "Error!", "Cannot insert the customer into the database")
     
     def get_customer_id(self, name, address, postcode, number):
         search_for_id = QSqlQuery()
@@ -706,4 +704,43 @@ class Model_Database_Dialog(QSqlDatabase):
                 return True
             else:
                 return False
+            
+            
+    def update_customer_details(self, customer_id, name, address, postcode, tel):
+        update_details = QSqlQuery()
+        update_details.prepare("UPDATE Customers SET name = ?, address = ?, postcode = ?, number = ? WHERE customer_id LIKE ?")
+        update_details.bindValue(0, name)
+        update_details.bindValue(1, address)
+        update_details.bindValue(2, postcode)
+        update_details.bindValue(3, tel)
+        update_details.bindValue(4, customer_id)
+        update_details.exec_()
+        result = update_details.lastError()
+        if (result.type() == QSqlError.NoError):
+            QMessageBox.information(None, "Updated!!", "The customers details have been updated!")
+        else:
+            QMessageBox.critical(None, "Cannot update details!", "Cannot update the customers details, \
+            please refine your search for an existing customer")
+            
+    
+    def delete_customer(self, customer_id):
         
+        # Customers whom placed orders cannot be deleted until their orders have also been removed
+        # therefore remove the order first and then delete the customer
+        # possibly prompt this at this stage
+        
+        delete_order = QSqlQuery()
+        delete_order.prepare("DELETE FROM Orders WHERE customer_id LIKE ?")
+        delete_order.bindValue(0, customer_id)
+        delete_order.exec_()
+        
+        delete_customer = QSqlQuery()
+        delete_customer.prepare("DELETE FROM Customers WHERE customer_id LIKE ?")
+        delete_customer.bindValue(0, customer_id)
+        delete_customer.exec_()
+        result = delete_customer.lastError()
+        if (result.type() == QSqlError.NoError):
+            return True 
+        else:
+            QMessageBox.critical(None, "Cannot Delete Customer!", result.text())
+            return False 
