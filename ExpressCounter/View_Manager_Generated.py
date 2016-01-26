@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'manager_mode.ui'
 #
-# Created: Wed Jan 20 22:06:37 2016
+# Created: Tue Jan 26 15:49:00 2016
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
-        Dialog.resize(1280, 950)
+        Dialog.resize(994, 950)
         Dialog.setStyleSheet(_fromUtf8(""))
         self.tabWidget = QtGui.QTabWidget(Dialog)
         self.tabWidget.setGeometry(QtCore.QRect(10, 10, 961, 841))
@@ -52,11 +52,11 @@ class Ui_Dialog(object):
 "\n"
 ""))
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
-        self.Orders_tab = QtGui.QWidget()
-        self.Orders_tab.setObjectName(_fromUtf8("Orders_tab"))
-        self.table_search_result = QtGui.QTableWidget(self.Orders_tab)
+        self.sales_tab = QtGui.QWidget()
+        self.sales_tab.setObjectName(_fromUtf8("sales_tab"))
+        self.table_search_result = QtGui.QTableWidget(self.sales_tab)
         self.table_search_result.setEnabled(True)
-        self.table_search_result.setGeometry(QtCore.QRect(0, 0, 951, 631))
+        self.table_search_result.setGeometry(QtCore.QRect(0, 60, 951, 571))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Liberation Serif"))
         font.setPointSize(14)
@@ -93,7 +93,7 @@ class Ui_Dialog(object):
         self.table_search_result.horizontalHeader().setDefaultSectionSize(105)
         self.table_search_result.horizontalHeader().setMinimumSectionSize(89)
         self.table_search_result.verticalHeader().setVisible(False)
-        self.label = QtGui.QLabel(self.Orders_tab)
+        self.label = QtGui.QLabel(self.sales_tab)
         self.label.setGeometry(QtCore.QRect(10, 720, 141, 41))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Liberation Serif"))
@@ -105,19 +105,19 @@ class Ui_Dialog(object):
         self.label.setStyleSheet(_fromUtf8("font: 18pt \"Liberation Serif\";\n"
 ""))
         self.label.setObjectName(_fromUtf8("label"))
-        self.arrange = QtGui.QPushButton(self.Orders_tab)
+        self.arrange = QtGui.QPushButton(self.sales_tab)
         self.arrange.setGeometry(QtCore.QRect(770, 720, 171, 41))
         self.arrange.setStyleSheet(_fromUtf8("font: 63 16pt \"Ubuntu\";\n"
 ""))
         self.arrange.setObjectName(_fromUtf8("arrange"))
-        self.date_selection = QtGui.QDateEdit(self.Orders_tab)
+        self.date_selection = QtGui.QDateEdit(self.sales_tab)
         self.date_selection.setGeometry(QtCore.QRect(170, 720, 581, 41))
         self.date_selection.setDate(QtCore.QDate(2016, 1, 20))
         self.date_selection.setMaximumDate(QtCore.QDate(2020, 12, 31))
         self.date_selection.setCurrentSection(QtGui.QDateTimeEdit.YearSection)
         self.date_selection.setCalendarPopup(True)
         self.date_selection.setObjectName(_fromUtf8("date_selection"))
-        self.frame = QtGui.QFrame(self.Orders_tab)
+        self.frame = QtGui.QFrame(self.sales_tab)
         self.frame.setGeometry(QtCore.QRect(-10, 630, 961, 80))
         self.frame.setStyleSheet(_fromUtf8("background:rgb(240, 240, 240);\n"
 "font: 18pt \"Liberation Serif\";\n"
@@ -140,10 +140,69 @@ class Ui_Dialog(object):
         self.customernameLabel_2 = QtGui.QLabel(self.frame)
         self.customernameLabel_2.setGeometry(QtCore.QRect(460, 20, 151, 35))
         self.customernameLabel_2.setObjectName(_fromUtf8("customernameLabel_2"))
-        self.tabWidget.addTab(self.Orders_tab, _fromUtf8(""))
-        self.Customer_page = QtGui.QWidget()
-        self.Customer_page.setObjectName(_fromUtf8("Customer_page"))
-        self.tabWidget.addTab(self.Customer_page, _fromUtf8(""))
+        self.label_4 = QtGui.QLabel(self.sales_tab)
+        self.label_4.setGeometry(QtCore.QRect(0, 0, 961, 59))
+        self.label_4.setStyleSheet(_fromUtf8("QLabel {\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"background: gray;\n"
+"color:white;\n"
+"text-align: center;\n"
+"background:rgb(85, 255, 0);\n"
+"color:black;\n"
+"}"))
+        self.label_4.setTextFormat(QtCore.Qt.AutoText)
+        self.label_4.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_4.setWordWrap(False)
+        self.label_4.setObjectName(_fromUtf8("label_4"))
+        self.tabWidget.addTab(self.sales_tab, _fromUtf8(""))
+        self.order_tab = QtGui.QWidget()
+        self.order_tab.setObjectName(_fromUtf8("order_tab"))
+        self.frame_2 = QtGui.QFrame(self.order_tab)
+        self.frame_2.setGeometry(QtCore.QRect(10, 70, 941, 691))
+        self.frame_2.setStyleSheet(_fromUtf8("border:1px solid black;\n"
+"background : white;"))
+        self.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
+        self.frame_2.setObjectName(_fromUtf8("frame_2"))
+        self.delete_calendar = QtGui.QCalendarWidget(self.frame_2)
+        self.delete_calendar.setGeometry(QtCore.QRect(20, 10, 911, 591))
+        self.delete_calendar.setStyleSheet(_fromUtf8("border:none;\n"
+"background:rgb(0, 170, 255);\n"
+"color:black;"))
+        self.delete_calendar.setObjectName(_fromUtf8("delete_calendar"))
+        self.delete_date_button = QtGui.QPushButton(self.frame_2)
+        self.delete_date_button.setGeometry(QtCore.QRect(20, 610, 451, 71))
+        self.delete_date_button.setStyleSheet(_fromUtf8("QPushButton{\n"
+"background: rgb(255, 85, 0);\n"
+"    font: 75 18pt \"Ubuntu\";\n"
+"color:white;\n"
+"border:none;\n"
+"}"))
+        self.delete_date_button.setObjectName(_fromUtf8("delete_date_button"))
+        self.delete_all_orders_button = QtGui.QPushButton(self.frame_2)
+        self.delete_all_orders_button.setGeometry(QtCore.QRect(480, 610, 451, 71))
+        self.delete_all_orders_button.setStyleSheet(_fromUtf8("QPushButton{\n"
+"background: rgb(255, 0, 4);\n"
+"    font: 75 18pt \"Ubuntu\";\n"
+"color:white;\n"
+"border:none;\n"
+"}"))
+        self.delete_all_orders_button.setObjectName(_fromUtf8("delete_all_orders_button"))
+        self.label_3 = QtGui.QLabel(self.order_tab)
+        self.label_3.setGeometry(QtCore.QRect(0, 0, 991, 59))
+        self.label_3.setStyleSheet(_fromUtf8("QLabel {\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"background: gray;\n"
+"color:white;\n"
+"text-align: center;\n"
+"background:rgb(255, 85, 0);\n"
+"color:black;\n"
+"}"))
+        self.label_3.setTextFormat(QtCore.Qt.AutoText)
+        self.label_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_3.setWordWrap(False)
+        self.label_3.setObjectName(_fromUtf8("label_3"))
+        self.tabWidget.addTab(self.order_tab, _fromUtf8(""))
         self.signout_button = QtGui.QPushButton(Dialog)
         self.signout_button.setGeometry(QtCore.QRect(10, 860, 961, 71))
         self.signout_button.setStyleSheet(_fromUtf8("QPushButton{\n"
@@ -181,7 +240,11 @@ class Ui_Dialog(object):
         self.date_selection.setDisplayFormat(_translate("Dialog", "yyyy/MM/dd", None))
         self.customernameLabel.setText(_translate("Dialog", "Total Order", None))
         self.customernameLabel_2.setText(_translate("Dialog", "Total Income £", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Orders_tab), _translate("Dialog", "Orders", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Customer_page), _translate("Dialog", "Customers", None))
+        self.label_4.setText(_translate("Dialog", "View Sales", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.sales_tab), _translate("Dialog", "Sales", None))
+        self.delete_date_button.setText(_translate("Dialog", " Delete Specified Date ", None))
+        self.delete_all_orders_button.setText(_translate("Dialog", "Delete All Orders", None))
+        self.label_3.setText(_translate("Dialog", "Delete Orders", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.order_tab), _translate("Dialog", "Orders", None))
         self.signout_button.setText(_translate("Dialog", "Sign Out", None))
 

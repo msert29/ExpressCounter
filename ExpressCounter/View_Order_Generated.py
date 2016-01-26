@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'order_search.ui'
 #
-# Created: Tue Jan 19 22:37:29 2016
+# Created: Mon Jan 25 20:48:19 2016
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -64,30 +64,35 @@ class Ui_Dialog(object):
         self.customernameLabel_2.setObjectName(_fromUtf8("customernameLabel_2"))
         self.customer_layout_2.setWidget(0, QtGui.QFormLayout.LabelRole, self.customernameLabel_2)
         self.order_search_box = QtGui.QLineEdit(self.formLayoutWidget_3)
+        self.order_search_box.setStyleSheet(_fromUtf8("background:white;"))
         self.order_search_box.setObjectName(_fromUtf8("order_search_box"))
         self.customer_layout_2.setWidget(0, QtGui.QFormLayout.FieldRole, self.order_search_box)
         self.addressLabel_3 = QtGui.QLabel(self.formLayoutWidget_3)
         self.addressLabel_3.setObjectName(_fromUtf8("addressLabel_3"))
         self.customer_layout_2.setWidget(1, QtGui.QFormLayout.LabelRole, self.addressLabel_3)
         self.name_search_box = QtGui.QLineEdit(self.formLayoutWidget_3)
+        self.name_search_box.setStyleSheet(_fromUtf8("background:white;"))
         self.name_search_box.setObjectName(_fromUtf8("name_search_box"))
         self.customer_layout_2.setWidget(1, QtGui.QFormLayout.FieldRole, self.name_search_box)
         self.postcodeLabel_3 = QtGui.QLabel(self.formLayoutWidget_3)
         self.postcodeLabel_3.setObjectName(_fromUtf8("postcodeLabel_3"))
         self.customer_layout_2.setWidget(2, QtGui.QFormLayout.LabelRole, self.postcodeLabel_3)
         self.address_search_box = QtGui.QLineEdit(self.formLayoutWidget_3)
+        self.address_search_box.setStyleSheet(_fromUtf8("background:white;"))
         self.address_search_box.setObjectName(_fromUtf8("address_search_box"))
         self.customer_layout_2.setWidget(2, QtGui.QFormLayout.FieldRole, self.address_search_box)
         self.telephoneLabel_3 = QtGui.QLabel(self.formLayoutWidget_3)
         self.telephoneLabel_3.setObjectName(_fromUtf8("telephoneLabel_3"))
         self.customer_layout_2.setWidget(3, QtGui.QFormLayout.LabelRole, self.telephoneLabel_3)
         self.postcode_search_box = QtGui.QLineEdit(self.formLayoutWidget_3)
+        self.postcode_search_box.setStyleSheet(_fromUtf8("background:white;"))
         self.postcode_search_box.setObjectName(_fromUtf8("postcode_search_box"))
         self.customer_layout_2.setWidget(3, QtGui.QFormLayout.FieldRole, self.postcode_search_box)
         self.telephoneLabel_4 = QtGui.QLabel(self.formLayoutWidget_3)
         self.telephoneLabel_4.setObjectName(_fromUtf8("telephoneLabel_4"))
         self.customer_layout_2.setWidget(4, QtGui.QFormLayout.LabelRole, self.telephoneLabel_4)
         self.tel_search_box = QtGui.QLineEdit(self.formLayoutWidget_3)
+        self.tel_search_box.setStyleSheet(_fromUtf8("background:white;"))
         self.tel_search_box.setObjectName(_fromUtf8("tel_search_box"))
         self.customer_layout_2.setWidget(4, QtGui.QFormLayout.FieldRole, self.tel_search_box)
         self.search_button = QtGui.QPushButton(self.formLayoutWidget_3)
@@ -108,7 +113,7 @@ class Ui_Dialog(object):
         self.search_button.setObjectName(_fromUtf8("search_button"))
         self.customer_layout_2.setWidget(5, QtGui.QFormLayout.SpanningRole, self.search_button)
         self.label_3 = QtGui.QLabel(self.frame_2)
-        self.label_3.setGeometry(QtCore.QRect(0, 0, 961, 59))
+        self.label_3.setGeometry(QtCore.QRect(0, 0, 971, 59))
         self.label_3.setStyleSheet(_fromUtf8("QLabel {\n"
 "font: 63 20pt \"Ubuntu\";\n"
 "background: gray;\n"

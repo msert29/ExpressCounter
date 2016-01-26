@@ -727,7 +727,6 @@ class Model_Database_Dialog(QSqlDatabase):
         
         # Customers whom placed orders cannot be deleted until their orders have also been removed
         # therefore remove the order first and then delete the customer
-        # possibly prompt this at this stage
         
         delete_order = QSqlQuery()
         delete_order.prepare("DELETE FROM Orders WHERE customer_id LIKE ?")
@@ -743,4 +742,42 @@ class Model_Database_Dialog(QSqlDatabase):
             return True 
         else:
             QMessageBox.critical(None, "Cannot Delete Customer!", result.text())
+            return False 
+        
+    def delete_order_by_date(self, date):
+        date_exist = False
+        check_date = QSqlQuery()
+        check_date.prepare("SELECT * FROM Orders WHERE date_of_order LIKE ?")
+        check_date.bindValue(0, date)
+        check_date.exec_()
+        while (check_date.next()):
+            if (check_date.isValid()):
+                date_exist = True
+            else:
+                date_exist = False
+    
+        if (date_exist):
+            delete_date = QSqlQuery()
+            delete_date.prepare("DELETE FROM Orders WHERE date_of_order LIKE ?")
+            delete_date.bindValue(0, date)
+            delete_date.exec_()
+            result = delete_date.lastError()
+            if (result.type() == QSqlError.NoError):
+                return True
+            else:
+                QMessageBox.critical(None, "Cannot Delete Order!", result.text())
+                return False 
+        else:
+            QMessageBox.critical(None, "Cannot remove it", "The date you've specified cannot be found!")
+            return False
+        
+    def delete_all_orders(self):
+        delete_all_orders = QSqlQuery()
+        delete_all_orders.prepare("DELETE FROM Orders")
+        delete_all_orders.exec_()
+        result = delete_all_orders.lastError()
+        if (result.type() == QSqlError.NoError):
+            return True 
+        else:
+            QMessageBox.critical(None, "Cannot Delete Orders!", result.text())
             return False 

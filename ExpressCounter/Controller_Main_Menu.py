@@ -124,7 +124,7 @@ class Controller_Main_Menu(QtGui.QMainWindow):
     def on_create_new_customer_request(self):
         self.customer_mode = Controller_Customer_Mode_Dialog.Controller_Customer_Mode_Dialog()
         self.customer_mode.exec_()
-        print ("New customer dialog loaded")
+
         
     """ We will need to run this main dialog continiously preventing user accessing the system
     uncomment out this method to prevent quitting main window
@@ -133,6 +133,7 @@ class Controller_Main_Menu(QtGui.QMainWindow):
     """
 def main():
     app = QtGui.QApplication(sys.argv)
+    app.setStyle("GTK")
     vmm = Controller_Main_Menu()
     sys.exit(app.exec_())
 

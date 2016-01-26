@@ -7,9 +7,9 @@ Created on Jan 24, 2016
 import Model_Database_Dialog
 import View_Customer_Mode_Custom
 from PyQt4.Qt import QDialog, QMessageBox
-from lxml.html.builder import ADDRESS
+
 from Controller_Customer_Dialog import New_Customer
-from __builtin__ import False
+
 
 class Controller_Customer_Mode_Dialog(QDialog):
 

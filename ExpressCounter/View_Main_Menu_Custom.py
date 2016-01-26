@@ -59,22 +59,26 @@ class View_Main_Menu_Custom(object):
     Returns     :   Void
     ------------------------------------------------------------------------------"""
     def draw_icons(self):     
-        neworder_icon = QtGui.QPixmap(os.getcwd() + '/images/tel.png')
-        manager_icon = QPixmap(os.getcwd() + '/images/admin-icon.png')
-        search_icon = QPixmap(os.getcwd() +'/images/search-icon.png')
-        newcustomer_icon = QPixmap(os.getcwd() +'/images/newcustomer-icon.png')
-        
+        neworder_icon = QtGui.QPixmap(os.getcwd() + '/images/new_order.png')
+        manager_icon = QPixmap(os.getcwd() + '/images/new_admin.png')
+        search_icon = QPixmap(os.getcwd() +'/images/order_search.png')
+        newcustomer_icon = QPixmap(os.getcwd() +'/images/customer_mode.png')
+        header_icon      = QPixmap(os.getcwd() + '/images/header-final.png')
         self.neworder_lbl = QLabel("Place an order")
         self.manager_lbl = QLabel("Manager Log in")
         self.search_lbl = QLabel("Search")
         self.newcustomer_lbl = QLabel("New Customer Entry")
+        self.header_lbl    = QLabel("Header")
         
         self.manager_lbl.setPixmap(manager_icon)
         self.search_lbl.setPixmap(search_icon)
         self.neworder_lbl.setPixmap(neworder_icon)
         self.newcustomer_lbl.setPixmap(newcustomer_icon)
+        self.header_lbl.setPixmap(header_icon)
         
         self.generated_main_menu_ui.new_order_layout.addWidget(self.neworder_lbl)
         self.generated_main_menu_ui.manager_layout.addWidget(self.manager_lbl)
         self.generated_main_menu_ui.search_order_layout.addWidget(self.search_lbl)
         self.generated_main_menu_ui.newcustomer_layout.addWidget(self.newcustomer_lbl)
+        self.generated_main_menu_ui.header_layout.addWidget(self.header_lbl)
+        

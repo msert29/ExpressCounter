@@ -1116,7 +1116,6 @@ class Cart_Controller_Class(QDialog):
         self.send_data_to_list_view()
         self.total_price_display = self.cart_view_init.get_total_price()
         self.total_price_display.setText(pound + str(float(self.total_price)) + "0")
-        print ("Total Price: " + str(self.total_price))
 
     def send_data_to_list_view(self):
         if len(self.shopping_list) > 0:
