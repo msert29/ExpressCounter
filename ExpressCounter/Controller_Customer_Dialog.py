@@ -167,7 +167,7 @@ class Controller_Customer_Dialog(QDialog):
 
     def file_i_o(self, order, price, customer, order_id):
         product_len = len(order)
-        f = open('order.txt', 'rw+')
+        f = open('order.txt', 'w')
         # truncate it before writing it to clear previous orders
         f.truncate()
         self.echo_header(f)
