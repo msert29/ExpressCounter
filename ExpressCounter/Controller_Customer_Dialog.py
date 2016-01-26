@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import View_Customer_Details_Custom
 import Model_Database_Dialog
-from PyQt4.Qt import QDialog, QMessageBox
+from PyQt4.Qt import QDialog, QMessageBox, QDate, QTime
 import subprocess
 
 class Controller_Customer_Dialog(QDialog):
@@ -167,7 +167,9 @@ class Controller_Customer_Dialog(QDialog):
 
     def file_i_o(self, order, price, customer, order_id):
         product_len = len(order)
-        f = open('order.txt', 'w')
+        f = open('order.txt', 'rw+')
+        # truncate it before writing it to clear previous orders
+        f.truncate()
         self.echo_header(f)
         self.echo_order_id(f, order_id)
         for x in range(0, product_len):
@@ -189,6 +191,7 @@ class Controller_Customer_Dialog(QDialog):
         f.close()
         # Start the bash script in order to print it
         subprocess.Popen(['sh', 'printer.sh'])
+        del order[:]
         
     def echo_kebab(self, f, order):
         f.write(order.size + " " + order.name)
@@ -235,7 +238,12 @@ class Controller_Customer_Dialog(QDialog):
         f.write("\nTelephone: " + str(customer['telephone']))
         return 
     def echo_order_id(self, f, order_id):
-        f.write("   Order ID:" + str(order_id))
+        date = QDate.currentDate().toString("yyyy-MM-dd")
+        time = QTime.currentTime().toString("hh:mm:ss")
+        
+        f.write("   Order ID :  " + str(order_id))
+        f.write("\n   Date     :  " + date)
+        f.write("\n   Time     :  " + time)
         f.write("\n___________________________\n\n")
 class New_Customer(object):
     pass
