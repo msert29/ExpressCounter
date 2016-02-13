@@ -46,6 +46,16 @@ class Controller_Customer_Dialog(QDialog):
         self.handle_cart_cancel_confirm_buttons()
         self.handle_customer_search_entry()
         self.handle_existing_customer_selection()
+        
+        caller_id = self.read_caller_id()
+        self.customer_view_custom.customer_generated_view.ex_tel_edit.setText(caller_id)
+        
+    def read_caller_id(self):
+        file = open('number.txt', 'r')    
+        caller_id = file.read()
+        return caller_id
+    
+    
     def handle_cart_cancel_confirm_buttons(self):
         self.customer_view_custom.customer_generated_view.confirm_button.clicked.connect(self.cart_confirmed)
         self.customer_view_custom.customer_generated_view.cancel_button.clicked.connect(self.operation_cancel)

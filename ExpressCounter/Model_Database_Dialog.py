@@ -56,7 +56,7 @@ class Model_Database_Dialog(QSqlDatabase):
         db.setHostName("localhost")
         db.setDatabaseName("expresscounter")
         db.setUserName("root")
-        db.setPassword("express")
+        db.setPassword("expresscounter")
         if (db.open()==False):     
             QMessageBox.critical(None, "Database Error", db.lastError().text())   
 
