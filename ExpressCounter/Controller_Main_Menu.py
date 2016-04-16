@@ -27,6 +27,7 @@ DESCRIPTION : This class is responsible for handling user Events. It initiliazes
 -------------------------------------------------------------------------------"""
 import sys
 import sip
+
 sip.setapi('QString', 2)
 from PyQt4 import QtGui
 from PyQt4.Qt import QObject, QEvent
@@ -55,7 +56,6 @@ class Controller_Main_Menu(QtGui.QMainWindow):
         self.show()
         self.handle_icon_clicks()
         self.setWindowTitle("IYI Kayi - Express Counter")
-
     
     """------------------------------------------------------------------------------
     Function           : clickable

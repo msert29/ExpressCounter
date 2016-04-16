@@ -4,6 +4,7 @@ from PyQt4.QtCore import Qt , pyqtSlot, pyqtSignal
 from PyQt4.Qt import QDialog, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox,\
     QComboBox, QPushButton, QCheckBox, QObject, QEvent, QListWidget, QListWidgetItem,\
     QStandardItemModel, QStandardItem, QLineEdit
+from PyQt4.QtGui import QButtonGroup
 
 
 
@@ -41,10 +42,11 @@ class View_Cart_Custom(QObject):
     def __init__(self):
         super(View_Cart_Custom, self).__init__()
         # Import the generated GUI Elements
-        self.generated_cart_ui = View_Cart_Generated.Ui_Dialog()
+        self.generated_cart_ui = View_Cart_Generated.Ui_Widget()
         pound = u'\xa3'
         self.__total_price_display = QLineEdit(pound + "00.00")
-        
+        self.burger_add_button_group = QButtonGroup()
+
         
     def setupUI(self, dialog):
         self.generated_cart_ui.setupUi(dialog)
@@ -70,30 +72,10 @@ class View_Cart_Custom(QObject):
         kebabs_length = len(kebabs_list)
         #holds the position of widget
         place_holder = 0 
-        # Create combobox variables which will be assigned in the loop
-        # needs to be dynamic to capture value changed event for each
-        # two arrays with length equal to kebab_list size.
-        # we will iterate and assign combobox to each one
-        self.salad_options = [None] * kebabs_length
-        self.sauce_options = [None] * kebabs_length
-        self.add_button_x  = [None] * kebabs_length
-        self.size_options  = [None] * kebabs_length
-        self.wrap_pitta    = [None] * kebabs_length
-
+        self.select_button_group = QButtonGroup()
         for i in range(kebabs_length):
-            wrap_pitta_str    = ['Pitta', 'Wrap']
-            salad_options_str = ['All Salad', 'L/O/R/W', 'No Salad', 'Custom Salad']
-            sauce_options_str = ['Chilli Sauce', 'Garlic Mayo', 'Mayo', 'BBQ', 'No Sauce', 'Custom Sauce']
-            size_options_str  = ['Small', 'Large']
-            self.wrap_pitta[i]       = QComboBox()
-            self.salad_options[i]    = QComboBox()
-            self.sauce_options[i]    = QComboBox()
-            self.size_options[i]     = QComboBox()
-            self.wrap_pitta[i].addItems(wrap_pitta_str)
-            self.salad_options[i].addItems(salad_options_str)
-            self.sauce_options[i].addItems(sauce_options_str)
-            self.size_options[i].addItems(size_options_str)
-            self.add_button_x[i] = QPushButton("Add")
+            Select_Button = QPushButton("Select")
+            self.select_button_group.addButton(Select_Button, i)
             
             # Need a groupbox which will hold a bundle of QLabel, QComboBox and QPushbutton
             kebab_group_box = QGroupBox()
@@ -101,19 +83,13 @@ class View_Cart_Custom(QObject):
             # Need a layout which will hold nested layouts 
             core = QVBoxLayout()
             top_layout = QVBoxLayout()
-            bottom_layout = QHBoxLayout()
             add_button_holder = QVBoxLayout()
-            add_button_holder.addWidget(self.add_button_x[i])
+            add_button_holder.addWidget(Select_Button)
             name = QLabel(kebabs_list[i]['name'])
             name.setAlignment(Qt.AlignCenter)
             add_button_holder.setAlignment(Qt.AlignCenter)
             top_layout.addWidget(name)
-            bottom_layout.addWidget(self.wrap_pitta[i])
-            bottom_layout.addWidget(self.size_options[i])
-            bottom_layout.addWidget(self.salad_options[i])
-            bottom_layout.addWidget(self.sauce_options[i])
             core.addLayout(top_layout)
-            core.addLayout(bottom_layout)
             core.addLayout(add_button_holder)
             
             kebab_group_box.setLayout(core)
@@ -142,56 +118,9 @@ class View_Cart_Custom(QObject):
                 place_holder = 1
             
             
-            
-    """------------------------------------------------------------------------------
-    Function           : display_salads_options
-    Description        : This function retrieves a list of custom salad variables from
-                         the Controller_Cart_Dialog class. It then creates 
-                         dynamic variables to store each check box thus allowing user
-                         to select specific salad options. 
-                         This function is called directly by the Controller_Cart_Dialog.
-    Parameters         : salad_list (A list of salad options available fetched by 
-                         databaseConnection class, get_custom_salads method, which is 
-                         retrieved by Controller_Cart_Dialog and passed to this function.
-    Returns            : Void
-    ------------------------------------------------------------------------------"""
-    def display_salad_options(self, salad_list):
-        tmp_holder = QHBoxLayout()
-        tmp_group = QGroupBox()
-        salads_length = len(salad_list)
-        self.custom_salad_options = [None] * salads_length
-        for x in range(0, salads_length):
-            self.custom_salad_options[x] = QCheckBox(salad_list[x])
-            tmp_holder.addWidget(self.custom_salad_options[x])
-        tmp_group.setLayout(tmp_holder)
-        # Displayed in sauces layout as it was wrongly named in designer
-        self.generated_cart_ui.custom_sauces_layout.addWidget(tmp_group)
-        
-    """------------------------------------------------------------------------------
-    Function           : display_sauce_options
-    Description        :This function retrieves a list of custom salad variables from
-                        the Controller_Cart_Dialog class. It then creates 
-                        dynamic variables to store each check box thus allowing user
-                        to select specific sauce options. 
-                        This function is called directly by the Controller_Cart_Dialog.
-    Args                : sauce_list (A list of sauce options available fetched by 
-                         databaseConnection class, get_custom_salads method, which is 
-                         retrieved by Controller_Cart_Dialog and passed to this function.
-    Returns             : Void
-    ------------------------------------------------------------------------------"""
-    def display_sauce_options(self, sauce_list):
-        tmp_holder = QHBoxLayout()
-        tmp_group = QGroupBox()
-        sauces_length = len(sauce_list)
-        self.custom_sauce_options = [None] * sauces_length
-        for x in range(0, sauces_length):
-            self.custom_sauce_options[x] = QCheckBox(sauce_list[x])
-            tmp_holder.addWidget(self.custom_sauce_options[x])
-        tmp_group.setLayout(tmp_holder)
-        # Displayed in salads layout as it was wrongly named in designer
-        self.generated_cart_ui.custom_salads_layout.addWidget(tmp_group)
-        
-        
+    def get_sel_buttons(self):
+        return self.select_button_group
+
     """------------------------------------------------------------------------------
     Function        : display_pizzas
     Description     : Receives a list of pizzas which then creates a size combobox
@@ -259,7 +188,7 @@ class View_Cart_Custom(QObject):
         join_layouts.addLayout(custom_topping_bot_layout)
         self.layout_into_group.setLayout(join_layouts)
         self.layout_into_group.hide()
-        self.generated_cart_ui.horizontalLayout.addWidget(self.layout_into_group)
+        
         
         
     def display_burgers(self, burgers_list):
@@ -269,22 +198,10 @@ class View_Cart_Custom(QObject):
         # needs to be dynamic to capture value changed event for each
         # two arrays with length equal to kebab_list size.
         # we will iterate and assign combobox to each one
-        self.burger_salad_options = [None] * burgers_length
-        self.burger_sauce_options = [None] * burgers_length
-        self.burger_add_button    = [None] * burgers_length
-        self.burger_cheese_option = [None] * burgers_length
-
         for i in range(burgers_length):
-            salad_options_str = ['All Salad', 'L/O/R/W', 'No Salad', 'Custom Salad']
-            sauce_options_str = ['Chilli Sauce', 'Garlic Mayo', 'Mayo', 'BBQ', 'No Sauce', 'Custom Sauce']
-            cheese_options_str  = ['No Cheese', 'Cheese']
-            self.burger_salad_options[i]    = QComboBox()
-            self.burger_sauce_options[i]    = QComboBox()
-            self.burger_cheese_option[i]     = QComboBox()
-            self.burger_salad_options[i].addItems(salad_options_str)
-            self.burger_sauce_options[i].addItems(sauce_options_str)
-            self.burger_cheese_option[i].addItems(cheese_options_str)
-            self.burger_add_button[i] = QPushButton("Add")
+            #self.burger_cheese_option[i]     = QComboBox()
+            burger_add_button = QPushButton("Select")
+            self.burger_add_button_group.addButton(burger_add_button, i)
             
             # Need a groupbox which will hold a bundle of QLabel, QComboBox and QPushbutton
             burger_group_box = QGroupBox()
@@ -292,18 +209,16 @@ class View_Cart_Custom(QObject):
             # Need a layout which will hold nested layouts 
             core = QVBoxLayout()
             top_layout = QVBoxLayout()
-            bottom_layout = QHBoxLayout()
+            #bottom_layout = QHBoxLayout()
             add_button_holder = QVBoxLayout()
-            add_button_holder.addWidget(self.burger_add_button[i])
+            add_button_holder.addWidget(burger_add_button)
             name = QLabel(burgers_list[i]['name'])
             name.setAlignment(Qt.AlignCenter)
             add_button_holder.setAlignment(Qt.AlignCenter)
             top_layout.addWidget(name)
-            bottom_layout.addWidget(self.burger_cheese_option[i])
-            bottom_layout.addWidget(self.burger_salad_options[i])
-            bottom_layout.addWidget(self.burger_sauce_options[i])
+            #bottom_layout.addWidget(self.burger_cheese_option[i])
             core.addLayout(top_layout)
-            core.addLayout(bottom_layout)
+            #core.addLayout(bottom_layout)
             core.addLayout(add_button_holder)
             
             burger_group_box.setLayout(core)
@@ -331,57 +246,11 @@ class View_Cart_Custom(QObject):
             else:
                 place_holder = 1
         
-        
-    """------------------------------------------------------------------------------
-    Function           : display_salads_options
-    Description        : This function retrieves a list of custom salad variables from
-                         the Controller_Cart_Dialog class. It then creates 
-                         dynamic variables to store each check box thus allowing user
-                         to select specific salad options. 
-                         This function is called directly by the Controller_Cart_Dialog.
-    Parameters         : salad_list (A list of salad options available fetched by 
-                         databaseConnection class, get_custom_salads method, which is 
-                         retrieved by Controller_Cart_Dialog and passed to this function.
-    Returns            : Void
-    todo : update description for burger 
-    ------------------------------------------------------------------------------"""
-    def display_burger_salad_options(self, salad_list):
-        tmp_holder              = QHBoxLayout()
-        burger_salad_group = QGroupBox()
-        salads_length = len(salad_list)
-        self.custom_burger_salad_options = [None] * salads_length
-        for x in range(0, salads_length):
-            self.custom_burger_salad_options[x] = QCheckBox(salad_list[x])
-            tmp_holder.addWidget(self.custom_burger_salad_options[x])
-        burger_salad_group.setLayout(tmp_holder)
-        self.generated_cart_ui.burger_custom_salad_layout.addWidget(burger_salad_group)
-        
-    """------------------------------------------------------------------------------
-    Function           : display_sauce_options
-    Description        :This function retrieves a list of custom salad variables from
-                        the Controller_Cart_Dialog class. It then creates 
-                        dynamic variables to store each check box thus allowing user
-                        to select specific sauce options. 
-                        This function is called directly by the Controller_Cart_Dialog.
-    Args                : sauce_list (A list of sauce options available fetched by 
-                         databaseConnection class, get_custom_salads method, which is 
-                         retrieved by Controller_Cart_Dialog and passed to this function.
-    Returns             : Void
-    todo : update description
-    ------------------------------------------------------------------------------"""
-    def display_burger_sauce_options(self, sauce_list):
-        tmp_holder              = QHBoxLayout()
-        burger_sauce_group = QGroupBox()
-        sauces_length = len(sauce_list)
-        self.custom_burger_sauce_options = [None] * sauces_length
-        for x in range(0, sauces_length):
-            self.custom_burger_sauce_options[x] = QCheckBox(sauce_list[x])
-            tmp_holder.addWidget(self.custom_burger_sauce_options[x])
-        burger_sauce_group.setLayout(tmp_holder)
-        self.generated_cart_ui.burger_custom_sauce_layout.addWidget(burger_sauce_group)
-        
-        
+    
+    def get_burger_add_buttons(self):
+        return self.burger_add_button_group
+
+    
     def send_data_to_list_view(self, data):
         self.generated_cart_ui.cart_view.addItem(data)
-
         
