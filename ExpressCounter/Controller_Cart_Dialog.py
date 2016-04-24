@@ -32,7 +32,7 @@ import View_Cart_Custom
 from PyQt4.QtCore import Qt , pyqtSlot, pyqtSignal
 from PyQt4.Qt import QDialog, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox,\
     QComboBox, QPushButton, QMessageBox, QMainWindow, QListWidgetItem,\
-    QListWidget
+    QListWidget, pyqtSlot
 
 
 class Cart_Controller_Class(QDialog):
@@ -56,7 +56,7 @@ class Cart_Controller_Class(QDialog):
         pizzas_list  = self.database.get_pizzas()
         burgers_list = self.database.get_burgers()
         others_list  = self.database.get_others()
-        
+        self.others_select_handle()
         #remove the declarations below to clean the code, p.s. update the x_list in order for it to work
         self.__kebabs_list = kebabs_list
         self.__pizzas_list = pizzas_list
@@ -80,7 +80,6 @@ class Cart_Controller_Class(QDialog):
         # Cart section user event handling
         self.handle_cart_clicks()
         self.handle_clear_cart_button()
-        self.handle_cart_confirm_button()
         
         """---------------------------------------------------------------------------------
         |
@@ -177,6 +176,31 @@ class Cart_Controller_Class(QDialog):
     Returns     :   Void
     
     ------------------------------------------------------------------------------"""  
+        
+            
+    def others_select_handle(self):
+        gen_view = self.cart_view_init.generated_cart_ui # in order to shorten linking we've typecasted it to gen_view
+        gen_view.rc_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.rc_chips.text()))
+        gen_view.nuggets6.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.nuggets6.text()))
+        gen_view.nuggets12.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.nuggets12.text()))
+        gen_view.salad_pitta.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.salad_pitta.text()))
+        gen_view.humus.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.humus.text()))
+        gen_view.chocolate_cake.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chocolate_cake.text()))
+        gen_view.meat_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.meat_chips.text()))
+        gen_view.cmeat_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.cmeat_chips.text()))
+        gen_view.wedges.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.wedges.text()))
+        gen_view.chips_cheese.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_cheese.text()))
+        gen_view.chips_gravy.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_gravy.text()))
+        gen_view.chips_curry.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_curry.text()))
+        gen_view.s_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.s_chips.text()))
+        gen_view.l_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.l_chips.text()))
+        gen_view.o_rings.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.o_rings.text()))
+
+    pyqtSlot(str)
+    def add_to_cart_other_drink(self, type, name):
+        name = name.replace('&&', '&')
+        price = self.database.get_price(name, "Standard")
+        self.add_to_cart_method(type, name, price)
         
         
     def handle_add_button(self):
@@ -436,8 +460,8 @@ class Cart_Controller_Class(QDialog):
                 self.pizza_added(args[0], args[1], args[2], args[3], args[4])
         elif (args[0] == "Burger"):
             self.burger_added(args[0], args[1], args[2], args[3], args[4], args[5], args[6])
-        elif (args[0] == "Other"):
-            print ("Other passed")
+        elif (args[0] == "Other") or (args[0] == "Drink"):
+            self.drink_other_added(args[0], args[1], args[2])
         else:
             QMessageBox.critical(None, "Unkown product Type passed!", "Unkown type has been passed!")
          
@@ -477,8 +501,8 @@ class Cart_Controller_Class(QDialog):
             except AttributeError:
                     pass
                     return (str(item.size) + " " + item.name)
-        elif item.type == "Other":
-            return (item.name + str(item.price))
+        elif item.type == "Other" or "Drink":
+            return item.name
         else:
             QMessageBox.critical(None, "Unkown product Type passed!", "Unkown type has been passed!")
             
@@ -534,7 +558,14 @@ class Cart_Controller_Class(QDialog):
         self.shopping_list.append(product)
         self.total_price = self.total_price + float(price)
             
-            
+    def drink_other_added(self, product_type, name, price):
+        product = Product()
+        product.type = product_type
+        product.name = name
+        product.price = price
+        self.shopping_list.append(product)
+        self.total_price = float(self.total_price) + float(price)
+        
     def handle_cart_clicks(self):
         self.cart_view_init.generated_cart_ui.cart_view.itemClicked.connect(lambda : self.remove_item_from_cart(self.cart_view_init.generated_cart_ui.cart_view.currentRow()))
         

@@ -10,6 +10,7 @@ from PyQt4.Qt import QDialog, Qt, QMessageBox, pyqtSlot, pyqtSignal
 class Controller_Cart_Toppings(QDialog):
     custom_pizza_inserted = pyqtSignal(str, str, str, float, str, str)
     no_custom_toppings    = pyqtSignal(str, str, str, unicode, str)
+    
     def __init__(self, extra_checkbox, toppings_list, pizza_size, pizza_name, pizza_id):
         super(Controller_Cart_Toppings, self).__init__()
         self.ui = View_Cart_Toppings_Custom.View_Cart_Toppings_Custom()
@@ -22,7 +23,6 @@ class Controller_Cart_Toppings(QDialog):
         self.display_toppings(toppings_list)
         self.ui.generated_cart_toppings_ui.add_to_cart_button.clicked.connect(lambda : self.handle_add_request(pizza_size, pizza_name, pizza_id))
         self.__extra_checkbox = extra_checkbox
-        
         
         
     def close_request(self, extra_checkbox):
