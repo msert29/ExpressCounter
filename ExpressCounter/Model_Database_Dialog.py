@@ -124,7 +124,14 @@ class Model_Database_Dialog(QSqlDatabase):
             list_of_burgers_array.append(burger_dict)
         return list_of_burgers_array
         
-
+    def get_id(self, name):
+        query = QSqlQuery()
+        query.prepare("""SELECT `product_id` FROM `Products` WHERE `product_name` LIKE :name""")
+        query.bindValue(":name", str(name))
+        query.exec_()
+        while(query.next()):
+            id = query.value(0).toString()
+            return id
         
     """------------------------------------------------------------------------------
     Function           : get_others
@@ -138,11 +145,11 @@ class Model_Database_Dialog(QSqlDatabase):
     def get_others(self):
         list_of_others_array = []
         query = QSqlQuery()
-        query.exec_("""SELECT * FROM `Items` WHERE `type` LIKE `other` """)
+        query.exec_("""SELECT * FROM `Products` WHERE `product_type` LIKE 'Other' ORDER BY `product_id` ASC""")
         while (query.next()):
             other_dict = {'id': query.value(0).toString(), 'type': query.value(1).toString(), 'name':query.value(2).toString(), 'price': query.value(3).toString()}
             list_of_others_array.append(other_dict)
-            return list_of_others_array
+        return list_of_others_array
         
         
     def get_drinks(self):

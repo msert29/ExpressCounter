@@ -188,32 +188,34 @@ class Cart_Controller_Class(QDialog):
         buttons.buttonClicked[int].connect(self.get_size)
                    
     def get_size(self, number):
-        self.add_to_cart_other_drink("Drink", self.__drinks_list[number]['name'], self.cart_view_init.size_list[number].currentText())
+        self.add_to_cart_other_drink("Drink", self.__drinks_list[number]['name'], self.cart_view_init.size_list[number].currentText(), \
+                                     self.__drinks_list[number]['id'])
         
     def others_select_handle(self):
         gen_view = self.cart_view_init.generated_cart_ui # in order to shorten linking we've typecasted it to gen_view
-        gen_view.rc_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.rc_chips.text(), "Standard"))
-        gen_view.nuggets6.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.nuggets6.text(), "Standard"))
-        gen_view.nuggets12.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.nuggets12.text(), "Standard"))
-        gen_view.salad_pitta.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.salad_pitta.text(), "Standard"))
-        gen_view.humus.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.humus.text(), "Standard"))
-        gen_view.chocolate_cake.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chocolate_cake.text(), "Standard"))
-        gen_view.meat_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.meat_chips.text(), "Standard"))
-        gen_view.cmeat_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.cmeat_chips.text(), "Standard"))
-        gen_view.wedges.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.wedges.text(), "Standard"))
-        gen_view.chips_cheese.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_cheese.text(), "Standard"))
-        gen_view.chips_gravy.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_gravy.text(), "Standard"))
-        gen_view.chips_curry.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_curry.text(), "Standard"))
-        gen_view.s_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.s_chips.text(), "Standard"))
-        gen_view.l_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.l_chips.text(), "Standard"))
-        gen_view.o_rings.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.o_rings.text(), "Standard"))
+        gen_view.rc_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.rc_chips.text(), "Standard", 0))
+        gen_view.nuggets6.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.nuggets6.text(), "Standard", 0))
+        gen_view.nuggets12.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.nuggets12.text(), "Standard", 0))
+        gen_view.salad_pitta.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.salad_pitta.text(), "Standard", 0))
+        gen_view.humus.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.humus.text(), "Standard", 0))
+        gen_view.chocolate_cake.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chocolate_cake.text(), "Standard", 0))
+        gen_view.meat_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.meat_chips.text(), "Standard", 0))
+        gen_view.cmeat_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.cmeat_chips.text(), "Standard", 0))
+        gen_view.wedges.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.wedges.text(), "Standard", 0))
+        gen_view.chips_cheese.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_cheese.text(), "Standard", 0))
+        gen_view.chips_gravy.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_gravy.text(), "Standard", 0))
+        gen_view.chips_curry.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_curry.text(), "Standard", 0))
+        gen_view.s_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.s_chips.text(), "Standard", 0))
+        gen_view.l_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.l_chips.text(), "Standard", 0))
+        gen_view.o_rings.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.o_rings.text(), "Standard", 0))
 
     pyqtSlot(str)
-    def add_to_cart_other_drink(self, product_type, name, size):
+    def add_to_cart_other_drink(self, product_type, name, size, p_id):
         if product_type == "Other":
             name = name.replace('&&', '&')
+            p_id =  self.database.get_id(name)
         price = self.database.get_price(name, size)
-        self.add_to_cart_method(product_type, name, price, size)
+        self.add_to_cart_method(product_type, name, price, size, p_id)
 
         
     def handle_add_button(self):
@@ -474,7 +476,7 @@ class Cart_Controller_Class(QDialog):
         elif (args[0] == "Burger"):
             self.burger_added(args[0], args[1], args[2], args[3], args[4], args[5], args[6])
         elif (args[0] == "Other") or (args[0] == "Drink"):
-            self.drink_other_added(args[0], args[1], args[2], args[3])
+            self.drink_other_added(args[0], args[1], args[2], args[3], args[4])
         else:
             QMessageBox.critical(None, "Unkown product Type passed!", "Unkown type has been passed!")
          
@@ -573,12 +575,13 @@ class Cart_Controller_Class(QDialog):
         self.shopping_list.append(product)
         self.total_price = self.total_price + float(price)
             
-    def drink_other_added(self, product_type, name, price, size):
-        product = Product()
-        product.type = product_type
-        product.name = name
-        product.size = size
+    def drink_other_added(self, product_type, name, price, size, p_id):
+        product       = Product()
+        product.type  = product_type
+        product.name  = name
+        product.size  = size
         product.price = price
+        product.id    = p_id
         self.shopping_list.append(product)
         self.total_price = float(self.total_price) + float(price)
         
