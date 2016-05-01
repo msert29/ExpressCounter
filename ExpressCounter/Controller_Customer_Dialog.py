@@ -79,7 +79,7 @@ class Controller_Customer_Dialog(QDialog):
             QMessageBox.critical(None, "No customer selected or added!", "Please either add a new customer or search for a customer and make a selection!")
     def operation_cancel(self):
         self.close()
-        self.parent().close()
+        #self.parent().close()
         
     def handle_customer_search_entry(self):
         self.customer_view_custom.customer_generated_view.ex_name_edit.editingFinished.connect(lambda : self.search_by_name(self.customer_view_custom.customer_generated_view.ex_name_edit.text()))
@@ -196,7 +196,7 @@ class Controller_Customer_Dialog(QDialog):
                 self.echo_pizza(f, order[x])
             elif (order[x].type == "Burger"):
                 self.echo_burger(f, order[x])
-            elif (order[x].type == "Other"):
+            elif (order[x].type == "Other") or (order[x].type == "Drink"):
                 self.echo_other(f, order[x])
             else:
                 QMessageBox.critical(None, "Unkown product type", "An unkown product type ha been passed to file write")

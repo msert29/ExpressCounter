@@ -24,6 +24,7 @@ class View_Order_Display_Custom(object):
         order_details    = QTextEdit()
         price_date_info  = QTextEdit()
         total_order = order
+        
         if (len(total_order) > 0):
             customer_details.append("---------------------------------------------------------------------------------")
             customer_details.append("Name      : " + total_order[0]['customer_name'])
@@ -32,8 +33,9 @@ class View_Order_Display_Custom(object):
             customer_details.append("Telephone : " + total_order[0]['customer_tel'])
             customer_details.append("---------------------------------------------------------------------------------")
             for x in range(0, len(total_order)):
+                p_t = total_order[x]['product_type'] # for shorter comparison
                 order_details.append(total_order[x]['product_name'])
-                if total_order[x]['product_type'] == "Pizza":
+                if  p_t == "Pizza" or p_t == "Kebab" or p_t == "Burger":
                     order_details.append(" -" + total_order[x]['options'] + "\n")
             price_date_info.append("---------------------------------------------------------------------------------")
             price_date_info.append("Total: " + pound+str(float(total_order[x]['price'])) + "0")

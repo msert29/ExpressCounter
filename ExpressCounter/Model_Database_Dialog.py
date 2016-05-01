@@ -298,7 +298,10 @@ class Model_Database_Dialog(QSqlDatabase):
         last_id_no = int(last_id_no) + 1
         for x in range(0, len(shopping_list)):
             try:
-                options = str(shopping_list[x].salad) + " " + str(shopping_list[x].sauce)
+                if shopping_list[x].type == "Kebab":
+                    options = str(shopping_list[x].kebab_type) + " " + str(shopping_list[x].salad) + " " + str(shopping_list[x].sauce)
+                else:
+                    options = str(shopping_list[x].salad) + " " + str(shopping_list[x].sauce)
             except AttributeError:
                 try:
                     options =  str(shopping_list[x].toppings)
