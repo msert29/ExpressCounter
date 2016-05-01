@@ -29,13 +29,27 @@ class Ui_Widget(object):
         self.cart_view = QtGui.QListWidget(Widget)
         self.cart_view.setGeometry(QtCore.QRect(880, 90, 391, 721))
         font = QtGui.QFont()
-        font.setFamily(_fromUtf8("Liberation Serif"))
+        font.setFamily(_fromUtf8("Ubuntu"))
         font.setPointSize(16)
         font.setBold(False)
         font.setItalic(False)
-        font.setWeight(50)
+        font.setWeight(3)
         self.cart_view.setFont(font)
-        self.cart_view.setStyleSheet(_fromUtf8(""))
+        self.cart_view.setAutoFillBackground(False)
+        self.cart_view.setStyleSheet(_fromUtf8("QListWidget {\n"
+"font: 25 16pt \"Ubuntu\";\n"
+"}\n"
+"QListWidget::item {\n"
+"   margin:2px;\n"
+"    padding: 2px;\n"
+"}\n"
+"\n"
+"QListWidget::item:selected {\n"
+"    background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #369, stop:1 #147);\n"
+"    color: white;\n"
+"}"))
+        self.cart_view.setFrameShadow(QtGui.QFrame.Raised)
+        self.cart_view.setViewMode(QtGui.QListView.ListMode)
         self.cart_view.setObjectName(_fromUtf8("cart_view"))
         self.tabWidget = QtGui.QTabWidget(Widget)
         self.tabWidget.setGeometry(QtCore.QRect(10, 10, 841, 921))
@@ -238,16 +252,221 @@ class Ui_Widget(object):
         self.tabWidget.addTab(self.burger_tab, _fromUtf8(""))
         self.other_tab = QtGui.QWidget()
         self.other_tab.setObjectName(_fromUtf8("other_tab"))
-        self.gridLayoutWidget_3 = QtGui.QWidget(self.other_tab)
-        self.gridLayoutWidget_3.setGeometry(QtCore.QRect(10, 10, 811, 821))
+        self.frame_3 = QtGui.QFrame(self.other_tab)
+        self.frame_3.setGeometry(QtCore.QRect(10, 9, 821, 831))
+        self.frame_3.setStyleSheet(_fromUtf8("QFrame {\n"
+"border:none;\n"
+"}\n"
+"QGroupBox{\n"
+"border: 1px solid rgb(150, 150, 150);\n"
+"background-color:rgb(253, 253, 253);\n"
+"border-radius: 0px;\n"
+"border-top-left-radius: 9px;\n"
+"border-top-right-radius: 9px;\n"
+"border-bottom-right-radius: 9px;\n"
+"border-bottom-left-radius: 9px;\n"
+"}\n"
+"\n"
+"QLabel {\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;\n"
+" qproperty-alignment: AlignCenter;\n"
+"}\n"
+"QPushButton {\n"
+"border: 1px solid rgb(150, 150, 150);\n"
+"background-color:rgb(253, 253, 253);\n"
+"border-radius: 0px;\n"
+"border-top-left-radius: 9px;\n"
+"border-top-right-radius: 9px;\n"
+"border-bottom-right-radius: 9px;\n"
+"border-bottom-left-radius: 9px;\n"
+"min-height:159;\n"
+"min-width:262;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"  background: rgb(255, 0, 0);\n"
+"  color:black;\n"
+"}\n"
+"\n"
+"QCheckBox{\n"
+"max-width:150px;\n"
+"min-height:50;\n"
+"font: 63 25pt \"Ubuntu\";\n"
+"}\n"
+"QComboBox {\n"
+"max-width:150px;\n"
+"min-height:50;\n"
+"font: 63 30pt \"Ubuntu\";\n"
+"}"))
+        self.frame_3.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.frame_3.setFrameShadow(QtGui.QFrame.Raised)
+        self.frame_3.setObjectName(_fromUtf8("frame_3"))
+        self.gridLayoutWidget_3 = QtGui.QWidget(self.frame_3)
+        self.gridLayoutWidget_3.setGeometry(QtCore.QRect(0, 0, 821, 831))
         self.gridLayoutWidget_3.setObjectName(_fromUtf8("gridLayoutWidget_3"))
-        self.others_layout = QtGui.QGridLayout(self.gridLayoutWidget_3)
-        self.others_layout.setObjectName(_fromUtf8("others_layout"))
+        self.gridLayout_2 = QtGui.QGridLayout(self.gridLayoutWidget_3)
+        self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
+        self.s_chips = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.s_chips.setStyleSheet(_fromUtf8("background:rgb(255, 255, 0);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;\n"
+""))
+        self.s_chips.setObjectName(_fromUtf8("s_chips"))
+        self.gridLayout_2.addWidget(self.s_chips, 4, 0, 1, 1)
+        self.l_chips = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.l_chips.setStyleSheet(_fromUtf8("background:rgb(255, 255, 0);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;"))
+        self.l_chips.setObjectName(_fromUtf8("l_chips"))
+        self.gridLayout_2.addWidget(self.l_chips, 4, 1, 1, 1)
+        self.o_rings = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.o_rings.setStyleSheet(_fromUtf8("background:rgb(255, 255, 127);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;\n"
+""))
+        self.o_rings.setObjectName(_fromUtf8("o_rings"))
+        self.gridLayout_2.addWidget(self.o_rings, 4, 2, 1, 1)
+        self.chips_cheese = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.chips_cheese.setStyleSheet(_fromUtf8("background:rgb(255, 255, 127);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;\n"
+""))
+        self.chips_cheese.setObjectName(_fromUtf8("chips_cheese"))
+        self.gridLayout_2.addWidget(self.chips_cheese, 3, 0, 1, 1)
+        self.chips_gravy = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.chips_gravy.setStyleSheet(_fromUtf8("background:rgb(255, 255, 127);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;"))
+        self.chips_gravy.setObjectName(_fromUtf8("chips_gravy"))
+        self.gridLayout_2.addWidget(self.chips_gravy, 3, 1, 1, 1)
+        self.chips_curry = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.chips_curry.setStyleSheet(_fromUtf8("background:rgb(255, 255, 127);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;\n"
+""))
+        self.chips_curry.setObjectName(_fromUtf8("chips_curry"))
+        self.gridLayout_2.addWidget(self.chips_curry, 3, 2, 1, 1)
+        self.meat_chips = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.meat_chips.setStyleSheet(_fromUtf8("background:rgb(255, 85, 0);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;\n"
+""))
+        self.meat_chips.setObjectName(_fromUtf8("meat_chips"))
+        self.gridLayout_2.addWidget(self.meat_chips, 2, 0, 1, 1)
+        self.cmeat_chips = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.cmeat_chips.setStyleSheet(_fromUtf8("background:rgb(255, 85, 0);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;"))
+        self.cmeat_chips.setObjectName(_fromUtf8("cmeat_chips"))
+        self.gridLayout_2.addWidget(self.cmeat_chips, 2, 1, 1, 1)
+        self.wedges = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.wedges.setStyleSheet(_fromUtf8("background:rgb(255, 255, 127);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;\n"
+""))
+        self.wedges.setObjectName(_fromUtf8("wedges"))
+        self.gridLayout_2.addWidget(self.wedges, 2, 2, 1, 1)
+        self.salad_pitta = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.salad_pitta.setStyleSheet(_fromUtf8("background:rgb(85, 255, 127);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;\n"
+""))
+        self.salad_pitta.setObjectName(_fromUtf8("salad_pitta"))
+        self.gridLayout_2.addWidget(self.salad_pitta, 1, 0, 1, 1)
+        self.humus = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.humus.setStyleSheet(_fromUtf8("background:rgb(85, 255, 127);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;\n"
+""))
+        self.humus.setObjectName(_fromUtf8("humus"))
+        self.gridLayout_2.addWidget(self.humus, 1, 1, 1, 1)
+        self.chocolate_cake = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.chocolate_cake.setStyleSheet(_fromUtf8("background:rgb(85, 255, 127);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;"))
+        self.chocolate_cake.setObjectName(_fromUtf8("chocolate_cake"))
+        self.gridLayout_2.addWidget(self.chocolate_cake, 1, 2, 1, 1)
+        self.rc_chips = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.rc_chips.setStyleSheet(_fromUtf8("background:rgb(0, 255, 255);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;\n"
+"\n"
+""))
+        self.rc_chips.setObjectName(_fromUtf8("rc_chips"))
+        self.gridLayout_2.addWidget(self.rc_chips, 0, 0, 1, 1)
+        self.nuggets6 = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.nuggets6.setStyleSheet(_fromUtf8("background:rgb(0, 255, 255);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;"))
+        self.nuggets6.setObjectName(_fromUtf8("nuggets6"))
+        self.gridLayout_2.addWidget(self.nuggets6, 0, 1, 1, 1)
+        self.nuggets12 = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.nuggets12.setStyleSheet(_fromUtf8("background:rgb(0, 255, 255);\n"
+"font: 63 20pt \"Ubuntu\";\n"
+"color:black;"))
+        self.nuggets12.setObjectName(_fromUtf8("nuggets12"))
+        self.gridLayout_2.addWidget(self.nuggets12, 0, 2, 1, 1)
         self.tabWidget.addTab(self.other_tab, _fromUtf8(""))
         self.drink_tab = QtGui.QWidget()
         self.drink_tab.setObjectName(_fromUtf8("drink_tab"))
-        self.verticalLayoutWidget_2 = QtGui.QWidget(self.drink_tab)
-        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(10, 10, 811, 821))
+        self.drinks_frame = QtGui.QFrame(self.drink_tab)
+        self.drinks_frame.setGeometry(QtCore.QRect(10, 10, 811, 821))
+        self.drinks_frame.setStyleSheet(_fromUtf8("QFrame {\n"
+"border:none;\n"
+"}\n"
+"QGroupBox{\n"
+"border: 1px solid rgb(150, 150, 150);\n"
+"background-color:rgb(253, 253, 253);\n"
+"border-radius: 0px;\n"
+"border-top-left-radius: 9px;\n"
+"border-top-right-radius: 9px;\n"
+"border-bottom-right-radius: 9px;\n"
+"border-bottom-left-radius: 9px;\n"
+"max-width:950px;\n"
+"max-height:165px;\n"
+"}\n"
+"\n"
+"QLabel {\n"
+"font: 63 35pt \"Ubuntu\";\n"
+"color:black;\n"
+"}\n"
+"QPushButton {\n"
+"background: rgb(252, 83, 86);\n"
+"color:black;\n"
+"border-radius:0px;\n"
+"border: 1px solid rgb(150, 150, 150);\n"
+"font: 63 15pt \"Ubuntu\";\n"
+"border-top-right-radius: 9px;\n"
+"border-bottom-right-radius: 9px;\n"
+"border-top-left-radius: 9px;\n"
+"border-bottom-left-radius: 9px;\n"
+"margin-top: 0px;\n"
+"padding-left:0px;\n"
+"min-width:301;\n"
+"max-height:71;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"  background: rgb(255, 0, 0);\n"
+"  color:black;\n"
+"}\n"
+"\n"
+"QCheckBox{\n"
+"max-width:150px;\n"
+"min-height:50;\n"
+"font: 63 25pt \"Ubuntu\";\n"
+"}\n"
+"QComboBox {\n"
+"max-width:150px;\n"
+"min-height:50;\n"
+"font: 63 30pt \"Ubuntu\";\n"
+"}"))
+        self.drinks_frame.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.drinks_frame.setFrameShadow(QtGui.QFrame.Raised)
+        self.drinks_frame.setObjectName(_fromUtf8("drinks_frame"))
+        self.verticalLayoutWidget_2 = QtGui.QWidget(self.drinks_frame)
+        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(0, 0, 811, 821))
         self.verticalLayoutWidget_2.setObjectName(_fromUtf8("verticalLayoutWidget_2"))
         self.drinks_layout = QtGui.QVBoxLayout(self.verticalLayoutWidget_2)
         self.drinks_layout.setObjectName(_fromUtf8("drinks_layout"))
@@ -325,6 +544,21 @@ class Ui_Widget(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.kebab_tab), _translate("Widget", "Kebabs", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.pizza_tab), _translate("Widget", "Pizzas", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.burger_tab), _translate("Widget", "Burgers", None))
+        self.s_chips.setText(_translate("Widget", "Small Chips", None))
+        self.l_chips.setText(_translate("Widget", "Large Chips", None))
+        self.o_rings.setText(_translate("Widget", "Onion Rings", None))
+        self.chips_cheese.setText(_translate("Widget", "Chips && Cheese", None))
+        self.chips_gravy.setText(_translate("Widget", "Chips && Gravy", None))
+        self.chips_curry.setText(_translate("Widget", "Chips && Curry", None))
+        self.meat_chips.setText(_translate("Widget", "Meat && Chips", None))
+        self.cmeat_chips.setText(_translate("Widget", "Chicken Meat && Chips", None))
+        self.wedges.setText(_translate("Widget", "Patato Wedges", None))
+        self.salad_pitta.setText(_translate("Widget", "Salad in Pitta", None))
+        self.humus.setText(_translate("Widget", "Humus in Pitta", None))
+        self.chocolate_cake.setText(_translate("Widget", "Chocolate Cake", None))
+        self.rc_chips.setText(_translate("Widget", "Roast Chicken&&Chips", None))
+        self.nuggets6.setText(_translate("Widget", "6 Nuggets && Chips", None))
+        self.nuggets12.setText(_translate("Widget", "12 Nuggets && Chips", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.other_tab), _translate("Widget", "Others", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.drink_tab), _translate("Widget", "Drinks", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.deal_tab), _translate("Widget", "Deals", None))

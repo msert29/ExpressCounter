@@ -48,12 +48,19 @@ class Controller_Customer_Dialog(QDialog):
         self.handle_existing_customer_selection()
         
         caller_id = self.read_caller_id()
-        self.customer_view_custom.customer_generated_view.ex_tel_edit.setText(caller_id)
+        if (caller_id != False):
+            self.customer_view_custom.customer_generated_view.ex_tel_edit.setText(caller_id)
+            self.__search_tel = caller_id
+            self.search_complete()
         
     def read_caller_id(self):
-        file = open('number.txt', 'r')    
-        caller_id = file.read()
-        return caller_id
+        try:
+            file = open('number.txt', 'r')    
+            caller_id = file.read()
+            return caller_id
+        except IOError:
+            QMessageBox.critical(None, "Caller ID detection failed", "Caller ID Detection failed, please check USB Modem is connected. Consult Manufacturer!")
+            return False
     
     
     def handle_cart_cancel_confirm_buttons(self):

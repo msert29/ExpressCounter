@@ -46,7 +46,7 @@ class View_Cart_Custom(QObject):
         pound = u'\xa3'
         self.__total_price_display = QLineEdit(pound + "00.00")
         self.burger_add_button_group = QButtonGroup()
-
+        self.drinks_add_button_group = QButtonGroup()
         
     def setupUI(self, dialog):
         self.generated_cart_ui.setupUi(dialog)
@@ -245,11 +245,41 @@ class View_Cart_Custom(QObject):
                 place_holder = 0
             else:
                 place_holder = 1
-        
+    
     
     def get_burger_add_buttons(self):
         return self.burger_add_button_group
+        
 
+    def display_drinks(self, drink_list):
+        can = "Can"
+        bottle = "Bottle"
+        drink_len                = len(drink_list)
+        self.size_list           = [None] * drink_len 
+
+        for i in range(drink_len):
+            drink_group_box      = QGroupBox()
+            h_layout             = QHBoxLayout()
+            name                 = QLabel(drink_list[i]['name'])
+            add_button           = QPushButton("Add")
+            self.size_list[i]    = QComboBox()
+            # Only coke, diet coke, pepsi and orange tango is available in bootle size
+            if drink_list[i]['name'] == "Coca Cola" or drink_list[i]['name'] == "Orange Tango" or drink_list[i]['name'] == "Pepsi" or drink_list[i]['name'] == "Diet Coke":
+                self.size_list[i].addItem(can)
+                self.size_list[i].addItem(bottle)
+            else:
+                self.size_list[i].addItem(can)
+            self.drinks_add_button_group.addButton(add_button, i)
+            h_layout.addWidget(name)
+            h_layout.addWidget(self.size_list[i])
+            h_layout.addWidget(add_button)
+            drink_group_box.setLayout(h_layout)
+            
+            self.generated_cart_ui.drinks_layout.addWidget(drink_group_box)
+        
+        
+    def get_drink_button(self):
+        return self.drinks_add_button_group
     
     def send_data_to_list_view(self, data):
         self.generated_cart_ui.cart_view.addItem(data)

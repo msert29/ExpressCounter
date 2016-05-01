@@ -144,6 +144,16 @@ class Model_Database_Dialog(QSqlDatabase):
             list_of_others_array.append(other_dict)
             return list_of_others_array
         
+        
+    def get_drinks(self):
+        list_of_drinks = []
+        query = QSqlQuery()
+        query.exec_("""SELECT * FROM `Products` WHERE `product_type` LIKE 'Drink' AND `product_size` LIKE 'can' ORDER BY `product_id` ASC""")
+        while (query.next()):
+            kebab_dict = {'id': query.value(0).toString(), 'type': query.value(1).toString(), 'name':query.value(2).toString(), 'price': query.value(4).toString()}
+            list_of_drinks.append(kebab_dict)
+        return list_of_drinks
+        
     """------------------------------------------------------------------------------
     Function           : get_price
     Description        : This function does a query into the database selecting

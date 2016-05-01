@@ -56,12 +56,12 @@ class Cart_Controller_Class(QDialog):
         pizzas_list  = self.database.get_pizzas()
         burgers_list = self.database.get_burgers()
         others_list  = self.database.get_others()
+        self.__drinks_list  = self.database.get_drinks()
         self.others_select_handle()
         #remove the declarations below to clean the code, p.s. update the x_list in order for it to work
         self.__kebabs_list = kebabs_list
         self.__pizzas_list = pizzas_list
         self.__burgers_list = burgers_list
-        
         
         # A list of custom salads and sauces used by burger and kebab options
         salad_list    = self.database.get_custom_salads()
@@ -153,7 +153,12 @@ class Cart_Controller_Class(QDialog):
         else:
             QMessageBox.critical(None, "No Burgers returned!", "No Burger products where found, please check your database connection and entries!")    
         
-        
+        if (len(self.__drinks_list)> 0):
+            self.cart_view_init.display_drinks(self.__drinks_list)
+            self.handle_drink_size()
+        else:
+            QMessageBox.critical(None, "No Drinks returned!", "No Drink products where found, please check your database connection and entries!")    
+
 
     """--------------------------------------------------------------------------------------------------------------------------------------------------------
     |
@@ -177,31 +182,39 @@ class Cart_Controller_Class(QDialog):
     
     ------------------------------------------------------------------------------"""  
         
-            
+    def handle_drink_size(self):
+        buttons = self.cart_view_init.get_drink_button()
+        buttons.buttonClicked[int].connect(self.get_size)
+                   
+    def get_size(self, number):
+        self.add_to_cart_other_drink("Drink", self.__drinks_list[number]['name'], self.cart_view_init.size_list[number].currentText())
+        
     def others_select_handle(self):
         gen_view = self.cart_view_init.generated_cart_ui # in order to shorten linking we've typecasted it to gen_view
-        gen_view.rc_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.rc_chips.text()))
-        gen_view.nuggets6.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.nuggets6.text()))
-        gen_view.nuggets12.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.nuggets12.text()))
-        gen_view.salad_pitta.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.salad_pitta.text()))
-        gen_view.humus.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.humus.text()))
-        gen_view.chocolate_cake.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chocolate_cake.text()))
-        gen_view.meat_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.meat_chips.text()))
-        gen_view.cmeat_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.cmeat_chips.text()))
-        gen_view.wedges.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.wedges.text()))
-        gen_view.chips_cheese.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_cheese.text()))
-        gen_view.chips_gravy.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_gravy.text()))
-        gen_view.chips_curry.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_curry.text()))
-        gen_view.s_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.s_chips.text()))
-        gen_view.l_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.l_chips.text()))
-        gen_view.o_rings.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.o_rings.text()))
+        gen_view.rc_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.rc_chips.text(), "Standard"))
+        gen_view.nuggets6.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.nuggets6.text(), "Standard"))
+        gen_view.nuggets12.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.nuggets12.text(), "Standard"))
+        gen_view.salad_pitta.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.salad_pitta.text(), "Standard"))
+        gen_view.humus.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.humus.text(), "Standard"))
+        gen_view.chocolate_cake.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chocolate_cake.text(), "Standard"))
+        gen_view.meat_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.meat_chips.text(), "Standard"))
+        gen_view.cmeat_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.cmeat_chips.text(), "Standard"))
+        gen_view.wedges.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.wedges.text(), "Standard"))
+        gen_view.chips_cheese.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_cheese.text(), "Standard"))
+        gen_view.chips_gravy.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_gravy.text(), "Standard"))
+        gen_view.chips_curry.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_curry.text(), "Standard"))
+        gen_view.s_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.s_chips.text(), "Standard"))
+        gen_view.l_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.l_chips.text(), "Standard"))
+        gen_view.o_rings.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.o_rings.text(), "Standard"))
 
     pyqtSlot(str)
-    def add_to_cart_other_drink(self, type, name):
-        name = name.replace('&&', '&')
-        price = self.database.get_price(name, "Standard")
-        self.add_to_cart_method(type, name, price)
-        
+    def add_to_cart_other_drink(self, product_type, name, size):
+        if product_type == "Other":
+            name = name.replace('&&', '&')
+        else:
+            price = self.database.get_price(name, size)
+            self.add_to_cart_method(product_type, name, price, size)
+
         
     def handle_add_button(self):
         sel_buttons = self.cart_view_init.get_sel_buttons()
@@ -461,7 +474,7 @@ class Cart_Controller_Class(QDialog):
         elif (args[0] == "Burger"):
             self.burger_added(args[0], args[1], args[2], args[3], args[4], args[5], args[6])
         elif (args[0] == "Other") or (args[0] == "Drink"):
-            self.drink_other_added(args[0], args[1], args[2])
+            self.drink_other_added(args[0], args[1], args[2], args[3])
         else:
             QMessageBox.critical(None, "Unkown product Type passed!", "Unkown type has been passed!")
          
@@ -501,8 +514,10 @@ class Cart_Controller_Class(QDialog):
             except AttributeError:
                     pass
                     return (str(item.size) + " " + item.name)
-        elif item.type == "Other" or "Drink":
+        elif item.type == "Other":
             return item.name
+        elif item.type == "Drink":
+            return item.size + " of " + item.name
         else:
             QMessageBox.critical(None, "Unkown product Type passed!", "Unkown type has been passed!")
             
@@ -558,10 +573,11 @@ class Cart_Controller_Class(QDialog):
         self.shopping_list.append(product)
         self.total_price = self.total_price + float(price)
             
-    def drink_other_added(self, product_type, name, price):
+    def drink_other_added(self, product_type, name, price, size):
         product = Product()
         product.type = product_type
         product.name = name
+        product.size = size
         product.price = price
         self.shopping_list.append(product)
         self.total_price = float(self.total_price) + float(price)
