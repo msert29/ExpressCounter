@@ -80,6 +80,7 @@ class Cart_Controller_Class(QDialog):
         # Cart section user event handling
         self.handle_cart_clicks()
         self.handle_clear_cart_button()
+        self.handle_cart_confirm_button()
         
         """---------------------------------------------------------------------------------
         |
@@ -211,9 +212,8 @@ class Cart_Controller_Class(QDialog):
     def add_to_cart_other_drink(self, product_type, name, size):
         if product_type == "Other":
             name = name.replace('&&', '&')
-        else:
-            price = self.database.get_price(name, size)
-            self.add_to_cart_method(product_type, name, price, size)
+        price = self.database.get_price(name, size)
+        self.add_to_cart_method(product_type, name, price, size)
 
         
     def handle_add_button(self):
@@ -639,7 +639,6 @@ class Cart_Controller_Class(QDialog):
         
     pyqtSlot()
     def cart_confirmed(self):
-        
         # check if cart is not empty
         if len (self.shopping_list) > 0:
             self.customer_dialog = Controller_Customer_Dialog.Controller_Customer_Dialog(self, self.shopping_list, self.total_price)
