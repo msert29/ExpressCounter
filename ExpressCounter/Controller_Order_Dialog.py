@@ -112,7 +112,15 @@ class Controller_Order_Dialog(QDialog):
     
     def handle_order_search_req(self):
         if (self.__order_id) and (self.__name) and (self.__address) and (self.__postcode) and (self.__tel):
-            print ("All")
+            #print ("All")
+            # Fixme: Add a method to search for all added 
+            #currently only searches for id
+            order = self.database.search_order_by_id(self.__order_id)
+            try:
+                if (len(order) > 0 ):
+                    self.order_view.echo_order(order)
+            except TypeError:
+                QMessageBox.critical(None, "No Results found!", "Please input a valid order number entry!")
         elif (self.__order_id):
             order = self.database.search_order_by_id(self.__order_id)
             try:

@@ -130,8 +130,8 @@ class Model_Database_Dialog(QSqlDatabase):
         query.bindValue(":name", str(name))
         query.exec_()
         while(query.next()):
-            id = query.value(0).toString()
-            return id
+            p_id = query.value(0).toString()
+            return p_id
         
     """------------------------------------------------------------------------------
     Function           : get_others

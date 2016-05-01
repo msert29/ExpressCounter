@@ -42,10 +42,10 @@ class Controller_Order_View_Dialog(QDialog):
                 self.echo_pizza(f, order[x])
             elif (order[x]['product_type'] == "Burger"):
                 self.echo_burger(f, order[x])
-            elif (order[x]['product_type'] == "Other"):
+            elif (order[x]['product_type'] == "Other") or (order[x]['product_type'] == "Drink"):
                 self.echo_other(f, order[x])
             else:
-                QMessageBox.critical(None, "Unkown product type", "An unkown product type ha been passed to file write")
+                QMessageBox.critical(None, "Unkown product type", "An unkown product type has been passed to file write")
         f.write("___________________________")
         f.write("\nTotal Price:       " + self.__pound.encode('utf8') + str(float(order[0]['price'])) + "0")
         f.write("\n___________________________")

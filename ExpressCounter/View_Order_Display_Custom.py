@@ -33,7 +33,8 @@ class View_Order_Display_Custom(object):
             customer_details.append("---------------------------------------------------------------------------------")
             for x in range(0, len(total_order)):
                 order_details.append(total_order[x]['product_name'])
-                order_details.append(" -" + total_order[x]['options'] + "\n")
+                if total_order[x]['product_type'] == "Pizza":
+                    order_details.append(" -" + total_order[x]['options'] + "\n")
             price_date_info.append("---------------------------------------------------------------------------------")
             price_date_info.append("Total: " + pound+str(float(total_order[x]['price'])) + "0")
             price_date_info.append("---------------------------------------------------------------------------------")
