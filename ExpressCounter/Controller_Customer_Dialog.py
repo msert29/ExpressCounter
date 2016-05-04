@@ -51,6 +51,7 @@ class Controller_Customer_Dialog(QDialog):
         if (caller_id != False):
             self.customer_view_custom.customer_generated_view.ex_tel_edit.setText(caller_id)
             self.__search_tel = caller_id
+            self.__number = caller_id
             self.search_complete()
         
     def read_caller_id(self):
@@ -124,6 +125,8 @@ class Controller_Customer_Dialog(QDialog):
         if (len (self.__result) > 0):
             self.customer_view_custom.display_existing_customer_results(self.__result)
         else:
+            self.customer_view_custom.customer_generated_view.ex_tel_edit.setText("")
+            self.customer_view_custom.customer_generated_view.new_tel_edit.setText(self.__number)
             QMessageBox.critical(None, "NO results found", "The specified user doesnt exist!")
         
         
@@ -212,6 +215,7 @@ class Controller_Customer_Dialog(QDialog):
         
     def echo_kebab(self, f, order):
         f.write(order.size + " " + order.name)
+        f.write("\n-" + str(order.kebab_type))
         f.write("\n-" + str(order.salad))
         f.write("\n-" + str(order.sauce))
         f.write("\n \t \t   " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
@@ -237,9 +241,14 @@ class Controller_Customer_Dialog(QDialog):
         return
     
     def echo_other(self, f, order):
-        f.write(order.name)
-        f.write("\n \t \t   " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
-        f.write("\n")
+        if order.type == "Drink":
+            f.write(order.size + " of " + order.name)
+            f.write("\n \t \t   " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
+            f.write("\n")
+        else:
+            f.write(order.name)
+            f.write("\n \t \t   " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
+            f.write("\n")
         
     def echo_header(self, f):
         header_file = open('order_header.txt', 'r')

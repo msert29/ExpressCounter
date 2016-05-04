@@ -126,12 +126,12 @@ class Controller_Cart_Addon(QDialog):
         sauce = self.concat_sauce()
         if salad == "" or sauce == "":
             QMessageBox.critical(None, "Select Salad/Sauce", "Please make a salad/sauce selection in order to proceed")
-            print self.salad_array + self.sauce_array
+            #print self.salad_array + self.sauce_array
         else:
             price = self.calculate_price(self.product_name, self.size_selection, self.product_type)
             
             if self.product_type == "Kebab":
-                self.kebab_added.emit("Kebab", self.product_size, self.product_name, self.type, price, salad, sauce, self.product_id)
+                self.kebab_added.emit("Kebab", self.size_selection, self.product_name, self.type, price, salad, sauce, self.product_id)
             else:
                 self.burger_added.emit("Burger", self.product_name, self.cheese, price, salad, sauce, self.product_id)
             
@@ -160,6 +160,3 @@ class Controller_Cart_Addon(QDialog):
             price = float(price) + 1.00
                 
         return float(price)
-    
-    def print_it(self):
-        print self.salad_array

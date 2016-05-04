@@ -199,8 +199,8 @@ class Cart_Controller_Class(QDialog):
         gen_view.salad_pitta.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.salad_pitta.text(), "Standard", 0))
         gen_view.humus.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.humus.text(), "Standard", 0))
         gen_view.chocolate_cake.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chocolate_cake.text(), "Standard", 0))
-        gen_view.meat_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.meat_chips.text(), "Standard", 0))
-        gen_view.cmeat_chips.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.cmeat_chips.text(), "Standard", 0))
+        gen_view.gb.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.gb.text(), "Standard", 0))
+        gen_view.gbc.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.gbc.text(), "Standard", 0))
         gen_view.wedges.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.wedges.text(), "Standard", 0))
         gen_view.chips_cheese.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_cheese.text(), "Standard", 0))
         gen_view.chips_gravy.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_gravy.text(), "Standard", 0))
@@ -536,7 +536,6 @@ class Cart_Controller_Class(QDialog):
         else:
             product.id       = args[0]        
         self.shopping_list.append(product)
-       
         self.total_price = self.total_price + float(price)
         
     def kebab_added(self, product_type, size, name, kebab_type, price, salad, sauce, p_id):
