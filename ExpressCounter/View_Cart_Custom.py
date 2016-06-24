@@ -42,7 +42,7 @@ class View_Cart_Custom(QObject):
     def __init__(self):
         super(View_Cart_Custom, self).__init__()
         # Import the generated GUI Elements
-        self.generated_cart_ui = View_Cart_Generated.Ui_Widget()
+        self.generated_cart_ui = View_Cart_Generated.Ui_widget()
         pound = u'\xa3'
         self.__total_price_display = QLineEdit(pound + "00.00")
         self.burger_add_button_group = QButtonGroup()

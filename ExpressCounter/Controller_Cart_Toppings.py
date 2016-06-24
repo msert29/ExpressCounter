@@ -4,7 +4,7 @@ Created on Apr 10, 2016
 @author: murat
 '''
 import View_Cart_Toppings_Custom
-import Controller_Cart_Dialog
+import Model_Database_Dialog
 from PyQt4.Qt import QDialog, Qt, QMessageBox, pyqtSlot, pyqtSignal
 
 class Controller_Cart_Toppings(QDialog):
@@ -15,7 +15,6 @@ class Controller_Cart_Toppings(QDialog):
         super(Controller_Cart_Toppings, self).__init__()
         self.ui = View_Cart_Toppings_Custom.View_Cart_Toppings_Custom()
         self.ui.setupUI(self)
-        self.main_cart = Controller_Cart_Dialog.Cart_Controller_Class()
         # a dynamic array to hold topping options
         self.__custom_topping_list = []
         self.__custom_no_topping_list = []
@@ -25,7 +24,7 @@ class Controller_Cart_Toppings(QDialog):
         self.ui.generated_cart_toppings_ui.add_to_cart_button.clicked.connect(lambda : self.handle_add_request(pizza_size, pizza_name, pizza_id))
         self.__extra_checkbox = extra_checkbox
         self.__cat_toppings = ""
-
+        self.database = Model_Database_Dialog.Model_Database_Dialog()
         
     def close_request(self, extra_checkbox):
         for x in range(0, len(extra_checkbox)):
@@ -84,7 +83,7 @@ class Controller_Cart_Toppings(QDialog):
             
     @pyqtSlot(str, str)
     def handle_add_request(self, size, name, pizza_id):
-        price = self.main_cart.database.get_price(name, size)
+        price = self.database.get_price(name, size)
         #check if any toppings requested and update the price accordingly
         if (len(self.__custom_topping_list) > 0):
             topping_price = self.calculate_topping_price(size)

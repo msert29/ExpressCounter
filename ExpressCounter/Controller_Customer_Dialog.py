@@ -2,6 +2,8 @@
 import View_Customer_Details_Custom
 import Model_Database_Dialog
 from PyQt4.Qt import QDialog, QMessageBox, QDate, QTime
+from urllib2 import urlopen
+import json
 import subprocess
 
 class Controller_Customer_Dialog(QDialog):
@@ -54,6 +56,31 @@ class Controller_Customer_Dialog(QDialog):
             self.__number = caller_id
             self.search_complete()
         
+        
+    def handle_auto_complete(self):
+        pscd = self.customer_view_custom.customer_generated_view.new_postcode_edit.text()
+        pscd = pscd.replace(" ", "")
+        url = "https://maps.googleapis.com/maps/api/geocode/json?address="+pscd+"&key=AIzaSyAlj4ASiGdxts_qj3FXSHF9lLGX9Z3ClKg"
+        print url
+        response = urlopen(url)
+        json_obj = json.load(response)
+        counter = 0
+        if json_obj['status'] == 'OK':
+            for i in json_obj['results']:
+                for x in i['address_components']:
+                    counter += 1
+                    print x['long_name']
+                    if counter == 2:
+                        print x['long_name']
+                        self.customer_view_custom.customer_generated_view.new_addr_edit.setText(x['long_name'])
+                        break
+        else:
+            QMessageBox.critical(None, "No results found!", "Error, please enter a valid postcode or check your internet connection")
+
+
+      
+            
+    
     def read_caller_id(self):
         try:
             file = open('number.txt', 'r')    
@@ -80,7 +107,8 @@ class Controller_Customer_Dialog(QDialog):
             QMessageBox.critical(None, "No customer selected or added!", "Please either add a new customer or search for a customer and make a selection!")
     def operation_cancel(self):
         self.close()
-        #self.parent().close()
+        self.parent().close()
+
         
     def handle_customer_search_entry(self):
         self.customer_view_custom.customer_generated_view.ex_name_edit.editingFinished.connect(lambda : self.search_by_name(self.customer_view_custom.customer_generated_view.ex_name_edit.text()))
@@ -163,6 +191,7 @@ class Controller_Customer_Dialog(QDialog):
     def set_new_postcode(self, postcode):
         self.__new_postcode = postcode
         self.__n_c.postcode = postcode
+        self.handle_auto_complete()
     def set_new_telephone(self, tel_no):
         self.__new_tel = tel_no
         self.__n_c.telephone = tel_no
@@ -201,6 +230,8 @@ class Controller_Customer_Dialog(QDialog):
                 self.echo_burger(f, order[x])
             elif (order[x].type == "Other") or (order[x].type == "Drink"):
                 self.echo_other(f, order[x])
+            elif (order[x].type == "Meal"):
+                self.echo_meal(f, order[x])
             else:
                 QMessageBox.critical(None, "Unkown product type", "An unkown product type ha been passed to file write")
         f.write("___________________________")
@@ -212,6 +243,13 @@ class Controller_Customer_Dialog(QDialog):
         # Start the bash script in order to print it
         subprocess.Popen(['sh', 'printer.sh'])
         del order[:]
+        
+    def echo_meal(self, f, order):
+        f.write(order.options)
+        f.write("\n \t \t   " + self.__pound.encode('utf8') + str(float(order.price)) + "0")
+        f.write("\n")
+        return
+        
         
     def echo_kebab(self, f, order):
         f.write(order.size + " " + order.name)

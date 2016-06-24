@@ -276,6 +276,57 @@ class Model_Database_Dialog(QSqlDatabase):
         return array_of_items
     
     
+    def insert_all_to_collection_database(self, shopping_list, total_price, customer_name, customer_tel, collection_time):
+        
+        last_id_no = 0
+        last_order_id_query = QSqlQuery()
+        last_order_id_query.exec_(""" SELECT `order_id` FROM `collection_orders`""")
+        while (last_order_id_query.next()):
+            last_id_no = last_order_id_query.value(0).toString()
+         
+        # get local time and date
+        # generate an order id
+        query = QSqlQuery()
+        
+        
+        current_time = QTime()
+        current_date = QDate()
+    
+        last_id_no = int(last_id_no) + 1
+        for x in range(0, len(shopping_list)):
+            try:
+                if shopping_list[x].type == "Kebab":
+                    options = str(shopping_list[x].kebab_type) + " " + str(shopping_list[x].salad) + " " + str(shopping_list[x].sauce)
+                elif shopping_list[x].type == "Meal":
+                    options = str(shopping_list[x].options)
+                else:
+                    options = str(shopping_list[x].salad) + " " + str(shopping_list[x].sauce)
+            except AttributeError:
+                try:
+                    options =  str(shopping_list[x].toppings)
+                except AttributeError:
+                    options = "No Extra toppings"
+            
+            query.prepare("INSERT INTO `expresscounter`.`collection_orders` (`order_id` , `customer_name` , `customer_tel`, `item_id` , `options` , `total_price` , `date_of_order` , `time_of_order`, `collection_time`)"
+                            "VALUES (:order_id , :customer_name , :customer_tel, :i_id , :option , :total_price , :date , :time, :collection_time);")
+            query.bindValue(":order_id", str(last_id_no))
+            query.bindValue(":customer_name", customer_name)
+            query.bindValue(":customer_tel", customer_tel)
+            query.bindValue(":i_id", shopping_list[x].id)
+            query.bindValue(":option", options)
+            query.bindValue(":total_price", total_price)
+            query.bindValue(":date", current_date.currentDate())
+            query.bindValue(":time", current_time.currentTime())
+            query.bindValue(":collection_time", collection_time)
+
+            query.exec_()
+            # Check if we have an error returned and print it if true
+            #if (query.lastError()):
+            errorstr = str(query.lastError().text())   
+            print errorstr 
+            #QMessageBox.critical(None, "Error while executing MYSQL Statement! ", "Unable to insert orders into the orders database!" + str(errorstr))
+        print "last id no is : " + str(last_id_no)
+        return last_id_no
     
     
     
@@ -300,6 +351,8 @@ class Model_Database_Dialog(QSqlDatabase):
             try:
                 if shopping_list[x].type == "Kebab":
                     options = str(shopping_list[x].kebab_type) + " " + str(shopping_list[x].salad) + " " + str(shopping_list[x].sauce)
+                elif shopping_list[x].type == "Meal":
+                    options = str(shopping_list[x].options)
                 else:
                     options = str(shopping_list[x].salad) + " " + str(shopping_list[x].sauce)
             except AttributeError:
@@ -342,6 +395,15 @@ class Model_Database_Dialog(QSqlDatabase):
             QMessageBox.information(None, "Inserted!", "A new customer entry has succesfully been inserted!")
         else:
             QMessageBox.critical(None, "Error!", "Cannot insert the customer into the database")
+    
+    def get_customer_name(self, number):
+        search_for_id = QSqlQuery()
+        search_for_id.prepare("""SELECT name FROM Customers WHERE number LIKE ?""")
+        search_for_id.bindValue(0, number)
+        search_for_id.exec_()
+        while(search_for_id.next()):
+            customer_name = search_for_id.value(0).toString()
+        return customer_name
     
     def get_customer_id(self, name, address, postcode, number):
         search_for_id = QSqlQuery()
@@ -712,6 +774,7 @@ class Model_Database_Dialog(QSqlDatabase):
                                 'tel' : customer_search.value(4).toString()}
             return customer_details
         
+
     """ Manager Sign IN Section -----------------------------------------------------------"""
     def check_manager_details(self, account_name, password):
         manager_search = QSqlQuery()

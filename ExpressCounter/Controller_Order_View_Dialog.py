@@ -44,6 +44,8 @@ class Controller_Order_View_Dialog(QDialog):
                 self.echo_burger(f, order[x])
             elif (order[x]['product_type'] == "Other") or (order[x]['product_type'] == "Drink"):
                 self.echo_other(f, order[x])
+            elif (order[x]['product_type'] == "Meal"):
+                self.echo_meal(f, order[x])
             else:
                 QMessageBox.critical(None, "Unkown product type", "An unkown product type has been passed to file write")
         f.write("___________________________")
@@ -81,6 +83,13 @@ class Controller_Order_View_Dialog(QDialog):
         f.write("\n")
         return
         
+    def echo_meal(self, f, order):
+        print "eco meal"
+        f.write(order['product_name'] + "\n")
+        f.write(order['options'])
+        f.write("\n")
+        return
+    
     def echo_header(self, f):
         header_file = open('order_header.txt', 'r')
         header_data = header_file.read()

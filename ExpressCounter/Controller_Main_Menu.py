@@ -25,8 +25,7 @@ DESCRIPTION : This class is responsible for handling user Events. It initiliazes
     09/12/2015       Creation of the class
               
 -------------------------------------------------------------------------------"""
-import sys
-import sip
+import sys, sip
 
 sip.setapi('QString', 2)
 from PyQt4 import QtGui
@@ -40,14 +39,13 @@ import Controller_Order_Dialog
 import Model_Database_Dialog
 import Controller_Signin_Dialog
 import Controller_Customer_Mode_Dialog
-
+import Controller_Incoming_Call
 
 class Controller_Main_Menu(QtGui.QMainWindow):
     
     def __init__(self):
         super(Controller_Main_Menu, self).__init__()
         # Establish a connection during startup
-        
         self.establish_database = Model_Database_Dialog.Model_Database_Dialog()
         self.establish_database.establish_connection()
         # Initialize the view element and draw it
@@ -56,6 +54,9 @@ class Controller_Main_Menu(QtGui.QMainWindow):
         self.show()
         self.handle_icon_clicks()
         self.setWindowTitle("IYI Kayi - Express Counter")
+        
+        
+
     
     """------------------------------------------------------------------------------
     Function           : clickable
@@ -107,8 +108,10 @@ class Controller_Main_Menu(QtGui.QMainWindow):
     def on_neworder_request(self):
         # A new order request has been received, therefore initialize
         # and execute the cart_dialog class
-        self.cart_dialog = Controller_Cart_Dialog.Cart_Controller_Class()
-        self.cart_dialog.exec_()
+        #self.cart_dialog = Controller_Cart_Dialog.Cart_Controller_Class()
+        #self.cart_dialog.exec_()
+        self.incoming_call = Controller_Incoming_Call.Controller_Incoming_Call()
+        self.incoming_call.show()
         
     @pyqtSlot()
     def on_search_order_request(self):
@@ -133,7 +136,7 @@ class Controller_Main_Menu(QtGui.QMainWindow):
     """
 def main():
     app = QtGui.QApplication(sys.argv)
-    app.setStyle("GTK")
+    app.setStyle("Cleanlooks")
     vmm = Controller_Main_Menu()
     sys.exit(app.exec_())
 

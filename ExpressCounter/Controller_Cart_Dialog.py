@@ -13,9 +13,16 @@ DESCRIPTION : This class is instanced upon new order click event by the user.
 import Model_Database_Dialog   
 import Controller_Customer_Dialog   
 import Controller_Cart_Toppings   
-import Controller_Cart_Addon                                                                  
-from Crypto.Util.number import size
-from __builtin__ import classmethod
+import Controller_Cart_Addon       
+import Controller_Meal_Party
+import Controller_Meal_Two
+import Controller_Meal_Special
+import Controller_Meal_Pizza
+import Controller_Meal_Burger
+import Controller_Meal_Kids
+import Controller_Sauce_Custom
+import Controller_GB_Custom     
+import Controller_Collection_Dialog                                            
 
 """------------------------------------------------------------------------------
                      Development Diary
@@ -30,18 +37,16 @@ from __builtin__ import classmethod
 
 import View_Cart_Custom
 from PyQt4.QtCore import Qt , pyqtSlot, pyqtSignal
-from PyQt4.Qt import QDialog, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox,\
-    QComboBox, QPushButton, QMessageBox, QMainWindow, QListWidgetItem,\
-    QListWidget, pyqtSlot
+from PyQt4.Qt import QDialog, QMessageBox, QListWidgetItem
 
 
 class Cart_Controller_Class(QDialog):
     new_product_inserted = pyqtSignal()
     shopping_list = []
-    def __init__(self):
-        super(Cart_Controller_Class, self).__init__()
+    def __init__(self, parent_obj, order_type):
+        super(Cart_Controller_Class, self).__init__(parent = parent_obj)
         
-        
+        self.order_type = order_type
         #self.burger_addon_dialog = Controller_Cart_Addon.Controller_Cart_Addon("Burger")
         
         # Holds the total price of the cart
@@ -51,6 +56,7 @@ class Cart_Controller_Class(QDialog):
         self.cart_view_init = View_Cart_Custom.View_Cart_Custom()
         self.cart_view_init.setupUI(self)
         self.database = Model_Database_Dialog.Model_Database_Dialog()
+        self.handle_deal_clicks()
         """ Retrieve a list of products from the model_database """
         kebabs_list  = self.database.get_kebabs()
         pizzas_list  = self.database.get_pizzas()
@@ -132,7 +138,6 @@ class Cart_Controller_Class(QDialog):
             # User event handling
             self.handle_pizza_size_selection(pizza_size_combobox)
             self.handle_pizza_extra_checkbox_selection(pizza_extra_check_box)
-            
             self.handle_pizza_add_button(pizza_add_button, pizzas_list)
         else:
             QMessageBox.critical(None, "No Pizzas returned!", "No Pizza products where found, please check your database connection and entries!")    
@@ -183,9 +188,71 @@ class Cart_Controller_Class(QDialog):
     
     ------------------------------------------------------------------------------"""  
         
+        
+    def handle_deal_clicks(self):
+        gen_view = self.cart_view_init.generated_cart_ui
+        gen_view.party_special_b.clicked.connect(self.load_party_special)
+        gen_view.pizza_meal_b.clicked.connect(self.load_pizza_meal)
+        gen_view.meal_for_two_b.clicked.connect(self.load_meal_for_two)
+        gen_view.special_meal_b.clicked.connect(self.load_meal_special_of_day)
+        gen_view.burger_meal_b.clicked.connect(self.load_burger_meal)
+        gen_view.kids_meal_b.clicked.connect(self.load_kids_meal)
+        
+    def load_party_special(self, number):
+        self.party_meal = Controller_Meal_Party.Controller_Meal_Party()
+        self.party_meal.show()
+        self.party_meal.meal_confirmed.connect(self.append_meal)
+        
+    def load_meal_for_two(self):
+        self.meal_for_two = Controller_Meal_Two.Controller_Meal_Two()
+        self.meal_for_two.show()
+        self.meal_for_two.meal_confirmed.connect(self.append_meal)
+        
+    def load_meal_special_of_day(self):
+        self.meal_special_day = Controller_Meal_Special.Controller_Meal_Special()
+        self.meal_special_day.show()
+        self.meal_special_day.meal_confirmed.connect(self.append_meal)
+        
+    def load_pizza_meal(self):
+        self.pizza_meal = Controller_Meal_Pizza.Controller_Meal_Pizza()
+        self.pizza_meal.show()
+        self.pizza_meal.meal_confirmed.connect(self.append_meal)
+    
+    def load_burger_meal(self):
+        self.burger_meal = Controller_Meal_Burger.Controller_Meal_Burger()
+        self.burger_meal.show()
+        self.burger_meal.meal_confirmed.connect(self.append_meal)
+        
+    def load_kids_meal(self):
+        self.kids_meal = Controller_Meal_Kids.Controller_Meal_Kids()
+        self.kids_meal.show()
+        self.kids_meal.meal_confirmed.connect(self.append_meal)
+        
+    def append_meal(self, meal_name, list_of_meal):
+        list_view_item = "-------"+meal_name+ "-------\n"
+        for each in list_of_meal:
+            list_view_item += each
+        list_view_item += "---------------------------"
+        product = Product()                           
+        product.type = "Meal"
+        product.size = "Large"
+        product.name = meal_name
+        product.options = str(list_view_item)
+        product.id   = self.database.get_id(product.name)
+        product.price = self.database.get_price(product.name, product.size)
+        self.shopping_list.append(product)
+        self.total_price = self.total_price + float(product.price)
+        self.total_price_display = self.cart_view_init.get_total_price()
+        pound = u'\xa3'
+        self.total_price_display.setText(pound + str(float(self.total_price)) + "0")
+        
+        list_view_item = QListWidgetItem(list_view_item)
+        self.cart_view_init.send_data_to_list_view(list_view_item)
+    
     def handle_drink_size(self):
         buttons = self.cart_view_init.get_drink_button()
         buttons.buttonClicked[int].connect(self.get_size)
+        
                    
     def get_size(self, number):
         self.add_to_cart_other_drink("Drink", self.__drinks_list[number]['name'], self.cart_view_init.size_list[number].currentText(), \
@@ -199,8 +266,8 @@ class Cart_Controller_Class(QDialog):
         gen_view.salad_pitta.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.salad_pitta.text(), "Standard", 0))
         gen_view.humus.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.humus.text(), "Standard", 0))
         gen_view.chocolate_cake.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chocolate_cake.text(), "Standard", 0))
-        gen_view.gb.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.gb.text(), "Standard", 0))
-        gen_view.gbc.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.gbc.text(), "Standard", 0))
+        gen_view.gb.clicked.connect(lambda : self.handle_gb_or_sauce("gb"))
+        gen_view.tub_sauce_b.clicked.connect(lambda : self.handle_gb_or_sauce("sauce"))
         gen_view.wedges.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.wedges.text(), "Standard", 0))
         gen_view.chips_cheese.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_cheese.text(), "Standard", 0))
         gen_view.chips_gravy.clicked.connect(lambda : self.add_to_cart_other_drink("Other", gen_view.chips_gravy.text(), "Standard", 0))
@@ -226,6 +293,17 @@ class Cart_Controller_Class(QDialog):
             burger_add_buttons.buttonClicked[int].connect(self.burger_addon_load)
         except IndexError:
             QMessageBox.critical(None, "Kebab Index Error", "Error while getting the price of kebab:")   
+            
+    def handle_gb_or_sauce(self, type_sel):
+        if type_sel == "sauce":
+            self.sauce_ui = Controller_Sauce_Custom.Controller_Sauce_Custom()
+            self.sauce_ui.show()
+            self.sauce_ui.sauce_confirmed.connect(self.add_to_cart_other_drink)
+        else:
+            self.gb_ui = Controller_GB_Custom.Controller_GB_Custom()
+            self.gb_ui.show()
+            self.gb_ui.gb_confirmed.connect(self.add_to_cart_other_drink)
+            
             
     def load_addon(self, number):
         self.kebab_addon_dialog = Controller_Cart_Addon.Controller_Cart_Addon(self.__kebabs_list[number]['type'], \
@@ -600,11 +678,11 @@ class Cart_Controller_Class(QDialog):
         # We need to deduct the price before removing it from our list
         # If there are no items in list, the price is always set to 0.00
         # Else deduct the price of the removed item 
-        if (len(self.shopping_list) > 0):
-            self.total_price = self.total_price - float(self.shopping_list[row].price)
+        if (len(self.shopping_list) <= 1): # Must be 1 or smaller otherwise random number is generated
+            self.total_price = 0.00
             self.total_price_display.setText(pound + str(float(self.total_price)) + "0")
         else:
-            self.total_price = 0.00
+            self.total_price = self.total_price - float(self.shopping_list[row].price)
             self.total_price_display.setText(pound + str(float(self.total_price)) + "0")
         # remove it from the shopping list which holds all the items
         self.shopping_list.pop(row)
@@ -624,6 +702,7 @@ class Cart_Controller_Class(QDialog):
         # if the cart is empty and user clicks cancel we presume to cancel the whole order and close dialog
         if (len(self.shopping_list) < 1):
             self.close()
+            self.parent().close()
         # clear all the products in the array
         # but check that the list isn't empty else it will cause an index error
         if (len(self.shopping_list) > 0):
@@ -641,13 +720,19 @@ class Cart_Controller_Class(QDialog):
         
     pyqtSlot()
     def cart_confirmed(self):
-        # check if cart is not empty
-        if len (self.shopping_list) > 0:
-            self.customer_dialog = Controller_Customer_Dialog.Controller_Customer_Dialog(self, self.shopping_list, self.total_price)
-            self.customer_dialog.exec_()
+        if self.order_type == "Delivery":
+            # check if cart is not empty
+            if len (self.shopping_list) > 0:
+                self.customer_dialog = Controller_Customer_Dialog.Controller_Customer_Dialog(self, self.shopping_list, self.total_price)
+                self.customer_dialog.exec_()
+            else:
+                QMessageBox.critical(None, "Cart is empty!", "Cart data is confirmed however cart list is empty! Please add products to continue!")
         else:
-            QMessageBox.critical(None, "Cart is empty!", "Cart data is confirmed however cart list is empty! Please add products to continue!")
-    
+            if len (self.shopping_list) > 0:
+                self.collection_dialog = Controller_Collection_Dialog.Controller_Collection_Dialog(self, self.shopping_list, self.total_price)
+                self.collection_dialog.exec_()
+            else:
+                QMessageBox.critical(None, "Cart is empty!", "Cart data is confirmed however cart list is empty! Please add products to continue!")
 # Python strcut equavilant
 # will hold product details
 class Product(object):
